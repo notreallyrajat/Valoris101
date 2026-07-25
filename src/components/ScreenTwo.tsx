@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Handshake,
   TrendingUp,
-  KeyRound,
   Home,
   Users,
   User,
@@ -36,12 +35,6 @@ export const ROLES: RoleItem[] = [
     title: 'Investor / VC',
     description: 'Chart and our professionals and directory industry',
     icon: TrendingUp,
-  },
-  {
-    id: 'tenant',
-    title: 'Tenant',
-    description: 'Tenant solutions by key professionals.',
-    icon: KeyRound,
   },
   {
     id: 'landlord',

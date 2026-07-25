@@ -1,24 +1,29 @@
 import { useState } from 'react';
 import { PhoneContainer } from './components/PhoneContainer';
 import { ScreenOne } from './components/ScreenOne';
+import { OtpVerificationScreen } from './components/OtpVerificationScreen';
+import { CreatePasswordScreen } from './components/CreatePasswordScreen';
 import { ScreenTwo, ROLES } from './components/ScreenTwo';
 import { RoleProfileScreen } from './components/RoleProfileScreens';
 import { RoleExploreScreen } from './components/RoleExploreScreens';
 import { PaymentPortalScreen, PaymentSuccessScreen } from './components/PaymentAndSuccessScreens';
 import { ValorisLogo } from './components/ValorisLogo';
-import { Smartphone, LayoutGrid, Sparkles, RotateCcw } from 'lucide-react';
+import { Smartphone, LayoutGrid, Sparkles, RotateCcw, Building2 } from 'lucide-react';
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<'showcase' | 'interactive' | 'dual-interactive'>('showcase');
+  const [viewMode, setViewMode] = useState<'showcase' | 'interactive' | 'dual-interactive'>('interactive');
   
   // App Flow Step:
-  // 1: Screen 1 (Join Network)
-  // 2: Screen 2 (Role Select)
-  // 3: Screen 3 (Role Profile Setup)
-  // 4: Screen 4 (Role Explore Feed)
-  // 5: Screen 5 (Pay ₹399 Portal)
-  // 6: Screen 6 (Success Notification)
-  const [interactiveStep, setInteractiveStep] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
+  // 1: Screen 1 (Join Network - Account Details)
+  // 2: Screen 2 (OTP Verification)
+  // 3: Screen 3 (Create & Confirm Password)
+  // 4: Screen 4 (Role Select)
+  // 5: Screen 5 (Role Profile Setup)
+  // 6: Screen 6 (Role Explore Feed)
+  // 7: Screen 7 (Pay ₹399 Portal)
+  // 8: Screen 8 (Success Notification)
+  const [interactiveStep, setInteractiveStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>(1);
+  const [isPaidMember, setIsPaidMember] = useState<boolean>(false);
 
   // Form & User State
   const [formData, setFormData] = useState({
@@ -26,35 +31,48 @@ export default function App() {
     email: 'rajat@valoris.com',
     phone: '+1 (555) 234-5678',
   });
+  const [, setUserPassword] = useState<string>('');
   const [selectedRole, setSelectedRole] = useState<string>('broker');
 
   const currentRoleObj = ROLES.find((r) => r.id === selectedRole) || ROLES[0];
 
   const handleScreenOneNext = (data: { fullName: string; email: string; phone: string }) => {
     setFormData(data);
-    setInteractiveStep(2);
+    setInteractiveStep(2); // Route to OTP Verification
+  };
+
+  const handleOtpVerified = () => {
+    setInteractiveStep(3); // Route to Create Password screen
+  };
+
+  const handlePasswordCreated = (password: string) => {
+    setUserPassword(password);
+    setInteractiveStep(4); // Route to Role Selection
   };
 
   const handleScreenTwoFinish = (role: string) => {
     setSelectedRole(role);
-    setInteractiveStep(3); // Route to role-specific profile setup!
+    setInteractiveStep(5); // Route to role-specific profile setup
   };
 
   const handleProfileComplete = () => {
-    setInteractiveStep(4); // Route to role-specific explore feed!
+    setInteractiveStep(6); // Route to role-specific explore feed
   };
 
   const handleProceedToPayment = () => {
-    setInteractiveStep(5); // Route to Pay ₹399 portal!
+    setInteractiveStep(7); // Route to Pay ₹399 portal
   };
 
   const handlePaymentSuccess = () => {
-    setInteractiveStep(6); // Route to success message!
+    setIsPaidMember(true); // Unlock all contacts & features
+    setInteractiveStep(8); // Route to success message
   };
 
   const handleReset = () => {
     setInteractiveStep(1);
     setSelectedRole('broker');
+    setUserPassword('');
+    setIsPaidMember(false);
   };
 
   return (
@@ -74,29 +92,17 @@ export default function App() {
                   VALORIS SaaS Onboarding
                 </h1>
                 <span className="text-[10px] font-bold uppercase tracking-wider bg-[#00a896]/10 text-[#007a6e] px-2 py-0.5 rounded-full border border-[#00a896]/20">
-                  Full Role Flow & ₹399 Checkout
+                  OTP & Password Auth
                 </span>
               </div>
               <p className="text-xs text-gray-500 font-medium">
-                Join ➔ Select Role ➔ Profile Setup ➔ Explore Feed ➔ Pay ₹399 ➔ Confirmation Notice
+                Join ➔ Verify OTP ➔ Set Password ➔ Select Role ➔ Profile Setup ➔ Explore Feed ➔ Pay ₹399 ➔ Success
               </p>
             </div>
           </div>
 
           {/* View Mode Controls */}
           <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-2xl border border-gray-200/60">
-            <button
-              onClick={() => setViewMode('showcase')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                viewMode === 'showcase'
-                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              Side-by-Side Showcase
-            </button>
-
             <button
               onClick={() => setViewMode('interactive')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -106,7 +112,19 @@ export default function App() {
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
-              Interactive Simulator
+              Interactive Flow
+            </button>
+
+            <button
+              onClick={() => setViewMode('showcase')}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                viewMode === 'showcase'
+                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              Auth & Setup Showcase
             </button>
 
             <button
@@ -122,8 +140,31 @@ export default function App() {
             </button>
           </div>
 
-          {/* Role Quick Selector */}
+          {/* Role Quick Selector & Reset */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsPaidMember(!isPaidMember)}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                isPaidMember
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                  : 'bg-amber-50 text-amber-900 border-amber-300'
+              }`}
+              title="Click to toggle between Paid Member (₹399 Unlocked) and Free/Locked Member"
+            >
+              <span>{isPaidMember ? '🟢 Pass: ₹399 Active' : '🔒 Pass: Locked'}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setSelectedRole('broker');
+                setInteractiveStep(6);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1 bg-[#092C3E] hover:bg-[#163842] text-white text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer"
+            >
+              <Building2 className="w-3.5 h-3.5 text-[#4ade80]" />
+              Brokers Dashboard
+            </button>
+
             <label className="text-xs font-bold text-gray-600">Active Role:</label>
             <select
               value={selectedRole}
@@ -131,8 +172,8 @@ export default function App() {
               className="px-2.5 py-1 text-xs font-bold bg-white border border-gray-200 rounded-xl text-gray-800 focus:ring-2 focus:ring-[#00a896] cursor-pointer"
             >
               <option value="broker">Broker</option>
+              <option value="customer">Customer</option>
               <option value="investor">Investor / VC</option>
-              <option value="tenant">Tenant</option>
               <option value="landlord">Landlord</option>
               <option value="founder">Founder</option>
             </select>
@@ -151,79 +192,29 @@ export default function App() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 lg:p-12 overflow-x-auto">
         
-        {/* VIEW MODE 1: SIDE-BY-SIDE SHOWCASE */}
-        {viewMode === 'showcase' && (
-          <div className="flex flex-col items-center space-y-8 animate-fadeIn">
-            <div className="text-center space-y-1.5 max-w-xl">
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
-                Role-Based Flow & Payment Portal (₹399)
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-600">
-                Explore setup for <strong className="text-[#007a6e]">{currentRoleObj.title}</strong>, explore screen preview, ₹399 payment portal, and final email/SMS confirmation.
-              </p>
-            </div>
-
-            {/* Side-by-Side Mobile Screens */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16 pt-2">
-              
-              {/* Screen 1: Role Setup */}
-              <div className="transform hover:scale-[1.01] transition-transform duration-300">
-                <PhoneContainer title={`1. ${currentRoleObj.title} Setup`} badge="Setup Form">
-                  <RoleProfileScreen
-                    roleId={selectedRole}
-                    onBack={() => setViewMode('interactive')}
-                    onComplete={() => setInteractiveStep(4)}
-                  />
-                </PhoneContainer>
-              </div>
-
-              {/* Screen 2: Payment Portal & Success Notice */}
-              <div className="transform hover:scale-[1.01] transition-transform duration-300">
-                <PhoneContainer title="2. Payment & Confirmation" badge="Pay ₹399">
-                  {interactiveStep === 6 ? (
-                    <PaymentSuccessScreen
-                      userEmail={formData.email}
-                      userPhone={formData.phone}
-                      roleTitle={currentRoleObj.title}
-                      onExploreDashboard={handleReset}
-                    />
-                  ) : (
-                    <PaymentPortalScreen
-                      userEmail={formData.email}
-                      userPhone={formData.phone}
-                      roleTitle={currentRoleObj.title}
-                      onBack={() => setInteractiveStep(4)}
-                      onPaymentSuccess={handlePaymentSuccess}
-                    />
-                  )}
-                </PhoneContainer>
-              </div>
-
-            </div>
-          </div>
-        )}
-
-        {/* VIEW MODE 2: INTERACTIVE SINGLE PHONE SIMULATOR */}
+        {/* VIEW MODE 1: INTERACTIVE SINGLE PHONE SIMULATOR */}
         {viewMode === 'interactive' && (
           <div className="flex flex-col items-center space-y-6 max-w-lg w-full animate-fadeIn">
             
             {/* Step Navigation Bar */}
-            <div className="flex items-center gap-1.5 bg-white p-2 rounded-2xl border border-gray-200 shadow-xs overflow-x-auto max-w-full">
+            <div className="flex items-center gap-1 bg-white p-1.5 rounded-2xl border border-gray-200 shadow-xs overflow-x-auto max-w-full">
               {[
                 { step: 1, label: '1. Join' },
-                { step: 2, label: '2. Role' },
-                { step: 3, label: '3. Form' },
-                { step: 4, label: '4. Feed' },
-                { step: 5, label: '5. Pay ₹399' },
-                { step: 6, label: '6. Success' },
+                { step: 2, label: '2. OTP' },
+                { step: 3, label: '3. Password' },
+                { step: 4, label: '4. Role' },
+                { step: 5, label: '5. Profile' },
+                { step: 6, label: '6. Feed/Dashboard' },
+                { step: 7, label: '7. Pay ₹399' },
+                { step: 8, label: '8. Done' },
               ].map((s) => (
                 <button
                   key={s.step}
                   onClick={() => setInteractiveStep(s.step as any)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
                     interactiveStep === s.step
-                      ? 'bg-[#1F4E5C] text-white shadow-xs'
-                      : 'text-gray-500 hover:text-gray-900'
+                      ? 'bg-[#092C3E] text-white shadow-xs'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                 >
                   {s.label}
@@ -233,17 +224,21 @@ export default function App() {
 
             {/* Interactive Phone Frame */}
             <PhoneContainer
-              title={`Step ${interactiveStep} of 6`}
+              title={`Step ${interactiveStep} of 8`}
               badge={
                 interactiveStep === 1
                   ? 'Join Network'
                   : interactiveStep === 2
-                  ? 'Role Select'
+                  ? 'OTP Verification'
                   : interactiveStep === 3
-                  ? `${currentRoleObj.title} Form`
+                  ? 'Set Password'
                   : interactiveStep === 4
-                  ? 'Role Feed'
+                  ? 'Role Select'
                   : interactiveStep === 5
+                  ? `${currentRoleObj.title} Profile`
+                  : interactiveStep === 6
+                  ? `${currentRoleObj.title} Dashboard`
+                  : interactiveStep === 7
                   ? 'Checkout ₹399'
                   : 'Confirmed!'
               }
@@ -252,43 +247,99 @@ export default function App() {
                 <ScreenOne initialData={formData} onNext={handleScreenOneNext} />
               )}
               {interactiveStep === 2 && (
-                <ScreenTwo
-                  selectedRole={selectedRole}
+                <OtpVerificationScreen
+                  userEmail={formData.email}
+                  userPhone={formData.phone}
+                  onVerified={handleOtpVerified}
                   onBack={() => setInteractiveStep(1)}
-                  onFinish={handleScreenTwoFinish}
                 />
               )}
               {interactiveStep === 3 && (
-                <RoleProfileScreen
-                  roleId={selectedRole}
+                <CreatePasswordScreen
+                  onPasswordCreated={handlePasswordCreated}
                   onBack={() => setInteractiveStep(2)}
-                  onComplete={handleProfileComplete}
                 />
               )}
               {interactiveStep === 4 && (
-                <RoleExploreScreen
-                  roleId={selectedRole}
-                  onProceedToPayment={handleProceedToPayment}
+                <ScreenTwo
+                  selectedRole={selectedRole}
+                  onBack={() => setInteractiveStep(3)}
+                  onFinish={handleScreenTwoFinish}
                 />
               )}
               {interactiveStep === 5 && (
+                <RoleProfileScreen
+                  roleId={selectedRole}
+                  onBack={() => setInteractiveStep(4)}
+                  onComplete={handleProfileComplete}
+                />
+              )}
+              {interactiveStep === 6 && (
+                <RoleExploreScreen
+                  roleId={selectedRole}
+                  onProceedToPayment={handleProceedToPayment}
+                  isPaidMember={isPaidMember}
+                />
+              )}
+              {interactiveStep === 7 && (
                 <PaymentPortalScreen
                   userEmail={formData.email}
                   userPhone={formData.phone}
                   roleTitle={currentRoleObj.title}
-                  onBack={() => setInteractiveStep(4)}
+                  onBack={() => setInteractiveStep(6)}
                   onPaymentSuccess={handlePaymentSuccess}
                 />
               )}
-              {interactiveStep === 6 && (
+              {interactiveStep === 8 && (
                 <PaymentSuccessScreen
                   userEmail={formData.email}
                   userPhone={formData.phone}
                   roleTitle={currentRoleObj.title}
-                  onExploreDashboard={handleReset}
+                  onExploreDashboard={() => setInteractiveStep(6)}
                 />
               )}
             </PhoneContainer>
+          </div>
+        )}
+
+        {/* VIEW MODE 2: SIDE-BY-SIDE SHOWCASE */}
+        {viewMode === 'showcase' && (
+          <div className="flex flex-col items-center space-y-8 animate-fadeIn">
+            <div className="text-center space-y-1.5 max-w-xl">
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                Signup Auth & Profile Setup Showcase
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600">
+                Compare the new <strong className="text-[#007a6e]">OTP & Password Setup</strong> screens alongside the complete user onboarding workflow.
+              </p>
+            </div>
+
+            {/* Side-by-Side Mobile Screens */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16 pt-2">
+              
+              {/* Screen A: OTP Verification */}
+              <div className="transform hover:scale-[1.01] transition-transform duration-300">
+                <PhoneContainer title="1. OTP Code Verification" badge="OTP Auth">
+                  <OtpVerificationScreen
+                    userEmail={formData.email}
+                    userPhone={formData.phone}
+                    onVerified={() => setInteractiveStep(3)}
+                    onBack={() => setInteractiveStep(1)}
+                  />
+                </PhoneContainer>
+              </div>
+
+              {/* Screen B: Create Password */}
+              <div className="transform hover:scale-[1.01] transition-transform duration-300">
+                <PhoneContainer title="2. Password Setup & Match" badge="New Password">
+                  <CreatePasswordScreen
+                    onPasswordCreated={() => setInteractiveStep(4)}
+                    onBack={() => setInteractiveStep(2)}
+                  />
+                </PhoneContainer>
+              </div>
+
+            </div>
           </div>
         )}
 
@@ -297,19 +348,19 @@ export default function App() {
           <div className="flex flex-col items-center space-y-8 animate-fadeIn">
             <div className="text-center space-y-1 max-w-lg">
               <h2 className="text-xl sm:text-2xl font-black text-gray-900">
-                Live Dual Interactive Mode
+                Live Dual Auth & Payment View
               </h2>
               <p className="text-xs text-gray-500">
-                Role Explore Feed and Payment Portal live side-by-side.
+                Signup password creation and Payment ₹399 portal side-by-side.
               </p>
             </div>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16">
-              {/* Explore Screen */}
-              <PhoneContainer title={`Role Explore Feed (${currentRoleObj.title})`} badge="Preview Feed">
-                <RoleExploreScreen
-                  roleId={selectedRole}
-                  onProceedToPayment={() => setInteractiveStep(5)}
+              {/* Password Screen */}
+              <PhoneContainer title="Create Password Screen" badge="Security">
+                <CreatePasswordScreen
+                  onPasswordCreated={() => setInteractiveStep(4)}
+                  onBack={() => setInteractiveStep(2)}
                 />
               </PhoneContainer>
 
@@ -319,8 +370,8 @@ export default function App() {
                   userEmail={formData.email}
                   userPhone={formData.phone}
                   roleTitle={currentRoleObj.title}
-                  onBack={() => setInteractiveStep(4)}
-                  onPaymentSuccess={() => setInteractiveStep(6)}
+                  onBack={() => setInteractiveStep(6)}
+                  onPaymentSuccess={() => setInteractiveStep(8)}
                 />
               </PhoneContainer>
             </div>
@@ -333,9 +384,9 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between px-6 gap-2">
           <div className="flex items-center gap-2">
             <ValorisLogo size="sm" showTagline={false} className="h-5 w-auto" />
-            <span>— Complete Role & Payment Flow</span>
+            <span>— Complete OTP Verification & Password Setup Onboarding</span>
           </div>
-          <div>React + Vite + Tailwind • Pay ₹399 & Confirmation Integration</div>
+          <div>React + Vite + Tailwind • OTP & Password Flow Included</div>
         </div>
       </footer>
     </div>

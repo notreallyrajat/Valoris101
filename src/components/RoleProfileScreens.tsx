@@ -5,8 +5,6 @@ import {
   ShieldCheck,
   Plus,
   X,
-  Building,
-  Home,
   MapPin,
   Share2,
 } from 'lucide-react';
@@ -470,143 +468,6 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
   );
 };
 
-/* 3. TENANT PROFILE SETUP */
-const TenantProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) => void }> = ({
-  onBack,
-  onComplete,
-}) => {
-  const [lookingFor, setLookingFor] = useState<'Residential' | 'Commercial'>('Residential');
-  const [budget, setBudget] = useState(45); // ₹ thousands
-  const [localities, setLocalities] = useState<string[]>(['Koramangala', 'Indiranagar']);
-  const [timeline, setTimeline] = useState('Within 1 Month');
-  const [occupants, setOccupants] = useState(2);
-
-  return (
-    <div className="w-full h-full flex flex-col justify-between px-5 pt-3 pb-6 bg-white overflow-y-auto">
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <button
-            onClick={onBack}
-            className="p-1.5 -ml-1 rounded-full hover:bg-gray-100 text-gray-800 cursor-pointer"
-          >
-            <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
-          </button>
-          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
-            Tenant Setup
-          </span>
-        </div>
-
-        <div className="space-y-0.5 mb-3">
-          <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">
-            Tenant Profile Setup
-          </h2>
-          <p className="text-xs text-gray-500 font-medium">
-            Let landlords and brokers find the right match for you
-          </p>
-        </div>
-
-        <div className="space-y-3.5 pt-1 text-left">
-          {/* Segmented Toggle: Residential vs Commercial */}
-          <div className="flex p-1 bg-gray-100 rounded-xl border border-gray-200">
-            <button
-              type="button"
-              onClick={() => setLookingFor('Residential')}
-              className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                lookingFor === 'Residential'
-                  ? 'bg-[#1F4E5C] text-white shadow-sm'
-                  : 'text-gray-600'
-              }`}
-            >
-              <Home className="w-3.5 h-3.5" />
-              Residential
-            </button>
-            <button
-              type="button"
-              onClick={() => setLookingFor('Commercial')}
-              className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                lookingFor === 'Commercial'
-                  ? 'bg-[#1F4E5C] text-white shadow-sm'
-                  : 'text-gray-600'
-              }`}
-            >
-              <Building className="w-3.5 h-3.5" />
-              Commercial
-            </button>
-          </div>
-
-          {/* Budget Range */}
-          <div className="space-y-1 bg-gray-50 p-3 rounded-xl border border-gray-200">
-            <div className="flex justify-between items-center text-xs">
-              <span className="font-bold text-gray-800">Monthly Budget</span>
-              <span className="font-extrabold text-[#1F4E5C]">₹ {budget},000 / month</span>
-            </div>
-            <input
-              type="range"
-              min="10"
-              max="200"
-              step="5"
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full accent-[#1F4E5C] cursor-pointer"
-            />
-          </div>
-
-          {/* Preferred Localities */}
-          <div className="space-y-1">
-            <label className="block text-xs font-bold text-gray-800 ml-0.5">
-              Preferred Localities
-            </label>
-            <MultiTagInput
-              placeholder="Add locality..."
-              tags={localities}
-              onAddTag={(tag) => setLocalities([...localities, tag])}
-              onRemoveTag={(idx) => setLocalities(localities.filter((_, i) => i !== idx))}
-            />
-          </div>
-
-          {/* Move-in Timeline Horizontal Selector */}
-          <div className="space-y-1">
-            <label className="block text-xs font-bold text-gray-800 ml-0.5">
-              Move-in Timeline
-            </label>
-            <div className="flex gap-1.5 overflow-x-auto pb-1">
-              {['Immediately', 'Within 1 Month', '1–3 Months', '3–6 Months'].map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setTimeline(t)}
-                  className={`px-3 py-2 text-xs font-bold rounded-xl whitespace-nowrap border cursor-pointer transition-all ${
-                    timeline === t
-                      ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C]'
-                      : 'bg-gray-50 border-gray-200 text-gray-600'
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Family / Team Size Stepper */}
-          <div className="space-y-1">
-            <label className="block text-xs font-bold text-gray-800 ml-0.5">
-              {lookingFor === 'Residential' ? 'Family / Occupants Size' : 'Team Size'}
-            </label>
-            <StepperInput value={occupants} onChange={setOccupants} min={1} max={500} />
-          </div>
-        </div>
-      </div>
-
-      <button
-        onClick={() => onComplete({ lookingFor, budget, localities, timeline, occupants })}
-        className="w-full py-3.5 mt-4 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
-      >
-        Find Properties
-      </button>
-    </div>
-  );
-};
-
 /* 4. LANDLORD PROFILE SETUP */
 const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) => void }> = ({
   onBack,
@@ -834,8 +695,6 @@ export const RoleProfileScreen: React.FC<RoleProfileScreenProps> = ({
       return <BrokerProfileSetup onBack={onBack} onComplete={onComplete} />;
     case 'investor':
       return <InvestorProfileSetup onBack={onBack} onComplete={onComplete} />;
-    case 'tenant':
-      return <TenantProfileSetup onBack={onBack} onComplete={onComplete} />;
     case 'landlord':
       return <LandlordProfileSetup onBack={onBack} onComplete={onComplete} />;
     case 'founder':

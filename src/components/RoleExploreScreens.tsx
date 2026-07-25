@@ -1,265 +1,114 @@
 import React from 'react';
+import { BrokerDashboard } from './BrokerDashboard';
+import { CustomerDashboard } from './CustomerDashboard';
 import {
-  Building2,
-  TrendingUp,
-  KeyRound,
-  Home,
-  UserCheck,
-  Search,
-  Filter,
-  Lock,
-  ArrowRight,
-  Star,
-  MapPin,
+  Coffee,
   Sparkles,
+  Armchair,
+  Clock,
+  Briefcase,
+  Compass,
 } from 'lucide-react';
 
 interface RoleExploreScreenProps {
   roleId: string;
   onProceedToPayment: () => void;
+  isPaidMember?: boolean;
 }
 
-export const RoleExploreScreen: React.FC<RoleExploreScreenProps> = ({
-  roleId,
-  onProceedToPayment,
+export const ComingSoonScreen: React.FC<{ roleTitle: string; onSwitchToBroker?: () => void }> = ({
+  roleTitle,
 }) => {
-  const getExploreContent = () => {
-    switch (roleId) {
-      case 'broker':
-        return {
-          title: 'Broker Hub & Mandates',
-          subtitle: 'Exclusive property listings & co-broker opportunities in your areas',
-          badge: 'Broker Network',
-          icon: Building2,
-          cards: [
-            {
-              id: 1,
-              title: '3 BHK Luxury Apartment in BKC',
-              tag: 'Exclusive Mandate',
-              price: '₹ 4.2 Cr',
-              location: 'BKC, Mumbai',
-              commission: '2.5% Split Commission',
-              rating: '4.9',
-            },
-            {
-              id: 2,
-              title: 'Commercial Office Space - 5,000 sq ft',
-              tag: 'Verified Listing',
-              price: '₹ 1.8 L / mo',
-              location: 'Bandra West, Mumbai',
-              commission: '1 Month Brokerage',
-              rating: '4.8',
-            },
-          ],
-        };
-      case 'investor':
-        return {
-          title: 'Investor Deal Flow',
-          subtitle: 'Vetted real estate deals & high-growth PropTech startups',
-          badge: 'Deal Flow',
-          icon: TrendingUp,
-          cards: [
-            {
-              id: 1,
-              title: 'Valoris PropTech Series A Round',
-              tag: 'Pre-vetted Deal',
-              price: 'Target: ₹ 5 Cr',
-              location: 'Bangalore / Mumbai',
-              commission: '2.4x Target MOIC',
-              rating: '5.0',
-            },
-            {
-              id: 2,
-              title: 'Prime Commercial Land Parcel - 12 Acres',
-              tag: 'Co-Investment',
-              price: '₹ 18.5 Cr Pool',
-              location: 'ORR, Bangalore',
-              commission: '14.5% Projected IRR',
-              rating: '4.9',
-            },
-          ],
-        };
-      case 'tenant':
-        return {
-          title: 'Tenant Matches Feed',
-          subtitle: 'Direct landlord properties matched to your budget & locality',
-          badge: 'Property Matches',
-          icon: KeyRound,
-          cards: [
-            {
-              id: 1,
-              title: 'Fully Furnished 2 BHK Apartment',
-              tag: 'Zero Brokerage',
-              price: '₹ 42,000 / mo',
-              location: 'Koramangala 4th Block',
-              commission: 'Immediate Move-in',
-              rating: '4.9',
-            },
-            {
-              id: 2,
-              title: 'Independent Gated Builder Floor',
-              tag: 'Verified Owner',
-              price: '₹ 55,000 / mo',
-              location: 'Indiranagar 100ft Rd',
-              commission: 'Available in 15 days',
-              rating: '4.8',
-            },
-          ],
-        };
-      case 'landlord':
-        return {
-          title: 'Tenant Enquiries & Leads',
-          subtitle: 'Verified high-intent corporate & residential tenant matches',
-          badge: 'Tenant Leads',
-          icon: Home,
-          cards: [
-            {
-              id: 1,
-              title: 'Corporate MNC Lease Enquiry (30 Seats)',
-              tag: 'Verified Tenant',
-              price: 'Budget: ₹ 2.5 L / mo',
-              location: 'Desired: Cyber City / BKC',
-              commission: 'Long Term 3 Yrs',
-              rating: '5.0',
-            },
-            {
-              id: 2,
-              title: 'Executive Family Seeking 3 BHK',
-              tag: 'Pre-Screened Tenant',
-              price: 'Budget: ₹ 85,000 / mo',
-              location: 'Desired: Bandra / Worli',
-              commission: 'Immediate Move-in',
-              rating: '4.9',
-            },
-          ],
-        };
-      default:
-        return {
-          title: 'Founder Network & Talent Pool',
-          subtitle: 'Connect with strategic investors, mentors, and partners',
-          badge: 'Founder Hub',
-          icon: UserCheck,
-          cards: [
-            {
-              id: 1,
-              title: 'Angel Syndicate PropTech Pool',
-              tag: 'Strategic Capital',
-              price: 'Cheque Size: ₹ 25L - ₹ 1Cr',
-              location: 'Pan-India',
-              commission: 'Mentorship Included',
-              rating: '5.0',
-            },
-          ],
-        };
-    }
-  };
-
-  const content = getExploreContent();
-  const Icon = content.icon;
-
   return (
-    <div className="w-full h-full flex flex-col justify-between px-5 pt-3 pb-5 bg-[#F8FAFC] overflow-y-auto">
-      <div>
-        {/* Top Header */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#1F4E5C] text-white flex items-center justify-center">
-              <Icon className="w-4 h-4" />
-            </div>
-            <span className="text-[11px] font-bold text-[#1F4E5C] tracking-tight">
-              {content.badge}
-            </span>
-          </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-            Role Activated
+    <div className="w-full h-full flex flex-col justify-between p-6 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 text-white overflow-y-auto animate-fadeIn text-center relative">
+      
+      {/* Background Decorative Blur Orbs */}
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-48 h-48 bg-[#00a896]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-amber-500/15 rounded-full blur-2xl pointer-events-none" />
+
+      {/* Top Header Badge */}
+      <div className="flex items-center justify-between z-10">
+        <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+          <Clock className="w-3.5 h-3.5 text-amber-400" />
+          <span className="text-[11px] font-bold text-slate-200 tracking-wide uppercase">
+            {roleTitle} Portal
           </span>
         </div>
+        <span className="text-[10px] font-black uppercase tracking-wider text-teal-300 bg-[#00a896]/20 border border-[#00a896]/30 px-2.5 py-0.5 rounded-full shadow-xs">
+          Coming Soon
+        </span>
+      </div>
 
-        {/* Title */}
-        <div className="space-y-0.5 mb-3 text-left">
-          <h2 className="text-lg font-black text-gray-900 leading-tight">
-            {content.title}
+      {/* Center Hero Content & Illustration */}
+      <div className="my-auto py-6 space-y-6 z-10 flex flex-col items-center">
+        
+        {/* Custom High-Fidelity SVG Lounge & Coffee Illustration */}
+        <div className="relative group">
+          <div className="w-28 h-28 rounded-3xl bg-gradient-to-tr from-[#092C3E] via-[#10435c] to-[#007a6e] p-0.5 shadow-2xl flex items-center justify-center relative overflow-hidden border border-white/20">
+            <div className="w-full h-full bg-slate-900/90 rounded-[22px] flex flex-col items-center justify-center p-3 relative">
+              <Armchair className="w-12 h-12 text-teal-300 stroke-[1.5] drop-shadow-md" />
+              <div className="absolute top-3 right-3 bg-amber-400/20 p-1.5 rounded-full border border-amber-400/40">
+                <Coffee className="w-4 h-4 text-amber-300" />
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Sparkles & Pulse Rings */}
+          <div className="absolute -top-2 -right-2 bg-amber-400 text-slate-950 p-1.5 rounded-full shadow-md animate-bounce">
+            <Sparkles className="w-3.5 h-3.5 fill-slate-950" />
+          </div>
+          <div className="absolute -bottom-2 -left-2 bg-[#00a896] text-white p-1.5 rounded-full shadow-md">
+            <Compass className="w-3.5 h-3.5" />
+          </div>
+        </div>
+
+        {/* Messaging Box */}
+        <div className="space-y-2.5 max-w-xs mx-auto">
+          <h2 className="text-2xl font-black tracking-tight text-white drop-shadow-xs">
+            Coming Soon!
           </h2>
-          <p className="text-xs text-gray-500 font-medium">
-            {content.subtitle}
-          </p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex-1 relative flex items-center">
-            <Search className="absolute left-3 w-3.5 h-3.5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search listings, locations..."
-              className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#1F4E5C] text-gray-800 placeholder-gray-400 font-medium shadow-2xs"
-            />
+          <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 shadow-lg">
+            <p className="text-xs font-bold text-teal-200 leading-relaxed">
+              We are working hard to bring you this service, please take a seat ☕✨
+            </p>
           </div>
-          <button className="p-2 bg-white border border-gray-200 rounded-xl text-gray-600 hover:text-[#1F4E5C] cursor-pointer">
-            <Filter className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Feed List */}
-        <div className="space-y-2.5">
-          {content.cards.map((card) => (
-            <div
-              key={card.id}
-              className="bg-white p-3.5 rounded-2xl border border-gray-200/80 shadow-2xs text-left space-y-2 relative group hover:border-[#1F4E5C]/40 transition-all"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <span className="text-[10px] font-bold text-[#1F4E5C] bg-[#EAF3F6] px-2 py-0.5 rounded-md">
-                  {card.tag}
-                </span>
-                <div className="flex items-center gap-1 text-[11px] font-extrabold text-amber-500">
-                  <Star className="w-3 h-3 fill-amber-400 stroke-amber-500" />
-                  {card.rating}
-                </div>
-              </div>
-
-              <h3 className="text-xs font-bold text-gray-900 leading-tight">
-                {card.title}
-              </h3>
-
-              <div className="flex items-center justify-between text-[11px] pt-1 border-t border-gray-100">
-                <div className="flex items-center gap-1 text-gray-500">
-                  <MapPin className="w-3 h-3 text-gray-400" />
-                  <span>{card.location}</span>
-                </div>
-                <span className="font-extrabold text-gray-900">{card.price}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Lock Membership Banner */}
-        <div className="mt-4 p-3.5 bg-gradient-to-br from-[#1F4E5C] to-[#092C3E] text-white rounded-2xl shadow-md text-left relative overflow-hidden space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-                <Lock className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-xs font-extrabold tracking-wide">
-                Membership Pass Required
-              </span>
-            </div>
-            <Sparkles className="w-4 h-4 text-[#4ade80]" />
-          </div>
-
-          <p className="text-[11px] text-gray-200 leading-snug">
-            To view full deal contacts, direct messaging & start matching, complete your platform subscription.
+          <p className="text-[11.5px] text-slate-400 font-medium leading-relaxed pt-1">
+            Our specialized <span className="text-slate-200 font-bold">{roleTitle}</span> dashboard & match algorithm is currently undergoing private beta testing.
           </p>
         </div>
       </div>
 
-      {/* Bottom CTA to Payment */}
-      <button
-        onClick={onProceedToPayment}
-        className="w-full py-3.5 mt-3 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer group"
-      >
-        <span>Unlock Full Access — Pay ₹399</span>
-        <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
-      </button>
+      {/* Bottom Action Section */}
+      <div className="space-y-3 z-10 w-full max-w-xs mx-auto">
+        <div className="p-3 bg-slate-900/80 rounded-2xl border border-slate-800 text-[11px] text-slate-400 font-medium flex items-center justify-center gap-2">
+          <Briefcase className="w-4 h-4 text-teal-400" />
+          <span>Active Service: Broker Dashboard is fully available</span>
+        </div>
+      </div>
     </div>
   );
+};
+
+export const RoleExploreScreen: React.FC<RoleExploreScreenProps> = ({
+  roleId,
+  onProceedToPayment,
+  isPaidMember = false,
+}) => {
+  if (roleId === 'broker') {
+    return <BrokerDashboard onProceedToPayment={onProceedToPayment} isPaidMember={isPaidMember} />;
+  }
+
+  if (roleId === 'customer') {
+    return <CustomerDashboard />;
+  }
+
+  if (roleId === 'investor') {
+    return <ComingSoonScreen roleTitle="Investor / VC" />;
+  }
+
+  if (roleId === 'founder') {
+    return <ComingSoonScreen roleTitle="Founder" />;
+  }
+
+  return <BrokerDashboard onProceedToPayment={onProceedToPayment} isPaidMember={isPaidMember} />;
 };
