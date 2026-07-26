@@ -83,7 +83,7 @@ export const ScreenOne: React.FC<ScreenOneProps> = ({ onNext, initialData }) => 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3.5 mt-2 bg-[#092C3E] hover:bg-[#061e2b] active:scale-[0.99] text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 mt-2 btn-brand active:scale-[0.99] font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             Create Account
           </button>
@@ -101,7 +101,7 @@ export const ScreenOne: React.FC<ScreenOneProps> = ({ onNext, initialData }) => 
       {/* Progress Footer */}
       <div className="w-full pt-3 border-t border-gray-100 flex items-center gap-3">
         <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden flex">
-          <div className="w-1/4 h-full bg-[#092C3E] rounded-full transition-all duration-300"></div>
+          <div className="w-1/4 h-full bg-brand-bar rounded-full transition-all duration-300"></div>
         </div>
         <span className="text-[11px] font-semibold text-gray-400 tracking-wider">
           Step 1: Account Details

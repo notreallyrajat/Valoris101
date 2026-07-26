@@ -154,7 +154,7 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
   onComplete,
 }) => {
   const [firmName, setFirmName] = useState('Valoris Realty Advisors');
-  const [reraNum, setReraNum] = useState('PRM/KA/RERA/1251/310/PR/210');
+  const [reraNum, setReraNum] = useState('');
   const [experience, setExperience] = useState(5);
   const [localities, setLocalities] = useState<string[]>(['Bandra West', 'BKC', 'Worli']);
   const [propertyTypes, setPropertyTypes] = useState<string[]>(['Residential', 'Commercial']);
@@ -214,18 +214,21 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
 
           {/* RERA Reg Number */}
           <div className="space-y-1 text-left">
-            <label className="block text-xs font-bold text-gray-800 ml-0.5">
+            <label className="block text-xs font-bold text-gray-800 ml-0.5 flex items-center gap-1.5">
               RERA Registration Number
+              <span className="text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full normal-case tracking-normal">
+                Optional
+              </span>
             </label>
             <div className="relative flex items-center">
               <input
                 type="text"
                 value={reraNum}
                 onChange={(e) => setReraNum(e.target.value)}
-                placeholder="RERA Number"
+                placeholder="e.g. PRM/KA/RERA/1251/310/PR/210 (if registered)"
                 className="w-full px-3.5 py-2.5 pr-9 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F4E5C]/30 focus:border-[#1F4E5C] text-gray-800 font-semibold uppercase tracking-wider"
               />
-              <ShieldCheck className="absolute right-3 w-4 h-4 text-emerald-600" />
+              <ShieldCheck className={`absolute right-3 w-4 h-4 ${reraNum ? 'text-emerald-600' : 'text-gray-300'}`} />
             </div>
           </div>
 
@@ -280,7 +283,7 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
 
       <button
         onClick={() => onComplete({ firmName, reraNum, experience, localities, propertyTypes })}
-        className="w-full py-3.5 mt-4 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+        className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
       >
         Complete Profile
       </button>
@@ -460,7 +463,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
 
       <button
         onClick={() => onComplete({ investorType, firmName, focus, ticketSize, sectors, linkedin })}
-        className="w-full py-3.5 mt-4 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+        className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
       >
         Complete Profile
       </button>
@@ -588,7 +591,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
 
       <button
         onClick={() => onComplete({ numProperties, types, portfolioVal, leaseTerm })}
-        className="w-full py-3.5 mt-4 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+        className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
       >
         Complete Profile
       </button>
@@ -676,7 +679,211 @@ const FounderProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =
 
       <button
         onClick={() => onComplete({ startupName, stage, funding })}
-        className="w-full py-3.5 mt-4 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+        className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+      >
+        Complete Profile
+      </button>
+    </div>
+  );
+};
+
+/* 3. CUSTOMER PROFILE SETUP */
+const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) => void }> = ({
+  onBack,
+  onComplete,
+}) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [district, setDistrict] = useState('');
+  const [state, setState] = useState('');
+  const [employment, setEmployment] = useState<'employed' | 'unemployed' | ''>('');
+  const [sector, setSector] = useState<'Primary' | 'Secondary' | 'Tertiary' | ''>('');
+
+  const INDIAN_STATES = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
+    'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
+    'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+    'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
+    'Andaman & Nicobar Islands', 'Chandigarh', 'Dadra & Nagar Haveli', 'Daman & Diu',
+    'Delhi', 'Jammu & Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry',
+  ];
+
+  const inputClass = "w-full px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F4E5C]/30 focus:border-[#1F4E5C] text-gray-800 font-semibold placeholder-gray-400";
+  const labelClass = "block text-xs font-bold text-gray-800 ml-0.5 mb-1";
+
+  return (
+    <div className="w-full h-full flex flex-col justify-between px-5 pt-3 pb-6 bg-white overflow-y-auto">
+      <div>
+        {/* Top Nav */}
+        <div className="flex items-center justify-between mb-2">
+          <button
+            onClick={onBack}
+            className="p-1.5 -ml-1 rounded-full hover:bg-gray-100 text-gray-800 cursor-pointer"
+          >
+            <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
+          </button>
+          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
+            Customer Profile
+          </span>
+        </div>
+
+        {/* Heading */}
+        <div className="space-y-0.5 mb-4">
+          <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">
+            Your Profile
+          </h2>
+          <p className="text-xs text-gray-500 font-medium">
+            Tell us a little about yourself to get started
+          </p>
+        </div>
+
+        {/* Profile Photo */}
+        <ProfilePhotoUpload label="Profile Photo" />
+
+        {/* Form Fields */}
+        <div className="space-y-3 pt-2">
+
+          {/* Name Row */}
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className={labelClass}>First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="e.g. Rajat"
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="e.g. Sharma"
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          {/* Physical Address */}
+          <div>
+            <label className={labelClass}>Physical Address</label>
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="House / Flat No., Street, Locality..."
+              rows={2}
+              className={`${inputClass} resize-none leading-relaxed`}
+            />
+          </div>
+
+          {/* Pincode + District */}
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className={labelClass}>Pincode</label>
+              <input
+                type="text"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="e.g. 400001"
+                inputMode="numeric"
+                maxLength={6}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>District</label>
+              <input
+                type="text"
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                placeholder="e.g. Mumbai"
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          {/* State Dropdown */}
+          <div>
+            <label className={labelClass}>State</label>
+            <select
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              className={`${inputClass} cursor-pointer`}
+            >
+              <option value="" disabled>Select your state...</option>
+              {INDIAN_STATES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Employment Status */}
+          <div>
+            <label className={labelClass}>Employment Status</label>
+            <div className="flex gap-2">
+              {(['employed', 'unemployed'] as const).map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => {
+                    setEmployment(opt);
+                    if (opt === 'unemployed') setSector('');
+                  }}
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer capitalize ${
+                    employment === opt
+                      ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C]'
+                      : 'bg-gray-50 border-gray-200 text-gray-500'
+                  }`}
+                >
+                  {opt === 'employed' ? '💼 Employed' : '🔍 Unemployed'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sector — only when employed */}
+          {employment === 'employed' && (
+            <div>
+              <label className={labelClass}>Sector of Work</label>
+              <div className="grid grid-cols-3 gap-2">
+                {([
+                  { value: 'Primary', emoji: '🌾', sub: 'Agriculture, Mining' },
+                  { value: 'Secondary', emoji: '🏭', sub: 'Manufacturing, Construction' },
+                  { value: 'Tertiary', emoji: '🏢', sub: 'Services, IT, Finance' },
+                ] as const).map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setSector(opt.value)}
+                    className={`flex flex-col items-center py-2.5 px-1.5 text-center rounded-xl border transition-all cursor-pointer ${
+                      sector === opt.value
+                        ? 'bg-[#1F4E5C] border-[#1F4E5C] text-white'
+                        : 'bg-gray-50 border-gray-200 text-gray-600'
+                    }`}
+                  >
+                    <span className="text-base mb-0.5">{opt.emoji}</span>
+                    <span className="text-[10px] font-bold leading-tight">{opt.value}</span>
+                    <span className={`text-[9px] leading-tight mt-0.5 ${
+                      sector === opt.value ? 'text-white/70' : 'text-gray-400'
+                    }`}>{opt.sub}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      <button
+        onClick={() => onComplete({ firstName, lastName, address, pincode, district, state, employment, sector })}
+        className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
       >
         Complete Profile
       </button>
@@ -693,6 +900,8 @@ export const RoleProfileScreen: React.FC<RoleProfileScreenProps> = ({
   switch (roleId) {
     case 'broker':
       return <BrokerProfileSetup onBack={onBack} onComplete={onComplete} />;
+    case 'customer':
+      return <CustomerProfileSetup onBack={onBack} onComplete={onComplete} />;
     case 'investor':
       return <InvestorProfileSetup onBack={onBack} onComplete={onComplete} />;
     case 'landlord':

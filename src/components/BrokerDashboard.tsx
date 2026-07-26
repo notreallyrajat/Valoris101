@@ -484,11 +484,11 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   const getActionLabel = (action: 'buy' | 'sell' | 'give_rent') => {
     switch (action) {
       case 'buy':
-        return 'Buying Requirement';
+        return 'Buy';
       case 'sell':
-        return 'For Sale';
+        return 'Sell';
       case 'give_rent':
-        return 'Give on Rent';
+        return 'Rent';
     }
   };
 
@@ -561,7 +561,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
             <button
               onClick={handlePayListingFee}
               disabled={isProcessingListingFee}
-              className="w-full py-3 bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-semibold text-xs rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+              className="w-full py-3 btn-brand active:scale-[0.99] font-semibold text-xs rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
             >
               {isProcessingListingFee ? (
                 <span className="flex items-center gap-2">
@@ -935,9 +935,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                     <div className="grid grid-cols-4 gap-1.5">
                       {[
                         { id: 'all', label: 'All Modes' },
-                        { id: 'give_rent', label: '🔑 Rent' },
-                        { id: 'buy', label: '🛒 Buy' },
-                        { id: 'sell', label: '🏷️ Sell' },
+                        { id: 'give_rent', label: 'Rent' },
+                        { id: 'buy', label: 'Buy' },
+                        { id: 'sell', label: 'Sell' },
                       ].map((act) => (
                         <button
                           key={act.id}
@@ -1343,9 +1343,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
-                    { id: 'give_rent', label: '🔑 Give on Rent' },
-                    { id: 'sell', label: '🏷️ Sell Property' },
-                    { id: 'buy', label: '🛒 Buy Mandate' },
+                    { id: 'give_rent', label: 'Rent' },
+                    { id: 'sell', label: 'Sell' },
+                    { id: 'buy', label: 'Buy' },
                   ].map((mode) => (
                     <button
                       type="button"
@@ -1370,9 +1370,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
-                    { id: 'pg', label: '🏠 PG (Paying Guest)' },
-                    { id: 'hostel', label: '🏢 Hostel' },
-                    { id: 'apartment', label: '🏢 Apartment / Land' },
+                    { id: 'pg', label: 'PG' },
+                    { id: 'hostel', label: 'Hostel' },
+                    { id: 'apartment', label: 'Apartment / Land' },
                   ].map((cat) => (
                     <button
                       type="button"
@@ -1586,7 +1586,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
 
                     <div>
                       <label className="text-[11px] font-semibold text-slate-800 block mb-0.5">
-                        Price per Sq Ft (₹/sq ft)
+                        Price per Sq Ft   
                       </label>
                       <input
                         type="text"
@@ -1648,7 +1648,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
-                    <span>🟢 Price: Negotiable</span>
+                    <span>🟢 Negotiable</span>
                   </button>
 
                   <button
@@ -1660,7 +1660,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
-                    <span>🔴 Price: Non-Negotiable</span>
+                    <span>🔴 Non-Negotiable</span>
                   </button>
                 </div>
               </div>
@@ -1672,9 +1672,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
-                    { id: 'fully_furnished', label: '🛋️ Fully Furnished' },
-                    { id: 'semifurnished', label: '🛋️ Semi-Furnished' },
-                    { id: 'unfurnished', label: '📦 Unfurnished' },
+                    { id: 'fully_furnished', label: ' Fully Furnished' },
+                    { id: 'semifurnished', label: ' Semi-Furnished' },
+                    { id: 'unfurnished', label: ' Unfurnished' },
                   ].map((fur) => (
                     <button
                       type="button"
@@ -1695,16 +1695,15 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
               {/* 7. Availability / Move-in Timeline */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-800 block">
-                  7. 📅 Availability / Move-in Date
+                  7. Availability / Move-in Date
                 </label>
-                <p className="text-[10px] text-slate-500 font-medium -mt-0.5">When will this property be available?</p>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
-                    { id: 'immediate', label: '🟢 Available Now' },
-                    { id: 'two_weeks', label: '📅 In 2 Weeks' },
-                    { id: 'one_month', label: '📅 In 1 Month' },
-                    { id: 'three_months', label: '📅 In 3 Months' },
-                    { id: 'six_months', label: '📅 In 6 Months' },
+                    { id: 'immediate', label: 'Available Now' },
+                    { id: 'two_weeks', label: ' 2 Weeks' },
+                    { id: 'one_month', label: ' 1 Month' },
+                    { id: 'three_months', label: ' 3 Months' },
+                    { id: 'six_months', label: ' 6 Months' },
                   ].map((av) => (
                     <button
                       type="button"
@@ -1728,7 +1727,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                   <div className="flex items-center gap-1.5">
                     <Camera className="w-4 h-4 text-teal-600" />
                     <label className="text-xs font-bold text-slate-900 block">
-                      7. Property Photo Gallery (Multi-Angle Photos) <span className="text-red-500">*</span>
+                      7. Gallery<span className="text-red-500">*</span>
                     </label>
                   </div>
                   <span className="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded-md">
@@ -1736,41 +1735,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                   </span>
                 </div>
 
-                {/* Preset Angle Buttons */}
-                <div className="space-y-1">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Quick Add Angle Presets:</span>
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-                    {PRESET_SAMPLE_PHOTOS.map((preset, pIdx) => (
-                      <button
-                        type="button"
-                        key={pIdx}
-                        onClick={() => handleAddPhotoUrl(preset.url)}
-                        className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] font-semibold text-slate-700 flex items-center gap-1 transition-all cursor-pointer shrink-0"
-                      >
-                        <Plus className="w-3 h-3 text-teal-600" />
-                        {preset.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
 
-                {/* Custom Photo URL Input */}
-                <div className="flex items-center gap-2">
-                  <input
-                    type="url"
-                    value={customPhotoInput}
-                    onChange={(e) => setCustomPhotoInput(e.target.value)}
-                    placeholder="Paste custom photo URL (https://...)"
-                    className="flex-1 px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-xl font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleAddPhotoUrl(customPhotoInput)}
-                    className="px-3 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-bold shrink-0 cursor-pointer"
-                  >
-                    Add URL
-                  </button>
-                </div>
 
                 {/* Thumbnails List */}
                 {uploadedPhotos.length > 0 ? (
@@ -1795,7 +1760,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 ) : (
                   <div className="bg-white p-4 rounded-xl border border-dashed border-slate-300 text-center space-y-1">
                     <ImageIcon className="w-6 h-6 text-slate-400 mx-auto" />
-                    <p className="text-[11px] font-medium text-slate-500">No photos added yet. Click preset angles above or add custom URLs.</p>
+                    <p className="text-[11px] font-medium text-slate-500">No photos added yet.</p>
                   </div>
                 )}
               </div>
@@ -1830,9 +1795,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3.5 mt-3 bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-semibold text-xs rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 mt-3 btn-brand active:scale-[0.99] font-semibold text-xs rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Continue to Pay ₹50 & Publish Listing ({uploadedPhotos.length} Photos)</span>
+                <span>Pay ₹50 & Publish Listing</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>

@@ -303,8 +303,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-base font-black text-slate-900 tracking-tight">Explore Properties</h1>
-            <p className="text-[11px] text-slate-500 font-medium">Find apartments, villas, PGs & commercial spaces</p>
+            <h1 className="text-base font-black text-slate-900 tracking-tight">Explore</h1>
           </div>
           
           <button

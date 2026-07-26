@@ -35,36 +35,33 @@ export const PhoneContainer: React.FC<PhoneContainerProps> = ({
           active ? 'ring-2 ring-emerald-500/20 shadow-2xl' : 'opacity-95'
         }`}
       >
-        {/* Outer Metallic Edge & Side Buttons */}
-        {/* Volume Up */}
+        {/* Side Buttons */}
         <div className="absolute -left-[14px] top-[115px] w-[3px] h-[34px] bg-gradient-to-r from-gray-400 to-gray-600 rounded-l-md shadow-sm" />
-        {/* Volume Down */}
         <div className="absolute -left-[14px] top-[160px] w-[3px] h-[34px] bg-gradient-to-r from-gray-400 to-gray-600 rounded-l-md shadow-sm" />
-        {/* Power Button */}
         <div className="absolute -right-[14px] top-[135px] w-[3px] h-[55px] bg-gradient-to-l from-gray-400 to-gray-600 rounded-r-md shadow-sm" />
 
         {/* Inner Phone Screen Chassis */}
-        <div className="relative w-full h-full rounded-[42px] bg-white overflow-hidden flex flex-col justify-between border border-gray-200">
+        <div className="phone-screen-chassis relative w-full h-full rounded-[42px] bg-white overflow-hidden flex flex-col justify-between border border-gray-200">
           
-          {/* Dynamic Island / Camera Pill */}
+          {/* Dynamic Island */}
           <div className="absolute top-[9px] left-1/2 -translate-x-1/2 w-[92px] h-[25px] bg-black rounded-full z-50 flex items-center justify-between px-2.5 shadow-sm">
             <div className="w-2.5 h-2.5 rounded-full bg-[#080d1a] border border-[#1e293b]" />
             <div className="w-2 h-2 rounded-full bg-[#052e16] border border-[#065f46]" />
           </div>
 
           {/* Status Bar */}
-          <div className="z-40 relative pt-1 bg-white">
+          <div className="phone-status-bar z-40 relative pt-1 bg-white">
             <StatusBar />
           </div>
 
-          {/* Dynamic Screen Content */}
-          <div className="flex-1 relative overflow-hidden bg-white">
+          {/* Screen Content */}
+          <div className="phone-content flex-1 relative overflow-hidden bg-white">
             {children}
           </div>
 
-          {/* Bottom Home Bar Indicator */}
-          <div className="w-full pt-1 pb-2 flex justify-center bg-white z-40">
-            <div className="w-[125px] h-[4px] bg-gray-900 rounded-full opacity-80" />
+          {/* Home Bar */}
+          <div className="phone-bottom-bar w-full pt-1 pb-2 flex justify-center bg-white z-40">
+            <div className="phone-home-bar w-[125px] h-[4px] bg-gray-900 rounded-full opacity-80" />
           </div>
         </div>
       </div>

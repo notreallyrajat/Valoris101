@@ -7,11 +7,12 @@ import { ScreenTwo, ROLES } from './components/ScreenTwo';
 import { RoleProfileScreen } from './components/RoleProfileScreens';
 import { RoleExploreScreen } from './components/RoleExploreScreens';
 import { PaymentPortalScreen, PaymentSuccessScreen } from './components/PaymentAndSuccessScreens';
-import { ValorisLogo } from './components/ValorisLogo';
-import { Smartphone, LayoutGrid, Sparkles, RotateCcw, Building2 } from 'lucide-react';
+
+import { Smartphone, LayoutGrid, Sparkles, RotateCcw, Building2, Moon, Sun } from 'lucide-react';
 
 export default function App() {
   const [viewMode, setViewMode] = useState<'showcase' | 'interactive' | 'dual-interactive'>('interactive');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   
   // App Flow Step:
   // 1: Screen 1 (Join Network - Account Details)
@@ -76,14 +77,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F3EF] bg-studio-grid text-gray-800 flex flex-col font-sans selection:bg-[#00a896] selection:text-white">
+    <div className={`min-h-screen studio-surface bg-studio-grid text-gray-800 flex flex-col font-sans selection:bg-[#00a896] selection:text-white${isDarkMode ? ' dark' : ''}`}>
       {/* Top Controls Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/80 px-4 sm:px-8 py-3 shadow-xs">
+      <header className="app-header sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/80 px-4 sm:px-8 py-3 shadow-xs">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           
           {/* Logo & Title */}
           <div className="flex items-center gap-3">
-            <div className="bg-[#092C3E] text-white p-2 rounded-xl shadow-xs">
+            <div className="bg-brand-gradient text-white p-2 rounded-xl shadow-xs">
               <Sparkles className="w-5 h-5 text-[#4ade80]" />
             </div>
             <div>
@@ -148,7 +149,7 @@ export default function App() {
                 setSelectedRole('broker');
                 setInteractiveStep(6);
               }}
-              className="flex items-center gap-1.5 px-3 py-1 bg-[#092C3E] hover:bg-[#163842] text-white text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1 btn-brand text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer"
             >
               <Building2 className="w-3.5 h-3.5 text-[#4ade80]" />
               Brokers Dashboard
@@ -167,12 +168,29 @@ export default function App() {
               <option value="founder">Founder</option>
             </select>
 
+
             <button
               onClick={handleReset}
               className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition-all cursor-pointer"
             >
               <RotateCcw className="w-3 h-3 text-gray-500" />
               Reset Flow
+            </button>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={() => setIsDarkMode((d) => !d)}
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer overflow-hidden ${
+                isDarkMode
+                  ? 'bg-[#0F172A] border-blue-500/40 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.3)]'
+                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <span className={`transition-transform duration-300 ${isDarkMode ? 'rotate-0' : 'rotate-180'}`}>
+                {isDarkMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
+              </span>
+              <span>{isDarkMode ? 'Dark' : 'Light'}</span>
             </button>
           </div>
         </div>
@@ -202,7 +220,7 @@ export default function App() {
                   onClick={() => setInteractiveStep(s.step as any)}
                   className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
                     interactiveStep === s.step
-                      ? 'bg-[#092C3E] text-white shadow-xs'
+                      ? 'bg-brand-gradient text-white shadow-xs'
                       : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                 >
@@ -372,8 +390,7 @@ export default function App() {
       <footer className="py-4 border-t border-gray-200/60 bg-white/60 text-center text-xs text-gray-500 font-medium">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between px-6 gap-2">
           <div className="flex items-center gap-2">
-            <ValorisLogo size="sm" showTagline={false} className="h-5 w-auto" />
-            <span>— Complete OTP Verification & Password Setup Onboarding</span>
+            <span>Valoris — Complete OTP Verification & Password Setup Onboarding</span>
           </div>
           <div>React + Vite + Tailwind • OTP & Password Flow Included</div>
         </div>

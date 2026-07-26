@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, ShieldCheck, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
-import { ValorisLogo } from './ValorisLogo';
+
 
 interface OtpVerificationScreenProps {
   userEmail?: string;
@@ -106,7 +106,7 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
     <div className="w-full h-full flex flex-col justify-between px-6 pt-3 pb-6 bg-white overflow-y-auto">
       {/* Navigation Top */}
       <div>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center mb-2">
           <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors text-gray-800 cursor-pointer"
@@ -114,7 +114,6 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <ValorisLogo size="sm" showTagline={false} className="h-6 w-auto" />
         </div>
 
         {/* Shield Icon Header */}
@@ -199,7 +198,7 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
           {/* Verify Button */}
           <button
             type="submit"
-            className="w-full py-3.5 mt-2 bg-[#092C3E] hover:bg-[#061e2b] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 mt-2 btn-brand active:scale-[0.99] font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             Verify & Continue
           </button>

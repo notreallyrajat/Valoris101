@@ -10,7 +10,7 @@ import {
   KeyRound,
   AlertCircle,
 } from 'lucide-react';
-import { ValorisLogo } from './ValorisLogo';
+
 
 interface CreatePasswordScreenProps {
   onPasswordCreated: (password: string) => void;
@@ -71,7 +71,7 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
     <div className="w-full h-full flex flex-col justify-between px-6 pt-3 pb-6 bg-white overflow-y-auto">
       {/* Top Bar Navigation */}
       <div>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center mb-2">
           <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors text-gray-800 cursor-pointer"
@@ -79,12 +79,11 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <ValorisLogo size="sm" showTagline={false} className="h-6 w-auto" />
         </div>
 
         {/* Title Header */}
         <div className="flex flex-col items-center text-center mt-1 mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#092C3E] text-white flex items-center justify-center shadow-md mb-2">
+          <div className="w-12 h-12 rounded-2xl bg-brand-gradient text-white flex items-center justify-center shadow-md mb-2">
             <KeyRound className="w-6 h-6 stroke-[2]" />
           </div>
           <h1 className="text-[20px] font-extrabold text-gray-900 tracking-tight leading-tight">
@@ -235,7 +234,7 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
           {/* Save & Finish Button */}
           <button
             type="submit"
-            className="w-full py-3.5 mt-1 bg-[#092C3E] hover:bg-[#061e2b] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 mt-1 btn-brand active:scale-[0.99] font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             Save Password & Continue
           </button>
@@ -245,7 +244,7 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
       {/* Progress Footer */}
       <div className="w-full pt-3 border-t border-gray-100 flex items-center gap-3">
         <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden flex">
-          <div className="w-3/5 h-full bg-[#092C3E] rounded-full transition-all duration-300"></div>
+          <div className="w-3/5 h-full bg-brand-bar rounded-full transition-all duration-300"></div>
         </div>
         <span className="text-[11px] font-semibold text-gray-400 tracking-wider">
           Create Password
