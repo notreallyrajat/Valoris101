@@ -51,6 +51,8 @@ import {
   Crop,
   PiggyBank,
   Armchair,
+  ExternalLink,
+  Navigation,
 } from 'lucide-react';
 
 interface CustomerDashboardProps {
@@ -1803,11 +1805,17 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                   </div>
                 </div>
 
-                {/* PRECISE LOCATION & MAP LANDMARK */}
-                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2 text-left">
-                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 uppercase tracking-wider">
-                    <MapPin className="w-4 h-4 text-teal-600" /> Precise Address & Landmark Location
-                  </h3>
+                {/* PRECISE LOCATION & MOCK GOOGLE MAP LANDMARK */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 text-left">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 uppercase tracking-wider">
+                      <MapPin className="w-4 h-4 text-teal-600" /> Precise Address & Location Map
+                    </h3>
+                    <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" /> Google Maps Live
+                    </span>
+                  </div>
+
                   <div className="p-3 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800 space-y-1.5">
                     <p className="text-xs text-slate-800 dark:text-slate-200 font-extrabold leading-relaxed">
                       {selectedPropertyDetail.address || `${selectedPropertyDetail.title}, Near Sony Signal, Koramangala 4th Block, Bangalore - 560034`}
@@ -1815,6 +1823,87 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                     <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                       <span>Coordinates: 12.9352° N, 77.6245° E</span>
                       <span>• Pincode: 560034</span>
+                    </div>
+                  </div>
+
+                  {/* MOCK GOOGLE MAP INTERACTIVE CANVAS */}
+                  <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 h-52 sm:h-60 w-full shadow-inner group">
+                    {/* Map Grid Background Simulation */}
+                    <div className="absolute inset-0 opacity-80 bg-[radial-gradient(#1e293b_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] bg-slate-900 dark:bg-[#0A0D14]" />
+                    
+                    {/* Simulated Map Roads & Blocks */}
+                    <svg className="absolute inset-0 w-full h-full opacity-40 dark:opacity-60" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M -20 80 Q 150 120 400 90 T 800 140" stroke="#38bdf8" strokeWidth="8" fill="none" opacity="0.7" />
+                      <path d="M 120 -20 Q 140 180 180 320" stroke="#0097A7" strokeWidth="6" fill="none" opacity="0.6" />
+                      <path d="M 280 -20 Q 250 160 310 320" stroke="#64748b" strokeWidth="4" fill="none" opacity="0.5" />
+                      <path d="M -20 200 Q 200 180 450 240" stroke="#475569" strokeWidth="5" fill="none" strokeDasharray="6 4" opacity="0.5" />
+                      <rect x="40" y="30" width="70" height="50" rx="12" fill="#10b981" opacity="0.25" />
+                      <rect x="220" y="140" width="90" height="60" rx="8" fill="#3b82f6" opacity="0.2" />
+                    </svg>
+
+                    {/* Top Bar: Google Maps Branding & External Link */}
+                    <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between z-10">
+                      <div className="bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10 flex items-center gap-1.5 shadow-md">
+                        <span className="text-xs font-black tracking-tight">
+                          <span className="text-blue-400">G</span>
+                          <span className="text-red-400">o</span>
+                          <span className="text-amber-400">o</span>
+                          <span className="text-blue-400">g</span>
+                          <span className="text-emerald-400">l</span>
+                          <span className="text-red-400">e</span>
+                          <span className="text-white text-[10px] ml-1 font-semibold">Maps</span>
+                        </span>
+                      </div>
+
+                      <a
+                        href={`https://maps.google.com/?q=${encodeURIComponent(selectedPropertyDetail.address || selectedPropertyDetail.location)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="bg-[#1A3FAA] hover:bg-blue-700 text-white text-[10.5px] font-extrabold px-3 py-1 rounded-xl backdrop-blur-md shadow-md border border-cyan-300/30 flex items-center gap-1 transition-all cursor-pointer hover:scale-105"
+                      >
+                        <Navigation className="w-3.5 h-3.5" />
+                        <span>Open in Google Maps</span>
+                        <ExternalLink className="w-3 h-3 text-cyan-200" />
+                      </a>
+                    </div>
+
+                    {/* Central Pin Marker with Pulse Animation */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-20 group-hover:scale-110 transition-transform">
+                      {/* Floating Property Info Badge */}
+                      <div className="mb-1 px-2.5 py-1 bg-slate-950/90 text-white backdrop-blur-md rounded-xl text-[10px] font-extrabold shadow-xl border border-teal-400/40 flex items-center gap-1 whitespace-nowrap">
+                        <MapPin className="w-3 h-3 text-rose-500 fill-rose-500 animate-bounce" />
+                        <span>{selectedPropertyDetail.title}</span>
+                      </div>
+
+                      {/* Glowing Pin Circle */}
+                      <div className="relative flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-rose-500/30 animate-ping absolute" />
+                        <div className="w-7 h-7 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg border-2 border-white">
+                          <MapPin className="w-4 h-4 fill-white stroke-rose-600" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Nearby Landmark Pin Badges on Map Canvas */}
+                    <div className="absolute bottom-10 left-4 z-10 bg-slate-950/80 backdrop-blur-xs text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg border border-white/10 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" /> Indiranagar Metro (450m)
+                    </div>
+
+                    <div className="absolute top-14 right-4 z-10 bg-slate-950/80 backdrop-blur-xs text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg border border-white/10 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-sky-400" /> Embassy GolfLinks (1.8km)
+                    </div>
+
+                    {/* Bottom Bar: Map Controls & Scale */}
+                    <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between z-10">
+                      <div className="flex items-center gap-1 bg-slate-950/80 backdrop-blur-xs px-2 py-0.5 rounded-lg text-[9px] font-mono text-slate-300 border border-white/10">
+                        <span>12.9352° N, 77.6245° E</span>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <span className="bg-slate-950/80 backdrop-blur-xs px-2 py-0.5 rounded-lg text-[9px] font-bold text-slate-200 border border-white/10">
+                          Scale 200m
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
