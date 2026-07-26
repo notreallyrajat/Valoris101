@@ -770,20 +770,10 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                     </div>
                   </div>
 
-                  {/* Owner Performance Stats */}
-                  <div className="grid grid-cols-3 gap-2 p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                    <div>
-                      <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-bold uppercase block">Response Rate</span>
-                      <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">98% (&lt; 10 mins)</span>
-                    </div>
-                    <div className="border-x border-slate-200 dark:border-slate-700">
-                      <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-bold uppercase block">Active Listings</span>
-                      <span className="text-xs font-black text-slate-800 dark:text-slate-200">4 Properties</span>
-                    </div>
-                    <div>
-                      <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-bold uppercase block">Tenant Rating</span>
-                      <span className="text-xs font-black text-amber-500">4.9 ★ (18 Reviews)</span>
-                    </div>
+                  {/* Owner Active Portfolio */}
+                  <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">Active Owner Portfolio:</span>
+                    <span className="font-extrabold text-slate-900 dark:text-slate-100">4 Verified Properties</span>
                   </div>
 
                   {/* Owner Registered Address & Contact Info */}
