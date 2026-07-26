@@ -19,39 +19,34 @@ interface ScreenTwoProps {
 export interface RoleItem {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   icon: React.ElementType;
 }
 
 export const ROLES: RoleItem[] = [
   {
+    id: 'customer',
+    title: 'Customer',
+    icon: Users,
+  },
+  {
+    id: 'landlord',
+    title: 'Landlord',
+    icon: Home,
+  },
+  {
     id: 'broker',
     title: 'Broker',
-    description: "Broker's B2B professional building and brokers",
     icon: Handshake,
   },
   {
     id: 'investor',
     title: 'Investor / VC',
-    description: 'Chart and our professionals and directory industry',
     icon: TrendingUp,
-  },
-  {
-    id: 'landlord',
-    title: 'Landlord',
-    description: 'Landlord services for property owners.',
-    icon: Home,
-  },
-  {
-    id: 'customer',
-    title: 'Customer',
-    description: 'Customer for professional, customer and cross',
-    icon: Users,
   },
   {
     id: 'founder',
     title: 'Founder',
-    description: 'Founder for professionals branding or success',
     icon: User,
   },
 ];
@@ -59,7 +54,7 @@ export const ROLES: RoleItem[] = [
 export const ScreenTwo: React.FC<ScreenTwoProps> = ({
   onBack,
   onFinish,
-  selectedRole: initialSelectedRole = 'founder',
+  selectedRole: initialSelectedRole = 'customer',
 }) => {
   const [selectedRole, setSelectedRole] = useState<string>(initialSelectedRole);
 
@@ -127,9 +122,6 @@ export const ScreenTwo: React.FC<ScreenTwoProps> = ({
                     <h3 className="text-[13.5px] font-bold text-gray-900 leading-tight">
                       {role.title}
                     </h3>
-                    <p className="text-[11px] text-gray-500 font-normal truncate max-w-[210px] mt-0.5">
-                      {role.description}
-                    </p>
                   </div>
                 </div>
 

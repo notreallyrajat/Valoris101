@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
 import {
-  PlusCircle,
   Search,
   CheckCircle2,
   MapPin,
-  Utensils,
-  BedDouble,
   PhoneCall,
   SlidersHorizontal,
   X,
   Building,
-  MessageSquare,
   Lock,
   CreditCard,
   Smartphone,
-  Ruler,
   Home,
   Check,
   ChevronRight,
@@ -23,7 +18,8 @@ import {
   Trash2,
   ChevronLeft,
   Plus,
-  Compass
+  Compass,
+  ArrowLeft
 } from 'lucide-react';
 
 export interface ListingItem {
@@ -33,8 +29,11 @@ export interface ListingItem {
   propertyType: 'pg' | 'hostel' | 'apartment'; // PG, Hostel, Apartment
   price: string;
   deposit?: string;
-  limitSet: 'negotiable' | 'non_negotiable'; // Negotiable or Non-Negotiable
-  furnishing: 'fully_furnished' | 'semifurnished' | 'unfurnished'; // Fully furnished, unfurnished, semifurnished
+  limitSet?: 'negotiable' | 'non_negotiable'; // Negotiable or Non-Negotiable
+  furnishing?: 'fully_furnished' | 'semifurnished' | 'unfurnished'; // Fully furnished, unfurnished, semifurnished
+  foodPreference?: 'vegetarian' | 'non_vegetarian' | 'both'; // Dietary preference
+  occupancyType?: 'coed' | 'girls_only' | 'boys_only' | 'family_only' | 'bachelors_only' | 'students_only'; // Allowed occupancy
+  availableFrom?: 'immediate' | 'two_weeks' | 'one_month' | 'three_months' | 'six_months'; // When property becomes available
   location: string;
   address?: string; // Full Property Address
   plotSize?: string; // Plot Size / Carpet Area (e.g. 1,800 sq ft)
@@ -47,7 +46,7 @@ export interface ListingItem {
   foodPolicy?: string; // Meals included, etc.
   targetTenant?: string; // Male, Female, Unisex, Professionals
   amenities: string[];
-  rating: string;
+  rating?: string;
   isVerified?: boolean;
   contactName?: string;
   contactPhone?: string;
@@ -58,62 +57,56 @@ export interface ListingItem {
 }
 
 const PRESET_SAMPLE_PHOTOS = [
-  { label: 'Front View', url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Living Room', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Master Bedroom', url: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Kitchen & Dining', url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Washroom & Balcony', url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Exterior Front View', url: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Living Room / Interior', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Master Bedroom', url: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Modern Kitchen', url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Bathroom', url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' }
 ];
 
 const INITIAL_LISTINGS: ListingItem[] = [
   {
-    id: 'b-101',
-    title: 'Starlight Co-Living PG for Professionals',
+    id: 'b-1',
+    title: 'Modern 3 BHK Luxury Apartment in Koramangala',
     actionType: 'give_rent',
-    propertyType: 'pg',
-    price: '₹ 14,500 / mo',
-    deposit: '₹ 25,000',
-    limitSet: 'negotiable',
-    furnishing: 'fully_furnished',
+    propertyType: 'apartment',
+    price: '₹ 45,000 / mo',
+    deposit: '₹ 1.5 Lakhs',
     location: 'Koramangala 4th Block, Bangalore',
-    address: 'Plot #42, 8th Main Road, Koramangala 4th Block',
-    plotSize: '2,400 sq ft (Carpet Area)',
-    maintenanceFee: '₹ 1,200 / mo',
-    lockInPeriod: '6 Months Lock-in',
-    roomType: 'Single & Twin Sharing',
-    foodPolicy: '3 Meals Included (Veg & Non-Veg)',
-    targetTenant: 'Working Professionals & Students',
-    amenities: ['WiFi', 'AC', 'Housekeeping', 'Power Backup', 'Gym'],
-    rating: '4.9',
-    isVerified: true,
-    contactName: 'Rajat Sharma (Broker)',
+    address: 'Flat 402, Skyline Residency, 8th Main Road, Koramangala',
+    contactName: 'Rajat Sharma (Owner)',
     contactPhone: '+91 98765 43210',
-    contactEmail: 'rajat.broker@valoris.com',
-    isSponsored: true,
-    sponsoredBid: 500,
+    contactEmail: 'rajat.owner@veloris.com',
+    furnishing: 'fully_furnished',
+    limitSet: 'negotiable',
+    foodPreference: 'both',
+    occupancyType: 'family_only',
+    availableFrom: 'immediate',
+    roomType: '3 BHK (3 Baths)',
+    maintenanceFee: '₹ 3,500 / mo',
+    lockInPeriod: '6 Months',
+    amenities: ['Power Backup', 'Gym & Clubhouse', '24/7 Security', 'Covered Parking', 'Swimming Pool'],
     images: [
-      'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80',
     ],
   },
   {
-    id: 'b-102',
-    title: 'Metro Executive Student Hostel',
+    id: 'b-2',
+    title: 'Premium Executive Single Sharing PG for Tech Professionals',
     actionType: 'give_rent',
-    propertyType: 'hostel',
-    price: '₹ 9,800 / mo',
-    deposit: '₹ 15,000',
-    limitSet: 'non_negotiable',
-    furnishing: 'semifurnished',
+    propertyType: 'pg',
+    price: '₹ 14,500 / mo',
+    deposit: '₹ 20,000',
     location: 'Indiranagar 100ft Road, Bangalore',
-    address: 'Building #108, 100ft Road, Opposite Metro Station',
-    plotSize: '4,500 sq ft (Total Built-up)',
-    maintenanceFee: 'Inclusive',
     lockInPeriod: '3 Months Lock-in',
     roomType: 'Triple & Four Sharing',
     foodPolicy: 'Breakfast & Dinner Included',
+    foodPreference: 'vegetarian',
+    occupancyType: 'boys_only',
+    availableFrom: 'two_weeks',
     targetTenant: 'College Students & Interns',
     amenities: ['WiFi', 'CCTV Security', 'Laundry', 'Study Hall'],
     rating: '4.7',
@@ -121,6 +114,8 @@ const INITIAL_LISTINGS: ListingItem[] = [
     contactName: 'Ankit Mehta (Broker)',
     contactPhone: '+91 98123 76543',
     contactEmail: 'ankit.broker@valoris.com',
+    furnishing: 'fully_furnished',
+    limitSet: 'non_negotiable',
     images: [
       'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80',
@@ -137,6 +132,7 @@ const INITIAL_LISTINGS: ListingItem[] = [
     deposit: '10% Booking Amount',
     limitSet: 'negotiable',
     furnishing: 'unfurnished',
+    availableFrom: 'immediate',
     location: 'BKC, Mumbai',
     address: 'Tower A, Flat 1402, Valoris Horizon, BKC',
     plotSize: '1,800 sq ft (30 x 60 Plot)',
@@ -165,6 +161,9 @@ const INITIAL_LISTINGS: ListingItem[] = [
     deposit: '₹ 30,000',
     limitSet: 'negotiable',
     furnishing: 'fully_furnished',
+    availableFrom: 'immediate',
+    foodPreference: 'vegetarian',
+    occupancyType: 'girls_only',
     location: 'HSR Layout Sector 1, Bangalore',
     address: 'House #55, 14th Cross, HSR Sector 1',
     plotSize: '1,600 sq ft',
@@ -194,6 +193,7 @@ const INITIAL_LISTINGS: ListingItem[] = [
     pricePerSqFt: '₹ 10,500 / sq ft Target',
     limitSet: 'non_negotiable',
     furnishing: 'semifurnished',
+    availableFrom: 'three_months',
     location: 'Cyber City, Gurgaon',
     address: 'Desired: Cyber City Phase 2 / Golf Course Rd',
     plotSize: '3,050 sq ft Carpet Requirement',
@@ -232,8 +232,14 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   const [propertyTypeFilter, setPropertyTypeFilter] = useState<'all' | 'pg' | 'hostel' | 'apartment'>('all');
   const [limitSetFilter, setLimitSetFilter] = useState<'all' | 'negotiable' | 'non_negotiable'>('all');
   const [furnishingFilter, setFurnishingFilter] = useState<'all' | 'fully_furnished' | 'semifurnished' | 'unfurnished'>('all');
+  const [foodPrefFilter, setFoodPrefFilter] = useState<'all' | 'vegetarian' | 'non_vegetarian' | 'both'>('all');
+  const [occupancyFilter, setOccupancyFilter] = useState<'all' | 'coed' | 'girls_only' | 'boys_only' | 'family_only' | 'bachelors_only' | 'students_only'>('all');
+  const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'immediate' | 'two_weeks' | 'one_month' | 'three_months' | 'six_months'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Selected property for full detail view screen
+  const [selectedPropertyDetail, setSelectedPropertyDetail] = useState<ListingItem | null>(null);
 
   // New Listing Form State
   const [newTitle, setNewTitle] = useState('');
@@ -251,6 +257,8 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   const [newRoomType, setNewRoomType] = useState('Single & Twin Sharing');
   const [newFoodPolicy, setNewFoodPolicy] = useState('3 Meals Included');
   const [newTargetTenant, setNewTargetTenant] = useState('Working Professionals & Students');
+
+  const [newAvailability, setNewAvailability] = useState<'immediate' | 'two_weeks' | 'one_month' | 'three_months' | 'six_months'>('immediate');
 
   // Buy/Sell specifics
   const [newPricePerSqFt, setNewPricePerSqFt] = useState('');
@@ -332,6 +340,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
       foodPolicy: newPropertyType !== 'apartment' && newActionType === 'give_rent' ? newFoodPolicy : undefined,
       targetTenant: newPropertyType !== 'apartment' && newActionType === 'give_rent' ? newTargetTenant : undefined,
       amenities: newAmenities,
+      availableFrom: newAvailability,
       rating: '5.0',
       isVerified: true,
       contactName: 'Rajat Sharma (Broker)',
@@ -397,6 +406,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
       if (propertyTypeFilter !== 'all' && item.propertyType !== propertyTypeFilter) return false;
       if (limitSetFilter !== 'all' && item.limitSet !== limitSetFilter) return false;
       if (furnishingFilter !== 'all' && item.furnishing !== furnishingFilter) return false;
+      if (foodPrefFilter !== 'all' && item.foodPreference !== foodPrefFilter) return false;
+      if (occupancyFilter !== 'all' && item.occupancyType !== occupancyFilter) return false;
+      if (availabilityFilter !== 'all' && item.availableFrom !== availabilityFilter) return false;
       if (searchTerm) {
         const q = searchTerm.toLowerCase();
         const matchTitle = item.title.toLowerCase().includes(q);
@@ -412,7 +424,40 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
       return bidB - bidA;
     });
 
-  const getFurnishingLabel = (f: 'fully_furnished' | 'semifurnished' | 'unfurnished') => {
+  // Helper labels
+  const getFoodPrefLabel = (f?: string) => {
+    switch (f) {
+      case 'vegetarian': return '🥦 Vegetarian Only';
+      case 'non_vegetarian': return '🍗 Non-Vegetarian';
+      case 'both': return '🍽️ Veg & Non-Veg';
+      default: return null;
+    }
+  };
+
+  const getOccupancyLabel = (o?: string) => {
+    switch (o) {
+      case 'coed': return '👫 Co-ed';
+      case 'girls_only': return '👩 Girls Only';
+      case 'boys_only': return '👨 Boys Only';
+      case 'family_only': return '👨‍👩‍👧 Family Only';
+      case 'bachelors_only': return '🎓 Bachelors Only';
+      case 'students_only': return '📚 Students Only';
+      default: return null;
+    }
+  };
+
+  const getAvailabilityLabel = (a?: string) => {
+    switch (a) {
+      case 'immediate': return '🟢 Available Now';
+      case 'two_weeks': return '📅 In 2 Weeks';
+      case 'one_month': return '📅 In 1 Month';
+      case 'three_months': return '📅 In 3 Months';
+      case 'six_months': return '📅 In 6 Months';
+      default: return null;
+    }
+  };
+
+  const getFurnishingLabel = (f?: 'fully_furnished' | 'semifurnished' | 'unfurnished') => {
     switch (f) {
       case 'fully_furnished':
         return 'Fully Furnished';
@@ -420,6 +465,8 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
         return 'Semi-Furnished';
       case 'unfurnished':
         return 'Unfurnished';
+      default:
+        return 'Fully Furnished';
     }
   };
 
@@ -463,7 +510,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
 
       {/* MODAL 1: ₹50 LISTING FEE PAYMENT MODAL */}
       {showListingFeeModal && pendingListing && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="absolute inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-left border border-slate-100 animate-scaleUp">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
@@ -529,36 +576,282 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
         </div>
       )}
 
+      {/* SEPARATE FULL PROPERTY DETAIL SCREEN */}
+      {selectedPropertyDetail && (
+        <div className="absolute inset-0 z-50 bg-[#F8FAFC] flex flex-col overflow-y-auto text-left animate-fadeIn">
+          {/* Top Sticky Header */}
+          <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 py-3 border-b border-slate-200/80 flex items-center justify-between shadow-2xs">
+            <button
+              onClick={() => setSelectedPropertyDetail(null)}
+              className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-extrabold text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl transition-all cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+              <span>Back to Feed</span>
+            </button>
+
+            <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
+              Property Details
+            </span>
+
+            <button
+              onClick={() => setSelectedPropertyDetail(null)}
+              className="p-1.5 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="p-4 space-y-4 max-w-lg mx-auto w-full pb-16">
+            {/* Gallery limited to maximum 2 images */}
+            {(() => {
+              const fullImages = selectedPropertyDetail.images && selectedPropertyDetail.images.length > 0
+                ? selectedPropertyDetail.images
+                : [PRESET_SAMPLE_PHOTOS[0].url];
+              const detailImages = fullImages.slice(0, 2);
+              const activeDetailImgIdx = Math.min(activeImageIndices[selectedPropertyDetail.id] || 0, detailImages.length - 1);
+
+              return (
+                <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-52 w-full border border-slate-200 shadow-md">
+                  <img
+                    src={detailImages[activeDetailImgIdx] || detailImages[0]}
+                    alt={selectedPropertyDetail.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 border border-white/10 shadow-xs">
+                    <Camera className="w-3.5 h-3.5 text-teal-400" />
+                    {activeDetailImgIdx + 1} of {detailImages.length} Preview Photos
+                  </div>
+
+                  {detailImages.length > 1 && (
+                    <div className="absolute inset-y-0 inset-x-2 flex items-center justify-between pointer-events-none">
+                      <button
+                        onClick={() => handlePrevImage(selectedPropertyDetail.id, detailImages.length)}
+                        className="pointer-events-auto w-7 h-7 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md transition-all shadow-md cursor-pointer"
+                      >
+                        <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
+                      </button>
+                      <button
+                        onClick={() => handleNextImage(selectedPropertyDetail.id, detailImages.length)}
+                        className="pointer-events-auto w-7 h-7 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md transition-all shadow-md cursor-pointer"
+                      >
+                        <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Thumbnail Strip */}
+                  {detailImages.length > 1 && (
+                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1.5 p-1 bg-slate-950/70 backdrop-blur-md rounded-xl overflow-x-auto">
+                      {detailImages.map((imgUrl, imgIdx) => (
+                        <button
+                          key={imgIdx}
+                          onClick={() => handleSelectImage(selectedPropertyDetail.id, imgIdx)}
+                          className={`w-8 h-8 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                            activeDetailImgIdx === imgIdx
+                              ? 'border-teal-400 ring-2 ring-teal-400/40 scale-105'
+                              : 'border-transparent opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={imgUrl} alt={`Thumb ${imgIdx + 1}`} className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
+            {/* Rough Location & Title (ALWAYS UNBLURRED) */}
+            <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-2">
+              <div className="flex items-center gap-1.5">
+                <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-lg border ${getActionBadgeStyle(selectedPropertyDetail.actionType)}`}>
+                  {getActionLabel(selectedPropertyDetail.actionType)}
+                </span>
+                <span className="text-[10px] font-bold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-lg border border-slate-200 uppercase">
+                  {selectedPropertyDetail.propertyType}
+                </span>
+              </div>
+
+              <div>
+                <h1 className="text-base font-extrabold text-slate-900 leading-snug">
+                  {selectedPropertyDetail.title}
+                </h1>
+                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-bold mt-1 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                  <MapPin className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span>Rough Location: {selectedPropertyDetail.location}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* DETAILED SPECIFICATIONS SECTION - BLURRED WHEN UNPAID */}
+            <div className="relative rounded-3xl overflow-hidden min-h-[360px]">
+              {/* Blurred / Visible Container */}
+              <div className={`space-y-4 transition-all duration-300 ${!isPaidMember ? 'filter blur-md select-none pointer-events-none opacity-30' : ''}`}>
+                
+                {/* Price & Deposit */}
+                <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                  <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        {selectedPropertyDetail.actionType === 'give_rent' ? 'Monthly Rent:' : 'Property Price:'}
+                      </span>
+                      <span className="text-lg font-black text-slate-900">{selectedPropertyDetail.price}</span>
+                    </div>
+                    {selectedPropertyDetail.deposit && (
+                      <div className="text-right">
+                        <span className="text-[10px] text-slate-500 font-medium block">Security Deposit:</span>
+                        <span className="text-xs font-bold text-slate-700">{selectedPropertyDetail.deposit}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Landlord / Owner Contact Card */}
+                <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Landlord / Owner:</span>
+                      <h3 className="text-sm font-extrabold text-slate-900">{selectedPropertyDetail.contactName || 'Property Owner'}</h3>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Unlocked
+                    </span>
+                  </div>
+
+                  <div className="space-y-2.5 pt-1">
+                    <div className="p-3 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 flex items-center justify-between text-xs">
+                      <span className="font-bold text-emerald-900 flex items-center gap-1.5">
+                        <PhoneCall className="w-4 h-4 text-emerald-600" />
+                        {selectedPropertyDetail.contactPhone}
+                      </span>
+                      <span className="text-[10px] text-emerald-700 font-semibold">{selectedPropertyDetail.contactEmail}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Complete Address */}
+                {selectedPropertyDetail.address && (
+                  <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-2">
+                    <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider">
+                      <MapPin className="w-4 h-4 text-teal-600" /> Complete Address
+                    </h3>
+                    <p className="text-xs text-slate-700 font-semibold leading-relaxed bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                      {selectedPropertyDetail.address}
+                    </p>
+                  </div>
+                )}
+
+                {/* Full Property Specifications */}
+                <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
+                    Full Property Specifications
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs font-medium">
+                    {selectedPropertyDetail.plotSize && (
+                      <div className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <span className="text-[10px] text-slate-400 block font-bold">Area / Plot Size:</span>
+                        <span className="font-bold text-slate-900">{selectedPropertyDetail.plotSize}</span>
+                      </div>
+                    )}
+                    {selectedPropertyDetail.roomType && (
+                      <div className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <span className="text-[10px] text-slate-400 block font-bold">Room Configuration:</span>
+                        <span className="font-bold text-slate-900">{selectedPropertyDetail.roomType}</span>
+                      </div>
+                    )}
+                    {selectedPropertyDetail.foodPolicy && (
+                      <div className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <span className="text-[10px] text-slate-400 block font-bold">Food & Mess Policy:</span>
+                        <span className="font-bold text-amber-900">{selectedPropertyDetail.foodPolicy}</span>
+                      </div>
+                    )}
+                    {selectedPropertyDetail.maintenanceFee && (
+                      <div className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <span className="text-[10px] text-slate-400 block font-bold">Maintenance Charge:</span>
+                        <span className="font-bold text-slate-900">{selectedPropertyDetail.maintenanceFee}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* PAYWALL OVERLAY - PROMINENTLY DISPLAYED OVER BLURRED CONTENT WHEN UNPAID */}
+              {!isPaidMember && (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-5 text-center bg-slate-950/75 backdrop-blur-xs rounded-3xl border border-amber-300/40 shadow-2xl">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black shadow-lg mb-3">
+                    <Lock className="w-6 h-6 stroke-[2.5]" />
+                  </div>
+                  <h3 className="text-base font-black text-white tracking-tight">
+                    Complete Profile Locked
+                  </h3>
+                  <p className="text-xs text-slate-200 font-medium max-w-xs mt-1.5 leading-relaxed">
+                    Pay ₹399 to unlock complete profile, price details, full address & direct landlord contact info.
+                  </p>
+                  <button
+                    onClick={onProceedToPayment}
+                    className="mt-5 w-full py-3.5 bg-[#007a6e] hover:bg-[#006258] text-white font-extrabold text-xs rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-teal-300/40 active:scale-[0.98]"
+                  >
+                    <Lock className="w-4 h-4 text-teal-300" />
+                    <span>Pay ₹399 to Unlock Complete Profile</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
-        {/* Ultra-Slim Icon-Only Navigation Bar */}
-        <div className="bg-white/95 backdrop-blur-md py-1.5 px-4 border-b border-slate-200/70 sticky top-0 z-30 shadow-2xs">
-          <div className="flex items-center justify-center gap-6 max-w-xs mx-auto">
+        {/* Ultra-Professional Navigation Bar with Icon & Text Below */}
+        <div className="bg-white/95 backdrop-blur-md py-2 px-4 border-b border-slate-200/70 sticky top-0 z-30 shadow-2xs">
+          <div className="flex items-center justify-center gap-10 max-w-xs mx-auto">
             {/* Tab 1: Explore Feed */}
             <button
               onClick={() => setActiveTab('explore')}
-              title="Explore Feed"
-              className={`p-2 rounded-2xl transition-all cursor-pointer flex items-center justify-center relative ${
-                activeTab === 'explore'
-                  ? 'bg-[#007a6e] text-white shadow-sm scale-105'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
-              }`}
+              className="flex flex-col items-center gap-1 transition-all cursor-pointer group"
             >
-              <Compass className="w-4 h-4" />
+              <div
+                className={`p-2 rounded-2xl transition-all flex items-center justify-center ${
+                  activeTab === 'explore'
+                    ? 'bg-[#007a6e] text-white shadow-sm scale-105'
+                    : 'bg-slate-100 group-hover:bg-slate-200 text-slate-600'
+                }`}
+              >
+                <Compass className="w-5 h-5 stroke-[2]" />
+              </div>
+              <span
+                className={`text-xs font-extrabold tracking-tight ${
+                  activeTab === 'explore' ? 'text-[#007a6e]' : 'text-slate-500 group-hover:text-slate-800'
+                }`}
+              >
+                Explore
+              </span>
             </button>
 
-            {/* Tab 2: List Property (₹50) */}
+            {/* Tab 2: Add Listing */}
             <button
               onClick={() => setActiveTab('give_listing')}
-              title="List Property (₹50)"
-              className={`p-2 rounded-2xl transition-all cursor-pointer flex items-center justify-center relative ${
-                activeTab === 'give_listing'
-                  ? 'bg-[#092C3E] text-white shadow-sm scale-105'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
-              }`}
+              className="flex flex-col items-center gap-1 transition-all cursor-pointer group"
             >
-              <PlusCircle className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1.5 bg-teal-500 text-slate-950 text-[8px] font-black px-1 rounded-full border border-white shadow-2xs">
-                ₹50
+              <div
+                className={`p-2 rounded-2xl transition-all flex items-center justify-center relative ${
+                  activeTab === 'give_listing'
+                    ? 'bg-[#092C3E] text-white shadow-sm scale-105'
+                    : 'bg-slate-100 group-hover:bg-slate-200 text-slate-600'
+                }`}
+              >
+                <Plus className="w-5 h-5 stroke-[2.5]" />
+                <span className="absolute -top-1 -right-1.5 bg-teal-500 text-slate-950 text-[8px] font-black px-1 rounded-full border border-white shadow-2xs">
+                  ₹50
+                </span>
+              </div>
+              <span
+                className={`text-xs font-extrabold tracking-tight ${
+                  activeTab === 'give_listing' ? 'text-[#092C3E]' : 'text-slate-500 group-hover:text-slate-800'
+                }`}
+              >
+                Add
               </span>
             </button>
           </div>
@@ -568,26 +861,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
         {activeTab === 'explore' && (
           <div className="p-4 space-y-3.5 max-w-lg mx-auto">
             
-            {/* Pass Status Alert Banner */}
-            {!isPaidMember && (
-              <div className="bg-white border border-slate-200/80 p-3 rounded-2xl shadow-xs flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-200/60">
-                    <Lock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-900 block">Contact Phone Numbers Locked</span>
-                    <span className="text-[11px] text-slate-500 font-medium">Unlock full broker contacts for ₹399</span>
-                  </div>
-                </div>
-                <button
-                  onClick={onProceedToPayment}
-                  className="px-3 py-1.5 bg-slate-900 text-white font-semibold text-xs rounded-xl shadow-xs shrink-0 cursor-pointer hover:bg-slate-800 transition-all"
-                >
-                  Pay ₹399
-                </button>
-              </div>
-            )}
+
 
             {/* Search Bar & Filter Toggle */}
             <div className="flex items-center gap-2">
@@ -613,7 +887,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`px-3 py-2.5 border rounded-2xl transition-all cursor-pointer flex items-center gap-1.5 text-xs font-semibold shadow-xs ${
-                  showFilters || actionFilter !== 'all' || propertyTypeFilter !== 'all' || limitSetFilter !== 'all' || furnishingFilter !== 'all'
+                  showFilters || actionFilter !== 'all' || propertyTypeFilter !== 'all' || limitSetFilter !== 'all' || furnishingFilter !== 'all' || foodPrefFilter !== 'all' || occupancyFilter !== 'all' || availabilityFilter !== 'all'
                     ? 'bg-slate-900 text-white border-slate-900'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
@@ -621,166 +895,250 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 <SlidersHorizontal className="w-3.5 h-3.5 text-teal-400" />
                 <span>
                   Filters
-                  {((actionFilter !== 'all' ? 1 : 0) + (propertyTypeFilter !== 'all' ? 1 : 0) + (limitSetFilter !== 'all' ? 1 : 0) + (furnishingFilter !== 'all' ? 1 : 0)) > 0 && (
+                  {((actionFilter !== 'all' ? 1 : 0) + (propertyTypeFilter !== 'all' ? 1 : 0) + (limitSetFilter !== 'all' ? 1 : 0) + (furnishingFilter !== 'all' ? 1 : 0) + (foodPrefFilter !== 'all' ? 1 : 0) + (occupancyFilter !== 'all' ? 1 : 0) + (availabilityFilter !== 'all' ? 1 : 0)) > 0 && (
                     <span className="ml-1 px-1.5 py-0.2 bg-teal-400 text-slate-950 rounded-full text-[10px] font-extrabold">
-                      {(actionFilter !== 'all' ? 1 : 0) + (propertyTypeFilter !== 'all' ? 1 : 0) + (limitSetFilter !== 'all' ? 1 : 0) + (furnishingFilter !== 'all' ? 1 : 0)}
+                      {(actionFilter !== 'all' ? 1 : 0) + (propertyTypeFilter !== 'all' ? 1 : 0) + (limitSetFilter !== 'all' ? 1 : 0) + (furnishingFilter !== 'all' ? 1 : 0) + (foodPrefFilter !== 'all' ? 1 : 0) + (occupancyFilter !== 'all' ? 1 : 0) + (availabilityFilter !== 'all' ? 1 : 0)}
                     </span>
                   )}
                 </span>
               </button>
             </div>
 
-            {/* ULTRA-PROFESSIONAL FILTER DROPDOWN PANEL */}
+            {/* ULTRA-PROFESSIONAL FILTER POPUP MODAL (FULL IN-APP SCREEN) */}
             {showFilters && (
-              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xl space-y-4 animate-scaleUp text-left border-t-2 border-t-slate-900">
-                <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-4 h-4 text-slate-900" />
-                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                      Refine Property Search
-                    </h3>
-                  </div>
+              <div className="absolute inset-0 z-50 bg-white flex flex-col justify-between p-4 overflow-y-auto animate-fadeIn text-left">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl bg-teal-50 text-[#007a6e] flex items-center justify-center font-bold">
+                        <SlidersHorizontal className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-extrabold text-slate-900">Refine Property Search</h3>
+                        <p className="text-[11px] text-slate-500 font-medium">Filter by mode, category, flexibility & furnishing</p>
+                      </div>
+                    </div>
 
-                  <div className="flex items-center gap-3">
-                    {(actionFilter !== 'all' || propertyTypeFilter !== 'all' || limitSetFilter !== 'all' || furnishingFilter !== 'all') && (
-                      <button
-                        onClick={() => {
-                          setActionFilter('all');
-                          setPropertyTypeFilter('all');
-                          setLimitSetFilter('all');
-                          setFurnishingFilter('all');
-                        }}
-                        className="text-[11px] text-red-600 font-bold hover:underline cursor-pointer"
-                      >
-                        Reset All
-                      </button>
-                    )}
                     <button
                       onClick={() => setShowFilters(false)}
-                      className="text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                      className="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 cursor-pointer"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-5 h-5" />
                     </button>
                   </div>
-                </div>
 
-                {/* 1. Transaction Purpose */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-800 block">
-                    Transaction Mode:
-                  </label>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {[
-                      { id: 'all', label: 'All Modes' },
-                      { id: 'give_rent', label: '🔑 Rent' },
-                      { id: 'buy', label: '🛒 Buy' },
-                      { id: 'sell', label: '🏷️ Sell' },
-                    ].map((act) => (
-                      <button
-                        key={act.id}
-                        onClick={() => setActionFilter(act.id as any)}
-                        className={`py-1.5 px-2 text-[11px] font-semibold rounded-xl border transition-all cursor-pointer truncate ${
-                          actionFilter === act.id
-                            ? 'bg-slate-900 text-white border-slate-900 font-bold shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
-                        }`}
-                      >
-                        {act.label}
-                      </button>
-                    ))}
+                  {/* 1. Transaction Purpose */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      Transaction Mode:
+                    </label>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {[
+                        { id: 'all', label: 'All Modes' },
+                        { id: 'give_rent', label: '🔑 Rent' },
+                        { id: 'buy', label: '🛒 Buy' },
+                        { id: 'sell', label: '🏷️ Sell' },
+                      ].map((act) => (
+                        <button
+                          key={act.id}
+                          onClick={() => setActionFilter(act.id as any)}
+                          className={`py-2.5 px-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer truncate ${
+                            actionFilter === act.id
+                              ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {act.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 2. Property Category */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      Property Types:
+                    </label>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {[
+                        { id: 'all', label: 'All Types' },
+                        { id: 'pg', label: '🏠 PG' },
+                        { id: 'hostel', label: '🏢 Hostel' },
+                        { id: 'apartment', label: '🏬 Apt' },
+                      ].map((pt) => (
+                        <button
+                          key={pt.id}
+                          onClick={() => setPropertyTypeFilter(pt.id as any)}
+                          className={`py-2.5 px-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer truncate ${
+                            propertyTypeFilter === pt.id
+                              ? 'bg-[#007a6e] text-white border-[#007a6e] shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {pt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 3. Price Flexibility */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      Price Flexibility:
+                    </label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: 'negotiable', label: '🟢 Price: Negotiable' },
+                        { id: 'non_negotiable', label: '🔴 Price: Non-Negotiable' },
+                      ].map((lim) => (
+                        <button
+                          key={lim.id}
+                          onClick={() => setLimitSetFilter(limitSetFilter === lim.id ? 'all' : lim.id as any)}
+                          className={`py-2.5 px-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                            limitSetFilter === lim.id
+                              ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {lim.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 4. Furnishing */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      Furnishing State:
+                    </label>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {[
+                        { id: 'all', label: 'All' },
+                        { id: 'fully_furnished', label: 'Furnished' },
+                        { id: 'semifurnished', label: 'Semi-Furn.' },
+                        { id: 'unfurnished', label: 'Unfurnished' },
+                      ].map((fur) => (
+                        <button
+                          key={fur.id}
+                          onClick={() => setFurnishingFilter(fur.id as any)}
+                          className={`py-2.5 px-1.5 text-[10px] font-bold rounded-xl border transition-all cursor-pointer truncate ${
+                            furnishingFilter === fur.id
+                              ? 'bg-[#007a6e] text-white border-[#007a6e] shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {fur.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 5. Food Preference */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      🥗 Food Preference:
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        { id: 'vegetarian', label: '🥦 Vegetarian' },
+                        { id: 'non_vegetarian', label: '🍗 Non-Veg' },
+                        { id: 'both', label: '🍽️ Both' },
+                      ].map((fp) => (
+                        <button
+                          key={fp.id}
+                          onClick={() => setFoodPrefFilter(foodPrefFilter === fp.id ? 'all' : fp.id as any)}
+                          className={`py-2.5 px-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer truncate ${
+                            foodPrefFilter === fp.id
+                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {fp.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 6. Occupancy / Tenant Type */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      🏠 Occupancy / Allowed Tenants:
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        { id: 'coed', label: '👫 Co-ed' },
+                        { id: 'girls_only', label: '👩 Girls Only' },
+                        { id: 'boys_only', label: '👨 Boys Only' },
+                        { id: 'family_only', label: '👨‍👩‍👧 Family' },
+                        { id: 'bachelors_only', label: '🎓 Bachelors' },
+                        { id: 'students_only', label: '📚 Students' },
+                      ].map((oc) => (
+                        <button
+                          key={oc.id}
+                          onClick={() => setOccupancyFilter(occupancyFilter === oc.id ? 'all' : oc.id as any)}
+                          className={`py-2.5 px-2 text-[10px] font-bold rounded-xl border transition-all cursor-pointer truncate ${
+                            occupancyFilter === oc.id
+                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {oc.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 7. Availability / Move-in Timeline */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 block">
+                      📅 Availability / Move-in Timeline:
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        { id: 'immediate', label: '🟢 Now' },
+                        { id: 'two_weeks', label: '📅 2 Weeks' },
+                        { id: 'one_month', label: '📅 1 Month' },
+                        { id: 'three_months', label: '📅 3 Months' },
+                        { id: 'six_months', label: '📅 6 Months' },
+                      ].map((av) => (
+                        <button
+                          key={av.id}
+                          onClick={() => setAvailabilityFilter(availabilityFilter === av.id ? 'all' : av.id as any)}
+                          className={`py-2.5 px-2 text-[10px] font-bold rounded-xl border transition-all cursor-pointer truncate ${
+                            availabilityFilter === av.id
+                              ? 'bg-sky-600 text-white border-sky-600 shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
+                          }`}
+                        >
+                          {av.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* 2. Property Category */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-800 block">
-                    Property Category:
-                  </label>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {[
-                      { id: 'all', label: 'All Types' },
-                      { id: 'pg', label: '🏠 PG' },
-                      { id: 'hostel', label: '🏢 Hostel' },
-                      { id: 'apartment', label: '🏬 Apt' },
-                    ].map((pt) => (
-                      <button
-                        key={pt.id}
-                        onClick={() => setPropertyTypeFilter(pt.id as any)}
-                        className={`py-1.5 px-2 text-[11px] font-semibold rounded-xl border transition-all cursor-pointer truncate ${
-                          propertyTypeFilter === pt.id
-                            ? 'bg-teal-600 text-white border-teal-600 font-bold shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
-                        }`}
-                      >
-                        {pt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                {/* Filter Popup Footer Bar */}
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3 mt-4">
+                  <button
+                    onClick={() => {
+                      setActionFilter('all');
+                      setPropertyTypeFilter('all');
+                      setLimitSetFilter('all');
+                      setFurnishingFilter('all');
+                      setFoodPrefFilter('all');
+                      setOccupancyFilter('all');
+                      setAvailabilityFilter('all');
+                    }}
+                    className="text-xs font-bold text-red-600 hover:text-red-700 cursor-pointer px-2"
+                  >
+                    Reset All
+                  </button>
 
-                {/* 3. Limit Set */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-800 block">
-                    Price Limit Flexibility:
-                  </label>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {[
-                      { id: 'all', label: 'All Limits' },
-                      { id: 'negotiable', label: '🟢 Negotiable' },
-                      { id: 'non_negotiable', label: '🔴 Fixed Limit' },
-                    ].map((lim) => (
-                      <button
-                        key={lim.id}
-                        onClick={() => setLimitSetFilter(lim.id as any)}
-                        className={`py-1.5 px-2 text-[11px] font-semibold rounded-xl border transition-all cursor-pointer ${
-                          limitSetFilter === lim.id
-                            ? 'bg-slate-900 text-white border-slate-900 font-bold shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
-                        }`}
-                      >
-                        {lim.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 4. Furnishing */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-800 block">
-                    Furnishing State:
-                  </label>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {[
-                      { id: 'all', label: 'All' },
-                      { id: 'fully_furnished', label: 'Furnished' },
-                      { id: 'semifurnished', label: 'Semi-Furn.' },
-                      { id: 'unfurnished', label: 'Unfurnished' },
-                    ].map((fur) => (
-                      <button
-                        key={fur.id}
-                        onClick={() => setFurnishingFilter(fur.id as any)}
-                        className={`py-1.5 px-1.5 text-[10px] font-semibold rounded-xl border transition-all cursor-pointer truncate ${
-                          furnishingFilter === fur.id
-                            ? 'bg-teal-600 text-white border-teal-600 font-bold shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
-                        }`}
-                      >
-                        {fur.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Dropdown Action Footer */}
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-500 font-medium">
-                    Showing <strong>{filteredListings.length}</strong> listings
-                  </span>
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition-all"
+                    className="flex-1 py-3.5 bg-[#007a6e] hover:bg-[#006258] text-white font-extrabold text-xs rounded-2xl shadow-md transition-all cursor-pointer text-center"
                   >
-                    Apply & View Results
+                    Apply Filters ({filteredListings.length} Matches)
                   </button>
                 </div>
               </div>
@@ -798,6 +1156,9 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                       setPropertyTypeFilter('all');
                       setLimitSetFilter('all');
                       setFurnishingFilter('all');
+                      setFoodPrefFilter('all');
+                      setOccupancyFilter('all');
+                      setAvailabilityFilter('all');
                       setSearchTerm('');
                     }}
                     className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer"
@@ -814,9 +1175,10 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                   return (
                     <div
                       key={item.id}
-                      className="bg-white rounded-3xl border border-slate-200/80 text-left p-4 space-y-3 transition-all duration-200 relative group shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-slate-300 hover:shadow-md"
+                      onClick={() => setSelectedPropertyDetail(item)}
+                      className="bg-white rounded-3xl border border-slate-200/80 text-left p-4 space-y-3 transition-all duration-200 relative group shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#007a6e]/40 hover:shadow-md cursor-pointer active:scale-[0.99]"
                     >
-                      {/* MULTI-PHOTO GALLERY CAROUSEL COVER */}
+                      {/* MULTI-PHOTO GALLERY COVER */}
                       <div className="relative rounded-2xl overflow-hidden bg-slate-900 group/gallery h-44 sm:h-48 w-full border border-slate-100 shadow-inner">
                         <img
                           src={activePhotoUrl}
@@ -828,46 +1190,33 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
                           <span className="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 border border-white/10 shadow-xs">
                             <Camera className="w-3 h-3 text-teal-400" />
-                            {currentImageIdx + 1} / {propertyImages.length} Photos
+                            {propertyImages.length} Photos
                           </span>
                         </div>
 
-                        {/* Navigation Arrows (Visible on multi-image properties) */}
+                        {/* Navigation Arrows */}
                         {propertyImages.length > 1 && (
                           <div className="absolute inset-y-0 inset-x-2 flex items-center justify-between pointer-events-none">
                             <button
-                              onClick={() => handlePrevImage(item.id, propertyImages.length)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePrevImage(item.id, propertyImages.length);
+                              }}
                               className="pointer-events-auto w-7 h-7 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-xs transition-all shadow-md cursor-pointer active:scale-95"
                               title="Previous angle photo"
                             >
                               <ChevronLeft className="w-4 h-4" />
                             </button>
                             <button
-                              onClick={() => handleNextImage(item.id, propertyImages.length)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleNextImage(item.id, propertyImages.length);
+                              }}
                               className="pointer-events-auto w-7 h-7 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-xs transition-all shadow-md cursor-pointer active:scale-95"
                               title="Next angle photo"
                             >
                               <ChevronRight className="w-4 h-4" />
                             </button>
-                          </div>
-                        )}
-
-                        {/* Bottom Thumbnail Strip on Image */}
-                        {propertyImages.length > 1 && (
-                          <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1.5 p-1 bg-slate-950/60 backdrop-blur-md rounded-xl overflow-x-auto">
-                            {propertyImages.map((imgUrl, imgIdx) => (
-                              <button
-                                key={imgIdx}
-                                onClick={() => handleSelectImage(item.id, imgIdx)}
-                                className={`w-8 h-8 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
-                                  currentImageIdx === imgIdx
-                                    ? 'border-teal-400 ring-2 ring-teal-400/40 scale-105'
-                                    : 'border-transparent opacity-60 hover:opacity-100'
-                                }`}
-                              >
-                                <img src={imgUrl} alt={`Angle ${imgIdx + 1}`} className="w-full h-full object-cover" />
-                              </button>
-                            ))}
                           </div>
                         )}
                       </div>
@@ -892,7 +1241,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                           </span>
                         </div>
 
-                        {/* Limit Flexibility Pill */}
+                        {/* Price Flexibility Pill */}
                         <span
                           className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
                             item.limitSet === 'negotiable'
@@ -900,161 +1249,65 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                               : 'bg-slate-100 text-slate-700 border-slate-200'
                           }`}
                         >
-                          {item.limitSet === 'negotiable' ? '🟢 Limit: Negotiable' : '🔴 Limit: Fixed'}
+                          {item.limitSet === 'negotiable' ? '🟢 Price: Negotiable' : '🔴 Price: Non-Negotiable'}
                         </span>
                       </div>
 
-                      {/* Title & Plot Size */}
+                      {/* Title & Rough Location */}
                       <div className="space-y-1">
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug group-hover:text-[#007a6e] transition-colors">
                           {item.title}
                         </h3>
 
-                        <div className="flex items-center gap-3 text-[11px] text-slate-500 font-medium">
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-teal-600 shrink-0" />
-                            <span className="truncate max-w-[200px]">{item.location}</span>
-                          </div>
-                          {item.plotSize && (
-                            <div className="flex items-center gap-1 text-slate-700 font-semibold border-l border-slate-200 pl-3">
-                              <Ruler className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                              <span>{item.plotSize}</span>
-                            </div>
-                          )}
+                        <div className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                          <span className="truncate max-w-[240px]">{item.location}</span>
                         </div>
 
-                        {/* Full Address */}
-                        {item.address && (
-                          <p className="text-[10px] text-slate-500 font-medium bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-100">
-                            📍 <strong>Address:</strong> {item.address}
-                          </p>
+                        {/* Food Preference & Occupancy Tags */}
+                        {(item.foodPreference || item.occupancyType || item.availableFrom) && (
+                          <div className="flex flex-wrap gap-1 pt-0.5">
+                            {item.foodPreference && (
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${
+                                item.foodPreference === 'vegetarian'
+                                  ? 'bg-green-50 text-green-800 border-green-200'
+                                  : item.foodPreference === 'non_vegetarian'
+                                  ? 'bg-red-50 text-red-700 border-red-200'
+                                  : 'bg-slate-50 text-slate-700 border-slate-200'
+                              }`}>
+                                {getFoodPrefLabel(item.foodPreference)}
+                              </span>
+                            )}
+                            {item.occupancyType && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg border bg-indigo-50 text-indigo-700 border-indigo-200">
+                                {getOccupancyLabel(item.occupancyType)}
+                              </span>
+                            )}
+                            {item.availableFrom && (
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${
+                                item.availableFrom === 'immediate'
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                  : 'bg-sky-50 text-sky-700 border-sky-200'
+                              }`}>
+                                {getAvailabilityLabel(item.availableFrom)}
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
 
-                      {/* SPECIFICS BOX (RENT VS SALE) */}
-                      {item.actionType === 'give_rent' ? (
-                        /* Renting Specs */
-                        <div className="bg-slate-50 border border-slate-100 p-2.5 rounded-2xl grid grid-cols-2 gap-2 text-[11px] font-medium text-slate-700">
-                          {item.roomType && (
-                            <div className="flex items-center gap-1.5">
-                              <BedDouble className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                              <span>{item.roomType}</span>
-                            </div>
-                          )}
-                          {item.foodPolicy && (
-                            <div className="flex items-center gap-1.5">
-                              <Utensils className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                              <span>{item.foodPolicy}</span>
-                            </div>
-                          )}
-                          {item.maintenanceFee && (
-                            <div className="text-[10px] text-slate-500">
-                              Maint: <strong className="text-slate-800">{item.maintenanceFee}</strong>
-                            </div>
-                          )}
-                          {item.lockInPeriod && (
-                            <div className="text-[10px] text-slate-500">
-                              Lock-in: <strong className="text-slate-800">{item.lockInPeriod}</strong>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        /* Sale / Buy Specs */
-                        <div className="bg-indigo-50/40 border border-indigo-100 p-2.5 rounded-2xl grid grid-cols-2 gap-2 text-[11px] font-medium">
-                          {item.pricePerSqFt && (
-                            <div className="text-indigo-950 font-bold">
-                              Rate: {item.pricePerSqFt}
-                            </div>
-                          )}
-                          {item.possessionStatus && (
-                            <div className="text-slate-700">
-                              Status: <strong className="text-slate-900">{item.possessionStatus}</strong>
-                            </div>
-                          )}
-                          {item.ownershipType && (
-                            <div className="col-span-2 text-[10px] text-slate-500">
-                              Ownership: <strong className="text-slate-800">{item.ownershipType}</strong>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Agent / Contact Section */}
-                      <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-100 flex items-center justify-between text-xs">
-                        <div>
-                          <span className="text-[10px] text-slate-400 block font-medium">Listing Broker / Partner:</span>
-                          <span className="font-semibold text-slate-900">{item.contactName}</span>
-                        </div>
-
-                        <div>
-                          {isPaidMember ? (
-                            <div className="text-right">
-                              <span className="text-xs font-bold text-emerald-700 block flex items-center gap-1">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                                {item.contactPhone}
-                              </span>
-                              <span className="text-[9px] text-slate-400">{item.contactEmail}</span>
-                            </div>
-                          ) : (
-                            <div className="text-right">
-                              <span className="text-xs font-semibold text-slate-400 block flex items-center gap-1">
-                                <Lock className="w-3 h-3 text-amber-500" />
-                                +91 98765 *****
-                              </span>
-                              <span className="text-[9px] text-amber-600 font-medium">Pass Required</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Pricing & Actions Footer */}
+                      {/* Pricing & View Details Action Footer */}
                       <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
                         <div>
                           <span className="text-[10px] text-slate-400 block font-medium">
                             {item.actionType === 'give_rent' ? 'Monthly Rent:' : 'Property Price:'}
                           </span>
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-sm font-bold text-slate-900">{item.price}</span>
-                            {item.deposit && (
-                              <span className="text-[10px] text-slate-500 font-medium">
-                                (Dep: {item.deposit})
-                              </span>
-                            )}
-                          </div>
+                          <span className="text-sm font-black text-slate-900">{item.price}</span>
                         </div>
 
-                        <div className="flex items-center gap-1.5">
-                          {isPaidMember ? (
-                            <>
-                              <a
-                                href={`tel:${item.contactPhone}`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  alert(`Calling ${item.contactName} at ${item.contactPhone}`);
-                                }}
-                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
-                              >
-                                <PhoneCall className="w-3.5 h-3.5" />
-                                Call
-                              </a>
-
-                              <button
-                                onClick={() => alert(`Opening WhatsApp direct chat with ${item.contactName}`)}
-                                className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
-                              >
-                                <MessageSquare className="w-3.5 h-3.5 text-teal-400" />
-                                Chat
-                              </button>
-                            </>
-                          ) : (
-                            <button
-                              onClick={onProceedToPayment}
-                              className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-                            >
-                              <Lock className="w-3.5 h-3.5 text-amber-400" />
-                              Unlock Phone
-                            </button>
-                          )}
+                        <div className="flex items-center gap-1 text-xs font-bold text-[#007a6e] bg-teal-50 group-hover:bg-[#007a6e] group-hover:text-white px-3 py-1.5 rounded-xl border border-teal-200/80 transition-all shadow-2xs">
+                          <span>View Details</span>
+                          <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                         </div>
                       </div>
                     </div>
@@ -1380,10 +1633,10 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 </div>
               )}
 
-              {/* 5. Limit Set */}
+              {/* 5. Price Policy */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-800 block">
-                  5. Price Limit Policy
+                  5. Price Policy
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -1395,7 +1648,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
-                    <span>🟢 Limit: Negotiable</span>
+                    <span>🟢 Price: Negotiable</span>
                   </button>
 
                   <button
@@ -1407,7 +1660,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
-                    <span>🔴 Limit: Non-Negotiable</span>
+                    <span>🔴 Price: Non-Negotiable</span>
                   </button>
                 </div>
               </div>
@@ -1439,7 +1692,37 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 </div>
               </div>
 
-              {/* 7. MULTI-PHOTO GALLERY UPLOAD SECTION */}
+              {/* 7. Availability / Move-in Timeline */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-800 block">
+                  7. 📅 Availability / Move-in Date
+                </label>
+                <p className="text-[10px] text-slate-500 font-medium -mt-0.5">When will this property be available?</p>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {[
+                    { id: 'immediate', label: '🟢 Available Now' },
+                    { id: 'two_weeks', label: '📅 In 2 Weeks' },
+                    { id: 'one_month', label: '📅 In 1 Month' },
+                    { id: 'three_months', label: '📅 In 3 Months' },
+                    { id: 'six_months', label: '📅 In 6 Months' },
+                  ].map((av) => (
+                    <button
+                      type="button"
+                      key={av.id}
+                      onClick={() => setNewAvailability(av.id as any)}
+                      className={`py-2 px-1 text-[10px] font-semibold rounded-xl border transition-all cursor-pointer ${
+                        newAvailability === av.id
+                          ? 'bg-sky-600 text-white border-sky-600 shadow-xs font-bold'
+                          : 'bg-slate-50 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      {av.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 8. MULTI-PHOTO GALLERY UPLOAD SECTION */}
               <div className="space-y-2.5 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
                 <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
                   <div className="flex items-center gap-1.5">
@@ -1558,21 +1841,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
 
       </div>
 
-      {/* Bottom Sticky Pass Unlock Bar */}
-      {!isPaidMember && onProceedToPayment && (
-        <div className="p-3.5 bg-white border-t border-slate-200/80 shadow-lg flex items-center justify-between gap-3 max-w-lg mx-auto w-full sticky bottom-0 z-40">
-          <div>
-            <span className="text-xs font-bold text-slate-900 block">Unlock Full Broker Contacts</span>
-            <span className="text-[11px] text-slate-500 font-medium">₹399 membership pass for unlimited access</span>
-          </div>
-          <button
-            onClick={onProceedToPayment}
-            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-semibold text-xs rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
-          >
-            Unlock ₹399
-          </button>
-        </div>
-      )}
+
     </div>
   );
 };

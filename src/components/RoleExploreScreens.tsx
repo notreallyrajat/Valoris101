@@ -94,12 +94,12 @@ export const RoleExploreScreen: React.FC<RoleExploreScreenProps> = ({
   onProceedToPayment,
   isPaidMember = false,
 }) => {
-  if (roleId === 'broker') {
+  if (roleId === 'broker' || roleId === 'landlord') {
     return <BrokerDashboard onProceedToPayment={onProceedToPayment} isPaidMember={isPaidMember} />;
   }
 
   if (roleId === 'customer') {
-    return <CustomerDashboard />;
+    return <CustomerDashboard onProceedToPayment={onProceedToPayment} isPaidMember={isPaidMember} />;
   }
 
   if (roleId === 'investor') {

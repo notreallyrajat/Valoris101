@@ -142,17 +142,6 @@ export default function App() {
 
           {/* Role Quick Selector & Reset */}
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsPaidMember(!isPaidMember)}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                isPaidMember
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                  : 'bg-amber-50 text-amber-900 border-amber-300'
-              }`}
-              title="Click to toggle between Paid Member (₹399 Unlocked) and Free/Locked Member"
-            >
-              <span>{isPaidMember ? '🟢 Pass: ₹399 Active' : '🔒 Pass: Locked'}</span>
-            </button>
 
             <button
               onClick={() => {
