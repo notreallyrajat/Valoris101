@@ -22,7 +22,7 @@ export const ValorisLogo: React.FC<ValorisLogoProps> = ({
       <img
         src={logoSrc}
         alt="Valoris Logo"
-        style={{ height: heightMap["lg"], width: 'auto', objectFit: 'contain' }}
+        style={{ height: heightMap[size], width: 'auto', objectFit: 'contain' }}
         draggable={false}
       />
     </div>

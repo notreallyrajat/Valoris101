@@ -275,7 +275,6 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
     PRESET_SAMPLE_PHOTOS[1].url,
     PRESET_SAMPLE_PHOTOS[2].url,
   ]);
-  const [customPhotoInput, setCustomPhotoInput] = useState('');
 
   // Modals & Fee state
   const [showListingFeeModal, setShowListingFeeModal] = useState(false);
@@ -290,16 +289,6 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
     } else {
       setNewAmenities([...newAmenities, amenity]);
     }
-  };
-
-  const handleAddPhotoUrl = (urlToAdd: string) => {
-    if (!urlToAdd.trim()) return;
-    if (uploadedPhotos.includes(urlToAdd.trim())) {
-      alert('This photo is already added to the gallery');
-      return;
-    }
-    setUploadedPhotos([...uploadedPhotos, urlToAdd.trim()]);
-    setCustomPhotoInput('');
   };
 
   const handleRemovePhoto = (indexToRemove: number) => {
