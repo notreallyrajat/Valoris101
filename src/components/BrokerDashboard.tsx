@@ -977,8 +977,8 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                     </label>
                     <div className="grid grid-cols-2 gap-1.5">
                       {[
-                        { id: 'negotiable', label: '🟢 Price: Negotiable' },
-                        { id: 'non_negotiable', label: '🔴 Price: Non-Negotiable' },
+                        { id: 'negotiable', label: 'Price: Negotiable' },
+                        { id: 'non_negotiable', label: 'Price: Non-Negotiable' },
                       ].map((lim) => (
                         <button
                           key={lim.id}
@@ -1238,7 +1238,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                               : 'bg-slate-100 text-slate-700 border-slate-200'
                           }`}
                         >
-                          {item.limitSet === 'negotiable' ? '🟢 Price: Negotiable' : '🔴 Price: Non-Negotiable'}
+                          {item.limitSet === 'negotiable' ? 'Price: Negotiable' : 'Price: Non-Negotiable'}
                         </span>
                       </div>
 
@@ -1637,7 +1637,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
-                    <span>🟢 Negotiable</span>
+                    <span>Negotiable</span>
                   </button>
 
                   <button
@@ -1649,7 +1649,7 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
-                    <span>🔴 Non-Negotiable</span>
+                    <span>Non-Negotiable</span>
                   </button>
                 </div>
               </div>

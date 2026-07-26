@@ -22,7 +22,7 @@ export const ScreenOne: React.FC<ScreenOneProps> = ({ onNext, initialData }) => 
     <div className="w-full h-full flex flex-col justify-between px-6 pt-4 pb-6 bg-white overflow-y-auto">
       {/* Top Header Logo Area */}
       <div className="flex flex-col items-center pt-2 pb-2">
-        <ValorisLogo size="md" showTagline={true} className="w-full max-w-[280px]" />
+        <ValorisLogo size="lg" showTagline={true} className="w-full max-w-[320px]" />
       </div>
 
       {/* Main Content Area */}

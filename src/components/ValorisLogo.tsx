@@ -12,9 +12,9 @@ export const ValorisLogo: React.FC<ValorisLogoProps> = ({
   size = 'md',
 }) => {
   const heightMap = {
-    sm: '56px',
-    md: '80px',
-    lg: '150px',
+    sm: '72px',
+    md: '120px',
+    lg: '165px',
   };
 
   return (
