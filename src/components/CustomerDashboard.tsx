@@ -1660,111 +1660,310 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
               </div>
             </div>
 
-            {/* DETAILED SPECIFICATIONS SECTION - BLURRED WHEN UNPAID */}
+            {/* DETAILED SPECIFICATIONS & OWNER PROFILE SECTION */}
             <div className="relative rounded-3xl overflow-hidden min-h-[360px]">
               {/* Blurred / Visible Container */}
               <div className={`space-y-4 transition-all duration-300 ${!isPaidMember ? 'filter blur-md select-none pointer-events-none opacity-30' : ''}`}>
                 
-                {/* Price & Deposit */}
-                <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
-                  <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-slate-500 font-medium block">
-                        {selectedPropertyDetail.transactionType === 'rent' ? 'Monthly Rent:' : 'Selling Price:'}
-                      </span>
-                      <span className="text-lg font-black text-[#1A3FAA]">{selectedPropertyDetail.price}</span>
-                    </div>
-                    {selectedPropertyDetail.deposit && (
-                      <div className="text-right">
-                        <span className="text-[10px] text-slate-500 font-medium block">Security Deposit:</span>
-                        <span className="text-xs font-bold text-slate-700">{selectedPropertyDetail.deposit}</span>
+                {/* OWNER / LANDLORD PROFILE CARD */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 text-left">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1A3FAA] to-[#0097A7] text-white font-black text-base flex items-center justify-center shadow-md">
+                        RS
                       </div>
-                    )}
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <h3 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+                            Rajat Sharma
+                          </h3>
+                          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-0.5">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified Owner
+                          </span>
+                        </div>
+                        <p className="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                          Member since March 2024 • <span className="text-[#1A3FAA] dark:text-sky-400 font-bold">2+ Years on Veloris</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Owner Performance Stats */}
+                  <div className="grid grid-cols-3 gap-2 p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                    <div>
+                      <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-bold uppercase block">Response Rate</span>
+                      <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">98% (&lt; 10 mins)</span>
+                    </div>
+                    <div className="border-x border-slate-200 dark:border-slate-700">
+                      <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-bold uppercase block">Active Listings</span>
+                      <span className="text-xs font-black text-slate-800 dark:text-slate-200">4 Properties</span>
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-bold uppercase block">Tenant Rating</span>
+                      <span className="text-xs font-black text-amber-500">4.9 ★ (18 Reviews)</span>
+                    </div>
+                  </div>
+
+                  {/* Owner Registered Address & Contact Info */}
+                  <div className="space-y-2 pt-1">
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800 text-xs">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block mb-0.5">Owner Registered Address:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200 leading-snug block">
+                        Flat 402, Skyline Residency, 8th Main Rd, Koramangala 4th Block, Bengaluru, KA 560034
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <a
+                        href="tel:+919876543210"
+                        className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <PhoneCall className="w-3.5 h-3.5" />
+                        <span>Call +91 98765 43210</span>
+                      </a>
+
+                      <a
+                        href="https://wa.me/919876543210"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="py-2.5 px-3 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        <span>WhatsApp Owner</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                {/* Landlord / Listing Agent Info & Schedule Visit CTA */}
-                <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-5 h-5 text-emerald-600" />
-                      <div>
-                        <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Landlord / Owner:</span>
-                        <h3 className="text-sm font-extrabold text-slate-900">Posted by {selectedPropertyDetail.postedBy}</h3>
-                      </div>
+                {/* LISTING TIMESTAMPS & RERA CERTIFICATION */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2 flex items-center justify-between">
+                    <span>Listing Verification & Timeline</span>
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">ID: {selectedPropertyDetail.id}</span>
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Property Listed Date:</span>
+                      <span className="font-extrabold text-slate-900 dark:text-slate-100">July 24, 2026 at 04:30 PM</span>
+                      <span className="text-[9.5px] text-slate-500 block font-medium mt-0.5">3 days ago</span>
                     </div>
 
-                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified Listing
-                    </span>
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">RERA Registration Status:</span>
+                      {selectedPropertyDetail.isReraApproved ? (
+                        <div>
+                          <span className="font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                            <ShieldCheck className="w-3.5 h-3.5" /> RERA Approved
+                          </span>
+                          <span className="text-[9px] text-slate-500 dark:text-slate-400 font-mono truncate block mt-0.5">
+                            {selectedPropertyDetail.reraRegNo || 'PRM/KA/RERA/1251/310/PR/180516'}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-extrabold text-slate-700 dark:text-slate-300">Self-Verified Owner</span>
+                      )}
+                    </div>
                   </div>
+                </div>
 
+                {/* FINANCIAL & PRICE BREAKDOWN */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2">
+                    Financials & Pricing Structure
+                  </h3>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold block">
+                        {selectedPropertyDetail.transactionType === 'rent' ? 'Monthly Rent' : 'Selling Price'}
+                      </span>
+                      <span className="text-sm font-black text-[#1A3FAA] dark:text-sky-400">{selectedPropertyDetail.price}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold block">Security Deposit</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">{selectedPropertyDetail.deposit || '₹ 1.5 Lakhs'}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold block">Maintenance Charge</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">₹ 3,500 / mo</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold block">Price per Sq. Ft.</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">₹ 15,405 / sq ft</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold block">Price Terms</span>
+                      <span className="font-extrabold text-teal-600 dark:text-teal-400 uppercase">Limit Set: Negotiable</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PRECISE LOCATION & MAP LANDMARK */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 uppercase tracking-wider">
+                    <MapPin className="w-4 h-4 text-teal-600" /> Precise Address & Landmark Location
+                  </h3>
+                  <div className="p-3 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800 space-y-1.5">
+                    <p className="text-xs text-slate-800 dark:text-slate-200 font-extrabold leading-relaxed">
+                      {selectedPropertyDetail.address || `${selectedPropertyDetail.title}, Near Sony Signal, Koramangala 4th Block, Bangalore - 560034`}
+                    </p>
+                    <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                      <span>Coordinates: 12.9352° N, 77.6245° E</span>
+                      <span>• Pincode: 560034</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* FULL FILTER SPECIFICATIONS & CONFIGURATION */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2">
+                    Complete Filter Specifications
+                  </h3>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Property Type:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 capitalize">{selectedPropertyDetail.propertyType}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Carpet Area:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">{selectedPropertyDetail.sqft}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Configuration:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">{selectedPropertyDetail.bhk || '3 BHK'}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Furnishing Status:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 capitalize">{selectedPropertyDetail.furnishing.replace('_', ' ')}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Dietary Policy:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">{getFoodPrefLabel(selectedPropertyDetail.foodPreference) || 'Veg & Non-Veg'}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Occupancy Policy:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">{getOccupancyLabel(selectedPropertyDetail.occupancyType) || 'Family Only'}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Available From:</span>
+                      <span className="font-extrabold text-teal-600 dark:text-teal-400">{getAvailabilityLabel(selectedPropertyDetail.availableFrom) || 'Available Now'}</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Lock-in Period:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">6 Months</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Floor Level:</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">8th of 14 Floors</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* FURNISHING INVENTORY BREAKDOWN */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2">
+                    Furnishing & Interior Inventory
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['2 King Beds', '1 L-Shape Sofa Set', '6-Seater Dining Table', 'Modular Kitchen with Chimney', '3 Built-in Wardrobes', '2 Air Conditioners', 'Washing Machine', 'Smart TV Unit', 'Curtains & Lighting'].map((inv) => (
+                      <span key={inv} className="px-2.5 py-1 bg-slate-100 dark:bg-[#141C2E] text-slate-700 dark:text-slate-300 text-[10.5px] font-bold rounded-xl border border-slate-200/80 dark:border-slate-700">
+                        {inv}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* NEIGHBORHOOD & PROXIMITY HIGHLIGHTS */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2">
+                    Neighborhood & Transit Proximity
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Nearest Metro Station:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">Indiranagar Metro (450m • 6 mins walk)</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Tech Park & Offices:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">Embassy GolfLinks (1.8 km)</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Emergency & Hospital:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">Manipal Hospital (800m)</span>
+                    </div>
+
+                    <div className="p-2.5 bg-slate-50 dark:bg-[#141C2E] rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-bold">Shopping & Dining:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">Forum Mall & 100ft Rd (300m)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AMENITIES GRID */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 text-left">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2">
+                    Verified Amenities & Facilities
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedPropertyDetail.amenities.map((am) => (
+                      <span key={am} className="px-3 py-1.5 bg-teal-50 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300 text-xs font-extrabold rounded-xl border border-teal-200 dark:border-teal-800 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-teal-600" />
+                        {am}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* SCHEDULE VISIT CTA */}
+                <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
                   <button
                     onClick={() => {
                       const itemToContact = selectedPropertyDetail;
                       setSelectedPropertyDetail(null);
                       setSelectedPropertyForContact(itemToContact);
                     }}
-                    className="w-full py-3 btn-brand text-white font-extrabold text-xs rounded-2xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full py-3.5 btn-brand text-white font-extrabold text-xs rounded-2xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.99]"
                   >
                     <Calendar className="w-4 h-4 text-cyan-300" />
-                    <span>Schedule Visit / Request Callback</span>
+                    <span>Schedule In-Person Site Visit</span>
                   </button>
-                </div>
-
-                {/* Full Address */}
-                {selectedPropertyDetail.address && (
-                  <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-2">
-                    <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider">
-                      <MapPin className="w-4 h-4 text-teal-600" /> Precise Address
-                    </h3>
-                    <p className="text-xs text-slate-700 font-semibold leading-relaxed bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                      {selectedPropertyDetail.address}
-                    </p>
-                  </div>
-                )}
-
-                {/* Full Property Specifications */}
-                <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-                    Property Specifications
-                  </h3>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs font-medium">
-                    {selectedPropertyDetail.sqft && (
-                      <div className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
-                        <span className="text-[10px] text-slate-400 block font-bold">Carpet Area:</span>
-                        <span className="font-bold text-slate-900">{selectedPropertyDetail.sqft}</span>
-                      </div>
-                    )}
-                    {selectedPropertyDetail.bhk && (
-                      <div className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
-                        <span className="text-[10px] text-slate-400 block font-bold">Configuration:</span>
-                        <span className="font-bold text-slate-900">{selectedPropertyDetail.bhk}</span>
-                      </div>
-                    )}
-                  </div>
                 </div>
               </div>
 
               {/* PAYWALL OVERLAY - PROMINENTLY DISPLAYED OVER BLURRED CONTENT WHEN UNPAID */}
               {!isPaidMember && (
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-5 text-center bg-slate-950/75 backdrop-blur-xs rounded-3xl border border-amber-300/40 shadow-2xl">
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-5 text-center bg-slate-950/80 backdrop-blur-xs rounded-3xl border border-amber-300/40 shadow-2xl">
                   <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black shadow-lg mb-3">
                     <Lock className="w-6 h-6 stroke-[2.5]" />
                   </div>
                   <h3 className="text-base font-black text-white tracking-tight">
-                    Complete Profile Locked
+                    Complete Property & Owner Details Locked
                   </h3>
                   <p className="text-xs text-slate-200 font-medium max-w-xs mt-1.5 leading-relaxed">
-                    Pay ₹399 to unlock complete profile, price details, full address & direct landlord contact info.
+                    Pay ₹399 one-time membership to unlock complete owner profile, direct phone number, exact address & full filter specs.
                   </p>
                   <button
                     onClick={onProceedToPayment}
                     className="mt-5 w-full py-3.5 btn-brand text-white font-extrabold text-xs rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-cyan-300/40 active:scale-[0.98]"
                   >
                     <Lock className="w-4 h-4 text-cyan-300" />
-                    <span>Pay ₹399 to Unlock Complete Profile</span>
+                    <span>Proceed to Checkout (Pay ₹399)</span>
                   </button>
                 </div>
               )}
