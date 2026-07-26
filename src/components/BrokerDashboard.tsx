@@ -642,14 +642,14 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
           <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 py-3 border-b border-slate-200/80 flex items-center justify-between shadow-2xs">
             <button
               onClick={() => setSelectedPropertyDetail(null)}
-              className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-extrabold text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl transition-all cursor-pointer"
+              className="p-2 text-slate-700 hover:text-slate-900 font-extrabold text-xs bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer flex items-center justify-center"
+              aria-label="Back"
             >
-              <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
-              <span>Back to Feed</span>
+              <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
             </button>
 
             <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
-              Property Details
+              Details
             </span>
 
             <button
@@ -750,23 +750,18 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                 {/* OWNER / LANDLORD PROFILE CARD */}
                 <div className="bg-white dark:bg-[#0D1117] p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 text-left">
                   <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1A3FAA] to-[#0097A7] text-white font-black text-base flex items-center justify-center shadow-md">
-                        {(selectedPropertyDetail.contactName || 'RS').substring(0, 2).toUpperCase()}
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+                          {selectedPropertyDetail.contactName || 'Rajat Sharma'}
+                        </h3>
+                        <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-0.5">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified Owner
+                        </span>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <h3 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
-                            {selectedPropertyDetail.contactName || 'Rajat Sharma'}
-                          </h3>
-                          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-0.5">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified Owner
-                          </span>
-                        </div>
-                        <p className="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                          Member since March 2024 • <span className="text-[#1A3FAA] dark:text-sky-400 font-bold">2+ Years on Veloris</span>
-                        </p>
-                      </div>
+                      <p className="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                        Member since March 2024 • <span className="text-[#1A3FAA] dark:text-sky-400 font-bold">2+ Years on Veloris</span>
+                      </p>
                     </div>
                   </div>
 
