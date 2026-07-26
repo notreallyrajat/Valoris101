@@ -197,3 +197,27 @@
 }
 /* Exception: don't slow down animations */
 .animate-spin, .animate-fadeIn { transition: none !important; }
+
+/* ─── ANDROID & MOBILE RESPONSIVE OPTIMIZATIONS ─────────────────────────────*/
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+/* Hide scrollbars for slick mobile tabs */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Ensure smooth touch momentum scrolling on mobile devices */
+.phone-content, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+

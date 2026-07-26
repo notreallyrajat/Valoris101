@@ -15,9 +15,9 @@ export const PhoneContainer: React.FC<PhoneContainerProps> = ({
   active = true,
 }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full max-w-[365px] mx-auto">
       {title && (
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-2.5 flex flex-wrap items-center justify-center gap-1.5 px-2">
           <span className="text-xs font-bold uppercase tracking-wider text-gray-600 bg-gray-200/70 px-3 py-1 rounded-full border border-gray-300/50">
             {title}
           </span>
@@ -29,24 +29,24 @@ export const PhoneContainer: React.FC<PhoneContainerProps> = ({
         </div>
       )}
 
-      {/* iPhone 15 Pro Device Frame */}
+      {/* Android & iOS Responsive Phone Container */}
       <div
-        className={`relative w-[340px] h-[690px] sm:w-[365px] sm:h-[730px] rounded-[52px] bg-black p-[11px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.08),inset_0_0_0_2px_rgba(255,255,255,0.2)] transition-all duration-300 select-none ${
+        className={`relative w-full max-w-[340px] sm:max-w-[365px] h-[82vh] max-h-[730px] min-h-[580px] sm:h-[730px] rounded-[36px] sm:rounded-[52px] bg-black p-[8px] sm:p-[11px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.08),inset_0_0_0_2px_rgba(255,255,255,0.2)] transition-all duration-300 select-none ${
           active ? 'ring-2 ring-emerald-500/20 shadow-2xl' : 'opacity-95'
         }`}
       >
-        {/* Side Buttons */}
-        <div className="absolute -left-[14px] top-[115px] w-[3px] h-[34px] bg-gradient-to-r from-gray-400 to-gray-600 rounded-l-md shadow-sm" />
-        <div className="absolute -left-[14px] top-[160px] w-[3px] h-[34px] bg-gradient-to-r from-gray-400 to-gray-600 rounded-l-md shadow-sm" />
-        <div className="absolute -right-[14px] top-[135px] w-[3px] h-[55px] bg-gradient-to-l from-gray-400 to-gray-600 rounded-r-md shadow-sm" />
+        {/* Side Buttons (visible on sm+ screen) */}
+        <div className="hidden sm:block absolute -left-[14px] top-[115px] w-[3px] h-[34px] bg-gradient-to-r from-gray-400 to-gray-600 rounded-l-md shadow-sm" />
+        <div className="hidden sm:block absolute -left-[14px] top-[160px] w-[3px] h-[34px] bg-gradient-to-r from-gray-400 to-gray-600 rounded-l-md shadow-sm" />
+        <div className="hidden sm:block absolute -right-[14px] top-[135px] w-[3px] h-[55px] bg-gradient-to-l from-gray-400 to-gray-600 rounded-r-md shadow-sm" />
 
         {/* Inner Phone Screen Chassis */}
-        <div className="phone-screen-chassis relative w-full h-full rounded-[42px] bg-white overflow-hidden flex flex-col justify-between border border-gray-200">
+        <div className="phone-screen-chassis relative w-full h-full rounded-[28px] sm:rounded-[42px] bg-white overflow-hidden flex flex-col justify-between border border-gray-200">
           
-          {/* Dynamic Island */}
-          <div className="absolute top-[9px] left-1/2 -translate-x-1/2 w-[92px] h-[25px] bg-black rounded-full z-50 flex items-center justify-between px-2.5 shadow-sm">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#080d1a] border border-[#1e293b]" />
-            <div className="w-2 h-2 rounded-full bg-[#052e16] border border-[#065f46]" />
+          {/* Dynamic Island / Notch */}
+          <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[80px] sm:w-[92px] h-[22px] sm:h-[25px] bg-black rounded-full z-50 flex items-center justify-between px-2.5 shadow-sm">
+            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#080d1a] border border-[#1e293b]" />
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#052e16] border border-[#065f46]" />
           </div>
 
           {/* Status Bar */}
@@ -61,7 +61,7 @@ export const PhoneContainer: React.FC<PhoneContainerProps> = ({
 
           {/* Home Bar */}
           <div className="phone-bottom-bar w-full pt-1 pb-2 flex justify-center bg-white z-40">
-            <div className="phone-home-bar w-[125px] h-[4px] bg-gray-900 rounded-full opacity-80" />
+            <div className="phone-home-bar w-[110px] sm:w-[125px] h-[4px] bg-gray-900 rounded-full opacity-80" />
           </div>
         </div>
       </div>

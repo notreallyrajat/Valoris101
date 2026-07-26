@@ -79,34 +79,45 @@ export default function App() {
   return (
     <div className={`min-h-screen studio-surface bg-studio-grid text-gray-800 flex flex-col font-sans selection:bg-[#00a896] selection:text-white${isDarkMode ? ' dark' : ''}`}>
       {/* Top Controls Header */}
-      <header className="app-header sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/80 px-4 sm:px-8 py-3 shadow-xs">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <header className="app-header sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/80 px-3 sm:px-8 py-2.5 shadow-xs">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           
           {/* Logo & Title */}
-          <div className="flex items-center gap-3">
-            <div className="bg-brand-gradient text-white p-2 rounded-xl shadow-xs">
-              <Sparkles className="w-5 h-5 text-[#4ade80]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-base font-extrabold tracking-tight text-gray-900 leading-none">
-                  VALORIS SaaS Onboarding
-                </h1>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#00a896]/10 text-[#007a6e] px-2 py-0.5 rounded-full border border-[#00a896]/20">
-                  OTP & Password Auth
-                </span>
+          <div className="flex items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-start">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-brand-gradient text-white p-1.5 sm:p-2 rounded-xl shadow-xs shrink-0">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#4ade80]" />
               </div>
-              <p className="text-xs text-gray-500 font-medium">
-                Join ➔ Verify OTP ➔ Set Password ➔ Select Role ➔ Profile Setup ➔ Explore Feed ➔ Pay ₹399 ➔ Success
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-sm sm:text-base font-extrabold tracking-tight text-gray-900 leading-none">
+                    VALORIS Mobile App
+                  </h1>
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#00a896]/10 text-[#007a6e] px-2 py-0.5 rounded-full border border-[#00a896]/20">
+                    Android & Web
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500 font-medium hidden sm:block">
+                  Join ➔ Verify OTP ➔ Set Password ➔ Select Role ➔ Profile Setup ➔ Explore Feed ➔ Pay ₹399 ➔ Success
+                </p>
+              </div>
             </div>
+
+            {/* Mobile Dark Mode Toggle */}
+            <button
+              onClick={() => setIsDarkMode((d) => !d)}
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className="sm:hidden p-1.5 rounded-xl border bg-white border-gray-200 text-gray-700"
+            >
+              {isDarkMode ? <Moon className="w-4 h-4 text-blue-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
+            </button>
           </div>
 
-          {/* View Mode Controls */}
-          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-2xl border border-gray-200/60">
+          {/* View Mode Controls (Horizontal Scrollable on Mobile) */}
+          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 w-full sm:w-auto overflow-x-auto no-scrollbar">
             <button
               onClick={() => setViewMode('interactive')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 viewMode === 'interactive'
                   ? 'bg-white text-[#007a6e] shadow-sm border border-gray-200'
                   : 'text-gray-600 hover:text-gray-900'
@@ -118,19 +129,19 @@ export default function App() {
 
             <button
               onClick={() => setViewMode('showcase')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 viewMode === 'showcase'
                   ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
-              Auth & Setup Showcase
+              Auth Showcase
             </button>
 
             <button
               onClick={() => setViewMode('dual-interactive')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 viewMode === 'dual-interactive'
                   ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                   : 'text-gray-600 hover:text-gray-900'
@@ -142,46 +153,46 @@ export default function App() {
           </div>
 
           {/* Role Quick Selector & Reset */}
-          <div className="flex items-center gap-2">
-
+          <div className="flex items-center justify-between w-full sm:w-auto gap-2 overflow-x-auto no-scrollbar">
             <button
               onClick={() => {
                 setSelectedRole('broker');
                 setInteractiveStep(6);
               }}
-              className="flex items-center gap-1.5 px-3 py-1 btn-brand text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1 btn-brand text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <Building2 className="w-3.5 h-3.5 text-[#4ade80]" />
-              Brokers Dashboard
+              Broker Dashboard
             </button>
 
-            <label className="text-xs font-bold text-gray-600">Active Role:</label>
-            <select
-              value={selectedRole}
-              onChange={(e) => setSelectedRole(e.target.value)}
-              className="px-2.5 py-1 text-xs font-bold bg-white border border-gray-200 rounded-xl text-gray-800 focus:ring-2 focus:ring-[#00a896] cursor-pointer"
-            >
-              <option value="broker">Broker</option>
-              <option value="customer">Customer</option>
-              <option value="investor">Investor / VC</option>
-              <option value="landlord">Landlord</option>
-              <option value="founder">Founder</option>
-            </select>
-
+            <div className="flex items-center gap-1 shrink-0">
+              <label className="text-[11px] font-bold text-gray-600">Role:</label>
+              <select
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                className="px-2 py-1 text-xs font-bold bg-white border border-gray-200 rounded-xl text-gray-800 focus:ring-2 focus:ring-[#00a896] cursor-pointer"
+              >
+                <option value="broker">Broker</option>
+                <option value="customer">Customer</option>
+                <option value="investor">Investor / VC</option>
+                <option value="landlord">Landlord</option>
+                <option value="founder">Founder</option>
+              </select>
+            </div>
 
             <button
               onClick={handleReset}
-              className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition-all cursor-pointer shrink-0"
             >
               <RotateCcw className="w-3 h-3 text-gray-500" />
-              Reset Flow
+              Reset
             </button>
 
-            {/* Dark Mode Toggle */}
+            {/* Desktop Dark Mode Toggle */}
             <button
               onClick={() => setIsDarkMode((d) => !d)}
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer overflow-hidden ${
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer overflow-hidden ${
                 isDarkMode
                   ? 'bg-[#0F172A] border-blue-500/40 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.3)]'
                   : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
@@ -197,28 +208,28 @@ export default function App() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 lg:p-12 overflow-x-auto">
+      <main className="flex-1 flex flex-col items-center justify-center p-2 sm:p-6 lg:p-12 overflow-x-hidden w-full">
         
         {/* VIEW MODE 1: INTERACTIVE SINGLE PHONE SIMULATOR */}
         {viewMode === 'interactive' && (
-          <div className="flex flex-col items-center space-y-6 max-w-lg w-full animate-fadeIn">
+          <div className="flex flex-col items-center space-y-4 sm:space-y-6 max-w-lg w-full animate-fadeIn">
             
             {/* Step Navigation Bar */}
-            <div className="flex items-center gap-1 bg-white p-1.5 rounded-2xl border border-gray-200 shadow-xs overflow-x-auto max-w-full">
+            <div className="flex items-center gap-1 bg-white p-1.5 rounded-2xl border border-gray-200 shadow-xs overflow-x-auto no-scrollbar max-w-full w-full justify-start sm:justify-center">
               {[
                 { step: 1, label: '1. Join' },
                 { step: 2, label: '2. OTP' },
                 { step: 3, label: '3. Password' },
                 { step: 4, label: '4. Role' },
                 { step: 5, label: '5. Profile' },
-                { step: 6, label: '6. Feed/Dashboard' },
+                { step: 6, label: '6. Feed' },
                 { step: 7, label: '7. Pay ₹399' },
                 { step: 8, label: '8. Done' },
               ].map((s) => (
                 <button
                   key={s.step}
                   onClick={() => setInteractiveStep(s.step as any)}
-                  className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                     interactiveStep === s.step
                       ? 'bg-brand-gradient text-white shadow-xs'
                       : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
