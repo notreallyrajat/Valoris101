@@ -478,7 +478,6 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
 }) => {
   const [numProperties, setNumProperties] = useState(3);
   const [types, setTypes] = useState<string[]>(['Residential', 'Commercial']);
-  const [portfolioVal, setPortfolioVal] = useState(2.5); // Cr
   const [leaseTerm, setLeaseTerm] = useState('Long Term (1yr+)');
 
   const toggleType = (t: string) => {
@@ -547,23 +546,6 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
             </div>
           </div>
 
-          {/* Portfolio Value Range */}
-          <div className="space-y-1 bg-gray-50 p-3 rounded-xl border border-gray-200">
-            <div className="flex justify-between items-center text-xs">
-              <span className="font-bold text-gray-800">Portfolio Value Range</span>
-              <span className="font-extrabold text-[#1A3FAA]">₹ {portfolioVal} Cr+</span>
-            </div>
-            <input
-              type="range"
-              min="0.5"
-              max="20"
-              step="0.5"
-              value={portfolioVal}
-              onChange={(e) => setPortfolioVal(Number(e.target.value))}
-              className="w-full accent-[#1A3FAA] cursor-pointer"
-            />
-          </div>
-
           {/* Preferred Lease Term */}
           <div className="space-y-1">
             <label className="block text-xs font-bold text-gray-800 ml-0.5">
@@ -590,7 +572,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
       </div>
 
       <button
-        onClick={() => onComplete({ numProperties, types, portfolioVal, leaseTerm })}
+        onClick={() => onComplete({ numProperties, types, leaseTerm })}
         className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
       >
         Complete Profile
@@ -841,7 +823,7 @@ const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                       : 'bg-gray-50 border-gray-200 text-gray-500'
                   }`}
                 >
-                  {opt === 'employed' ? '💼 Employed' : '🔍 Unemployed'}
+                  {opt === 'employed' ? 'Employed' : 'Unemployed'}
                 </button>
               ))}
             </div>
@@ -853,22 +835,21 @@ const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
               <label className={labelClass}>Sector of Work</label>
               <div className="grid grid-cols-3 gap-2">
                 {([
-                  { value: 'Primary', emoji: '🌾', sub: 'Agriculture, Mining' },
-                  { value: 'Secondary', emoji: '🏭', sub: 'Manufacturing, Construction' },
-                  { value: 'Tertiary', emoji: '🏢', sub: 'Services, IT, Finance' },
+                  { value: 'Primary', sub: 'Agriculture, Mining' },
+                  { value: 'Secondary', sub: 'Manufacturing, Construction' },
+                  { value: 'Tertiary', sub: 'Services, IT, Finance' },
                 ] as const).map((opt) => (
                   <button
                     key={opt.value}
                     type="button"
                     onClick={() => setSector(opt.value)}
-                    className={`flex flex-col items-center py-2.5 px-1.5 text-center rounded-xl border transition-all cursor-pointer ${
+                    className={`flex flex-col items-center justify-center py-2.5 px-1.5 text-center rounded-xl border transition-all cursor-pointer ${
                       sector === opt.value
                         ? 'bg-[#1A3FAA] border-[#1A3FAA] text-white'
                         : 'bg-gray-50 border-gray-200 text-gray-600'
                     }`}
                   >
-                    <span className="text-base mb-0.5">{opt.emoji}</span>
-                    <span className="text-[10px] font-bold leading-tight">{opt.value}</span>
+                    <span className="text-[11px] font-bold leading-tight">{opt.value}</span>
                     <span className={`text-[9px] leading-tight mt-0.5 ${
                       sector === opt.value ? 'text-white/70' : 'text-gray-400'
                     }`}>{opt.sub}</span>

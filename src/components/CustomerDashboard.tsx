@@ -35,10 +35,8 @@ import {
   HelpCircle,
   Heart,
   Menu,
-  Crown,
   ArrowUp,
   ThumbsUp,
-  MessageCircle,
   IndianRupee,
   Eye,
   Users,
@@ -78,6 +76,8 @@ export interface CustomerPropertyItem {
   location: string;
   address: string;
   verified: boolean;
+  isReraApproved?: boolean;
+  reraRegNo?: string;
   postedBy: 'Owner' | 'Verified Broker';
   images: string[];
   amenities: string[];
@@ -100,6 +100,8 @@ const CUSTOMER_INITIAL_LISTINGS: CustomerPropertyItem[] = [
     location: 'Koramangala 4th Block, Bangalore',
     address: 'Greenwood Heights, 7th Main Rd',
     verified: true,
+    isReraApproved: true,
+    reraRegNo: 'PRM/KA/RERA/1251/310/PR/180516/001732',
     postedBy: 'Owner',
     images: [
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
@@ -144,6 +146,8 @@ const CUSTOMER_INITIAL_LISTINGS: CustomerPropertyItem[] = [
     location: 'Whitefield, Bangalore',
     address: 'Palm Meadows Enclave, Phase 2',
     verified: true,
+    isReraApproved: true,
+    reraRegNo: 'PRM/KA/RERA/1251/446/PR/190822/002910',
     postedBy: 'Verified Broker',
     images: [
       'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80',
@@ -215,8 +219,8 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   const [ownershipType, setOwnershipType] = useState<'all' | 'freehold' | 'leasehold'>('all');
   const [locationChips, setLocationChips] = useState<string[]>(['Jodhpur', 'Koramangala']);
   const [locationInput, setLocationInput] = useState('');
-  const [activeMainTab, setActiveMainTab] = useState<'home' | 'search' | 'sell_rent' | 'activity' | 'menu'>('menu');
-  const [categorySidebarTab, setCategorySidebarTab] = useState<'sell_rent' | 'buy_residential' | 'rent_pg' | 'buy_commercial' | 'lease_commercial' | 'price_insights' | 'activity_support'>('sell_rent');
+  const [activeMainTab, setActiveMainTab] = useState<'home' | 'search' | 'activity' | 'menu'>('home');
+  const [categorySidebarTab, setCategorySidebarTab] = useState<'buy_residential' | 'rent_pg' | 'buy_commercial' | 'lease_commercial' | 'price_insights' | 'activity_support'>('buy_residential');
   const [postedByFilter, setPostedByFilter] = useState<'all' | 'owner' | 'builder' | 'agent'>('all');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [builtAreaSqft, setBuiltAreaSqft] = useState<number>(1200);
@@ -228,6 +232,32 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   const [parkingTypeFilter, setParkingTypeFilter] = useState<'all' | 'covered' | 'open' | 'no_pref'>('all');
   const [waterSupplyFilter, setWaterSupplyFilter] = useState<string[]>([]);
   const [saleTypeFilter, setSaleTypeFilter] = useState<'all' | 'new_launch' | 'resale'>('all');
+
+  // Favorites & Watch History State
+  const [savedPropertyIds, setSavedPropertyIds] = useState<string[]>(['cust-1', 'cust-3']);
+  const [watchHistoryIds, setWatchHistoryIds] = useState<string[]>(['cust-1', 'cust-2']);
+  const [activitySubTab, setActivitySubTab] = useState<'favorites' | 'history'>('favorites');
+
+  const toggleFavorite = (propertyId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSavedPropertyIds((prev) => {
+      const isSaved = prev.includes(propertyId);
+      if (isSaved) {
+        setToastMessage('Removed property from Favorites');
+        setTimeout(() => setToastMessage(null), 3000);
+        return prev.filter((id) => id !== propertyId);
+      } else {
+        setToastMessage('Saved property to Favorites ❤️');
+        setTimeout(() => setToastMessage(null), 3000);
+        return [...prev, propertyId];
+      }
+    });
+  };
+
+  const handleOpenPropertyDetail = (item: CustomerPropertyItem) => {
+    setSelectedPropertyDetail(item);
+    setWatchHistoryIds((prev) => [item.id, ...prev.filter((id) => id !== item.id)]);
+  };
 
   // Contact / Visit Schedule Modal State
   const [selectedPropertyForContact, setSelectedPropertyForContact] = useState<CustomerPropertyItem | null>(null);
@@ -310,24 +340,24 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   // Helper labels
   const getFoodPrefLabel = (f?: string) => {
     switch (f) {
-      case 'vegetarian': return '🥦 Vegetarian';
-      case 'non_vegetarian': return '🍗 Non-Veg';
-      case 'both': return '🍽️ Veg & Non-Veg';
+      case 'vegetarian': return 'Vegetarian';
+      case 'non_vegetarian': return 'Non-Veg';
+      case 'both': return 'Veg & Non-Veg';
       default: return null;
     }
   };
 
   const getOccupancyLabel = (o?: string) => {
     switch (o) {
-      case 'gov_employed': return '🏛️ Govt. Employed';
-      case 'private_employed': return '💼 Private Employed';
-      case 'self_employed': return '👨‍💼 Self Employed';
-      case 'coed': return '👫 Co-ed';
-      case 'girls_only': return '👩 Girls Only';
-      case 'boys_only': return '👨 Boys Only';
-      case 'family_only': return '👨‍👩‍👧 Family Only';
-      case 'bachelors_only': return '🎓 Bachelors Only';
-      case 'students_only': return '📚 Students Only';
+      case 'gov_employed': return 'Govt. Employed';
+      case 'private_employed': return 'Private Employed';
+      case 'self_employed': return 'Self Employed';
+      case 'coed': return 'Co-ed';
+      case 'girls_only': return 'Girls Only';
+      case 'boys_only': return 'Boys Only';
+      case 'family_only': return 'Family Only';
+      case 'bachelors_only': return 'Bachelors Only';
+      case 'students_only': return 'Students Only';
       default: return null;
     }
   };
@@ -335,10 +365,10 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   const getAvailabilityLabel = (a?: string) => {
     switch (a) {
       case 'immediate': return 'Available Now';
-      case 'two_weeks': return '📅 In 2 Weeks';
-      case 'one_month': return '📅 In 1 Month';
-      case 'three_months': return '📅 In 3 Months';
-      case 'six_months': return '📅 In 6 Months';
+      case 'two_weeks': return 'In 2 Weeks';
+      case 'one_month': return 'In 1 Month';
+      case 'three_months': return 'In 3 Months';
+      case 'six_months': return 'In 6 Months';
       default: return null;
     }
   };
@@ -361,75 +391,48 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         </div>
       )}
 
-      {/* Top Search & Context Header */}
-      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 p-3.5 space-y-2.5 shadow-2xs">
-        
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-base font-black text-slate-900 tracking-tight">Explore</h1>
-          </div>
-          
-          <button
-            onClick={() => setShowFilterModal(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 border border-teal-200 hover:bg-teal-100 text-teal-800 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-2xs relative"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-teal-700" />
-            <span>Filters</span>
-            {activeFilterCount > 0 && (
-              <span className="w-4 h-4 bg-[#1A3FAA] text-white text-[9px] font-black rounded-full flex items-center justify-center">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
-        </div>
-
-        {/* Search Bar */}
+      {/* Top Integrated Search & Filter Header */}
+      <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#0A0D14]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 p-3 shadow-2xs">
         <div className="relative flex items-center">
-          <Search className="absolute left-3.5 w-3.5 h-3.5 text-slate-400" />
+          {/* Search Icon */}
+          <Search className="absolute left-3.5 w-4 h-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
+          
+          {/* Main Search Input */}
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search locality, area, or property name..."
-            className="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-100/80 border border-slate-200/80 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A3FAA] focus:bg-white transition-all placeholder-slate-400"
+            className="w-full pl-10 pr-24 py-2.5 text-xs bg-white dark:bg-[#141C2E] border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A3FAA] dark:focus:ring-sky-500 transition-all placeholder-slate-400 dark:placeholder-slate-500 shadow-2xs"
           />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm('')}
-              className="absolute right-3 text-slate-400 hover:text-slate-600 cursor-pointer"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
-        </div>
 
-        {/* PROPERTY TYPE CATEGORY PILL TABS */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 pb-0.5">
-          {[
-            { id: 'all', label: 'All Listings', icon: Home },
-            { id: 'apartment', label: 'Apartments', icon: Building2 },
-            { id: 'villa', label: 'Villas', icon: Home },
-            { id: 'pg', label: 'PG / Coliving', icon: BedDouble },
-            { id: 'commercial', label: 'Commercial', icon: Briefcase },
-            { id: 'plot', label: 'Plots / Land', icon: MapPin },
-          ].map((tab) => {
-            const IconComp = tab.icon;
-            const isSelected = activeTab === tab.id;
-            return (
+          {/* Right Action Group inside Search Bar (Clear Search + Integrated Filters Button) */}
+          <div className="absolute right-1.5 flex items-center gap-1.5">
+            {searchTerm && (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  isSelected
-                    ? 'bg-brand-gradient text-white shadow-xs scale-102'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                onClick={() => setSearchTerm('')}
+                className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer rounded-full transition-colors"
+                title="Clear search"
               >
-                <IconComp className="w-3.5 h-3.5" />
-                <span>{tab.label}</span>
+                <X className="w-3.5 h-3.5" />
               </button>
-            );
-          })}
+            )}
+
+            {/* Integrated Filter Button inside Search Bar */}
+            <button
+              onClick={() => setShowFilterModal(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#1A3FAA]/10 dark:bg-sky-400/15 hover:bg-[#1A3FAA]/20 dark:hover:bg-sky-400/25 text-[#1A3FAA] dark:text-sky-300 border border-[#1A3FAA]/20 dark:border-sky-400/30 text-[11px] font-extrabold rounded-xl transition-all cursor-pointer shadow-2xs shrink-0"
+              title="Open Filters"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#1A3FAA] dark:text-sky-400" />
+              <span>Filters</span>
+              {activeFilterCount > 0 && (
+                <span className="w-4 h-4 bg-[#1A3FAA] dark:bg-sky-500 text-white text-[9px] font-black rounded-full flex items-center justify-center shadow-xs">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1800,27 +1803,46 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             return (
               <div
                 key={item.id}
-                onClick={() => setSelectedPropertyDetail(item)}
-                className="bg-white rounded-3xl border border-slate-200/80 text-left p-4 space-y-3 transition-all duration-200 relative group shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#1A3FAA]/40 hover:shadow-md cursor-pointer active:scale-[0.99]"
+                onClick={() => handleOpenPropertyDetail(item)}
+                className={`bg-white dark:bg-[#0D1117] rounded-3xl text-left p-4 space-y-3 transition-all duration-200 relative group cursor-pointer active:scale-[0.99] ${
+                  item.isReraApproved
+                    ? 'border-2 border-emerald-500/80 dark:border-emerald-400/80 shadow-[0_0_16px_rgba(16,185,129,0.15)] bg-gradient-to-b from-emerald-50/20 to-transparent dark:from-emerald-950/10'
+                    : 'border border-slate-200/80 dark:border-slate-800 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#1A3FAA]/40 hover:shadow-md'
+                }`}
               >
                   {/* MULTI-PHOTO GALLERY CAROUSEL COVER */}
-                  <div className="relative rounded-2xl overflow-hidden bg-slate-900 group/gallery h-44 sm:h-48 w-full border border-slate-100 shadow-inner">
+                  <div className="relative rounded-2xl overflow-hidden bg-slate-900 group/gallery h-44 sm:h-48 w-full border border-slate-100 dark:border-slate-800 shadow-inner">
                     <img
                       src={activePhotoUrl}
                       alt={`${item.title} angle ${currentImageIdx + 1}`}
                       className="w-full h-full object-cover transition-all duration-300 group-hover/gallery:scale-105"
                     />
                     
-                    {/* Photo Counter Overlay Badge */}
-                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                    {/* Photo Counter & RERA Overlay Badges */}
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap max-w-[70%]">
                       <span className="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 border border-white/10 shadow-xs">
                         <Camera className="w-3 h-3 text-teal-400" />
                         {propertyImages.length} Photos
                       </span>
+
+                      {item.isReraApproved && (
+                        <span className="bg-emerald-600/90 text-white backdrop-blur-md text-[10px] font-black tracking-wide px-2.5 py-1 rounded-full flex items-center gap-1 border border-emerald-400 shadow-xs">
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-200" />
+                          <span>RERA APPROVED</span>
+                        </span>
+                      )}
                     </div>
 
-                    {/* Transaction Badge (Rent vs Sale) */}
-                    <div className="absolute top-2.5 right-2.5">
+                    {/* Transaction Badge & Heart Favorite Toggle */}
+                    <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+                      <button
+                        onClick={(e) => toggleFavorite(item.id, e)}
+                        className="p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-950 text-white backdrop-blur-md transition-all cursor-pointer shadow-md border border-white/20 hover:scale-110 active:scale-95"
+                        title={savedPropertyIds.includes(item.id) ? 'Remove from favorites' : 'Save to favorites'}
+                      >
+                        <Heart className={`w-3.5 h-3.5 ${savedPropertyIds.includes(item.id) ? 'fill-rose-500 text-rose-500' : 'text-white'}`} />
+                      </button>
+                      
                       <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-xs border ${
                         item.transactionType === 'rent'
                           ? 'bg-teal-500 text-slate-950 border-teal-300'
@@ -1932,6 +1954,245 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         )}
       </div>
 
+      {/* ACTIVITY & HISTORY OVERLAY SCREEN */}
+      {activeMainTab === 'activity' && (
+        <div className="absolute inset-0 z-50 bg-slate-50 dark:bg-[#0A0D14] flex flex-col overflow-hidden text-left animate-fadeIn">
+          
+          {/* Top Sticky Header */}
+          <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#0D1117]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-3.5 flex items-center justify-between shadow-2xs">
+            <button
+              onClick={() => setActiveMainTab('home')}
+              className="p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
+            </button>
+            <div className="flex-1 text-center pr-6">
+              <h2 className="text-base font-black text-slate-900 dark:text-slate-100 tracking-tight">
+                My Activity
+              </h2>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
+                Saved Favorites & Watch History
+              </span>
+            </div>
+          </div>
+
+          {/* Activity Sub-Tab Switcher */}
+          <div className="p-3 bg-white dark:bg-[#0D1117] border-b border-slate-200 dark:border-slate-800">
+            <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-[#141C2E] p-1 rounded-2xl border border-slate-200 dark:border-slate-800">
+              <button
+                onClick={() => setActivitySubTab('favorites')}
+                className={`py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  activitySubTab === 'favorites'
+                    ? 'bg-white dark:bg-slate-800 text-[#1A3FAA] dark:text-sky-300 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                }`}
+              >
+                <Heart className={`w-3.5 h-3.5 ${activitySubTab === 'favorites' ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} />
+                <span>Favorites</span>
+                <span className="px-1.5 py-0.2 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-black rounded-full">
+                  {savedPropertyIds.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setActivitySubTab('history')}
+                className={`py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  activitySubTab === 'history'
+                    ? 'bg-white dark:bg-slate-800 text-[#1A3FAA] dark:text-sky-300 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                }`}
+              >
+                <Clock className="w-3.5 h-3.5 text-amber-500" />
+                <span>Watch History</span>
+                <span className="px-1.5 py-0.2 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-black rounded-full">
+                  {watchHistoryIds.length}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Content Area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3.5">
+            
+            {/* SUB-TAB 1: FAVORITES / SAVED PROPERTIES */}
+            {activitySubTab === 'favorites' && (
+              <>
+                {savedPropertyIds.length === 0 ? (
+                  <div className="p-8 bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3 my-4 shadow-2xs">
+                    <div className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-500 flex items-center justify-center mx-auto shadow-inner">
+                      <Heart className="w-7 h-7 stroke-[2]" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">No Saved Properties</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+                        Tap the heart icon on any property card to bookmark it for fast reference.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveMainTab('home')}
+                      className="px-5 py-2.5 btn-brand text-white font-extrabold text-xs rounded-xl shadow-md cursor-pointer transition-all"
+                    >
+                      Explore Properties
+                    </button>
+                  </div>
+                ) : (
+                  listings
+                    .filter((item) => savedPropertyIds.includes(item.id))
+                    .map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => handleOpenPropertyDetail(item)}
+                        className="bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200/80 dark:border-slate-800 p-3.5 space-y-3 transition-all cursor-pointer relative shadow-2xs hover:shadow-md"
+                      >
+                        <div className="flex gap-3">
+                          <img
+                            src={item.images[0]}
+                            alt={item.title}
+                            className="w-24 h-24 rounded-2xl object-cover shrink-0 border border-slate-100 dark:border-slate-800"
+                          />
+                          <div className="flex-1 min-w-0 flex flex-col justify-between">
+                            <div>
+                              <div className="flex items-center justify-between gap-1">
+                                <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
+                                  item.transactionType === 'rent'
+                                    ? 'bg-teal-500 text-slate-950 border-teal-300'
+                                    : 'bg-amber-400 text-slate-950 border-amber-300'
+                                }`}>
+                                  {item.transactionType === 'rent' ? 'For Rent' : 'For Sale'}
+                                </span>
+                                
+                                <button
+                                  onClick={(e) => toggleFavorite(item.id, e)}
+                                  className="p-1.5 text-rose-500 hover:scale-110 cursor-pointer transition-transform"
+                                  title="Remove from favorites"
+                                >
+                                  <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
+                                </button>
+                              </div>
+
+                              <h3 className="text-xs font-extrabold text-slate-900 dark:text-slate-100 truncate mt-1">
+                                {item.title}
+                              </h3>
+                              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate flex items-center gap-1 mt-0.5">
+                                <MapPin className="w-3 h-3 text-teal-600 shrink-0" />
+                                {item.location}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                              <span className="text-xs font-black text-[#1A3FAA] dark:text-sky-400">{item.price}</span>
+                              <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400 flex items-center gap-0.5">
+                                View <ChevronRight className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </>
+            )}
+
+            {/* SUB-TAB 2: WATCH HISTORY */}
+            {activitySubTab === 'history' && (
+              <>
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                    Recently Viewed Properties ({watchHistoryIds.length})
+                  </span>
+                  {watchHistoryIds.length > 0 && (
+                    <button
+                      onClick={() => {
+                        setWatchHistoryIds([]);
+                        setToastMessage('Cleared Watch History');
+                        setTimeout(() => setToastMessage(null), 3000);
+                      }}
+                      className="text-[10px] font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
+                    >
+                      Clear All
+                    </button>
+                  )}
+                </div>
+
+                {watchHistoryIds.length === 0 ? (
+                  <div className="p-8 bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3 my-4 shadow-2xs">
+                    <div className="w-14 h-14 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center mx-auto shadow-inner">
+                      <Clock className="w-7 h-7 stroke-[2]" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">No Watch History</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+                        Properties you view will automatically show up here so you can re-visit them easily.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveMainTab('home')}
+                      className="px-5 py-2.5 btn-brand text-white font-extrabold text-xs rounded-xl shadow-md cursor-pointer transition-all"
+                    >
+                      Explore Properties
+                    </button>
+                  </div>
+                ) : (
+                  watchHistoryIds.map((id) => {
+                    const item = listings.find((l) => l.id === id);
+                    if (!item) return null;
+                    const isFavorited = savedPropertyIds.includes(item.id);
+
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => handleOpenPropertyDetail(item)}
+                        className="bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200/80 dark:border-slate-800 p-3.5 space-y-3 transition-all cursor-pointer relative shadow-2xs hover:shadow-md"
+                      >
+                        <div className="flex gap-3">
+                          <img
+                            src={item.images[0]}
+                            alt={item.title}
+                            className="w-24 h-24 rounded-2xl object-cover shrink-0 border border-slate-100 dark:border-slate-800"
+                          />
+                          <div className="flex-1 min-w-0 flex flex-col justify-between">
+                            <div>
+                              <div className="flex items-center justify-between gap-1">
+                                <span className="text-[9px] font-extrabold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800/50 flex items-center gap-1">
+                                  <Clock className="w-2.5 h-2.5" /> Viewed Recently
+                                </span>
+                                
+                                <button
+                                  onClick={(e) => toggleFavorite(item.id, e)}
+                                  className="p-1 text-slate-400 hover:text-rose-500 cursor-pointer transition-colors"
+                                >
+                                  <Heart className={`w-4 h-4 ${isFavorited ? 'fill-rose-500 text-rose-500' : ''}`} />
+                                </button>
+                              </div>
+
+                              <h3 className="text-xs font-extrabold text-slate-900 dark:text-slate-100 truncate mt-1">
+                                {item.title}
+                              </h3>
+                              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate flex items-center gap-1 mt-0.5">
+                                <MapPin className="w-3 h-3 text-teal-600 shrink-0" />
+                                {item.location}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                              <span className="text-xs font-black text-[#1A3FAA] dark:text-sky-400">{item.price}</span>
+                              <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400 flex items-center gap-0.5">
+                                Re-visit <ChevronRight className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </>
+            )}
+
+          </div>
+        </div>
+      )}
+
       {/* ALL CATEGORIES OVERLAY SCREEN (VALORIS 2-PANEL REPLICA) */}
       {activeMainTab === 'menu' && (
         <div className="absolute inset-0 z-50 bg-white flex flex-col overflow-hidden text-left animate-fadeIn">
@@ -1955,13 +2216,6 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             {/* LEFT PANEL: CATEGORY PARENT MENU SIDEBAR */}
             <div className="w-[115px] sm:w-[135px] shrink-0 bg-[#F4F5F8] border-r border-slate-200/80 overflow-y-auto">
               {[
-                {
-                  id: 'sell_rent',
-                  label: 'Sell/Rent',
-                  icon: Plus,
-                  hasBadge: true,
-                  badgeText: '+ FREE',
-                },
                 {
                   id: 'buy_residential',
                   label: 'Buy Residential',
@@ -2011,13 +2265,6 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       <div className="absolute left-0 top-0 bottom-0 w-[3.5px] bg-[#0066FF] rounded-r-sm" />
                     )}
 
-                    {/* Free Badge above icon */}
-                    {item.hasBadge && (
-                      <span className="bg-[#00B050] text-white text-[7.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-tight mb-1 shadow-2xs">
-                        {item.badgeText}
-                      </span>
-                    )}
-
                     {/* Icon inside soft circle */}
                     <div className={`w-8.5 h-8.5 rounded-full flex items-center justify-center text-center mb-1 transition-colors ${
                       isActive ? 'bg-[#EBF3FF] text-[#0066FF]' : 'bg-slate-200/60 text-slate-500'
@@ -2035,89 +2282,6 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
             {/* RIGHT PANEL: OPTIONS CONTENT (CENTERED ICONS, MINIMAL UNBOLDED TEXT) */}
             <div className="flex-1 overflow-y-auto p-3.5 space-y-4 bg-white text-left">
-              
-              {/* TAB 1: SELL / RENT */}
-              {categorySidebarTab === 'sell_rent' && (
-                <div className="space-y-4 animate-fadeIn">
-                  {/* Section 1 */}
-                  <div>
-                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
-                      Property posting options
-                    </h3>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <button
-                        onClick={() => {
-                          setActiveMainTab('home');
-                          setToastMessage('Opening Property Listing Form...');
-                          setTimeout(() => setToastMessage(null), 3000);
-                        }}
-                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs group"
-                      >
-                        <div className="w-7 h-7 rounded-full bg-[#1A3FAA] text-white flex items-center justify-center">
-                          <Plus className="w-4 h-4" />
-                        </div>
-                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center group-hover:text-[#1A3FAA]">
-                          Post Property
-                        </span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setActiveMainTab('home');
-                          setToastMessage('Opening WhatsApp Valoris Assistant...');
-                          setTimeout(() => setToastMessage(null), 3000);
-                        }}
-                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs group"
-                      >
-                        <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center">
-                          <MessageCircle className="w-4 h-4" />
-                        </div>
-                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center group-hover:text-emerald-700">
-                          Post via WhatsApp
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Section 2 */}
-                  <div>
-                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
-                      Stand out with higher visibility
-                    </h3>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <button
-                        onClick={() => onProceedToPayment && onProceedToPayment()}
-                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
-                      >
-                        <Crown className="w-5 h-5 text-amber-500" />
-                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
-                          Owner Plans
-                        </span>
-                      </button>
-
-                      <button
-                        onClick={() => onProceedToPayment && onProceedToPayment()}
-                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
-                      >
-                        <ArrowUp className="w-5 h-5 text-emerald-600" />
-                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
-                          Dealer Plans
-                        </span>
-                      </button>
-
-                      <button
-                        onClick={() => onProceedToPayment && onProceedToPayment()}
-                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs col-span-2"
-                      >
-                        <Building2 className="w-5 h-5 text-orange-500" />
-                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
-                          Builder Plans
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
 
               {/* TAB 2: BUY RESIDENTIAL */}
               {categorySidebarTab === 'buy_residential' && (
@@ -2685,19 +2849,6 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         >
           <Search className="w-5 h-5 stroke-[2]" />
           <span className="text-[10px] font-bold">Search</span>
-        </button>
-
-        <button
-          onClick={() => {
-            setActiveMainTab('menu');
-            setCategorySidebarTab('sell_rent');
-          }}
-          className="flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all text-slate-500 hover:text-slate-800"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#1A3FAA] text-white flex items-center justify-center shadow-sm -mt-3 border-2 border-white">
-            <Plus className="w-5 h-5 stroke-[2.5]" />
-          </div>
-          <span className="text-[10px] font-bold">Sell/Rent</span>
         </button>
 
         <button

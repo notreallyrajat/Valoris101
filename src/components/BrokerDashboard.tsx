@@ -37,7 +37,9 @@ import {
   ArrowUp,
   Calculator,
   FileQuestion,
-  Star
+  Star,
+  Heart,
+  ShieldCheck
 } from 'lucide-react';
 
 export interface ListingItem {
@@ -67,6 +69,8 @@ export interface ListingItem {
   amenities: string[];
   rating?: string;
   isVerified?: boolean;
+  isReraApproved?: boolean;
+  reraRegNo?: string;
   contactName?: string;
   contactPhone?: string;
   contactEmail?: string;
@@ -94,6 +98,8 @@ const INITIAL_LISTINGS: ListingItem[] = [
     deposit: '₹ 1.5 Lakhs',
     location: 'Koramangala 4th Block, Bangalore',
     address: 'Flat 402, Skyline Residency, 8th Main Road, Koramangala',
+    isReraApproved: true,
+    reraRegNo: 'PRM/KA/RERA/1251/310/PR/180516/001732',
     contactName: 'Rajat Sharma (Owner)',
     contactPhone: '+91 98765 43210',
     contactEmail: 'rajat.owner@veloris.com',
@@ -244,8 +250,29 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   isPaidMember = false,
 }) => {
   const [listings, setListings] = useState<ListingItem[]>(INITIAL_LISTINGS);
-  const [activeMainTab, setActiveMainTab] = useState<'explore' | 'give_listing' | 'menu'>('explore');
+  const [activeMainTab, setActiveMainTab] = useState<'explore' | 'give_listing' | 'activity' | 'menu'>('explore');
   const [categorySidebarTab, setCategorySidebarTab] = useState<'sell_rent' | 'buy_residential' | 'rent_pg' | 'buy_commercial' | 'lease_commercial' | 'price_insights' | 'activity_support'>('sell_rent');
+
+  // Favorites & Watch History State
+  const [savedPropertyIds, setSavedPropertyIds] = useState<string[]>(['b-1', 'b-103']);
+  const [watchHistoryIds, setWatchHistoryIds] = useState<string[]>(['b-1', 'b-2']);
+  const [activitySubTab, setActivitySubTab] = useState<'favorites' | 'history'>('favorites');
+
+  const toggleFavorite = (propertyId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSavedPropertyIds((prev) => {
+      const isSaved = prev.includes(propertyId);
+      if (isSaved) {
+        setToastMessage('Removed property from Favorites');
+        setTimeout(() => setToastMessage(null), 3000);
+        return prev.filter((id) => id !== propertyId);
+      } else {
+        setToastMessage('Saved property to Favorites ❤️');
+        setTimeout(() => setToastMessage(null), 3000);
+        return [...prev, propertyId];
+      }
+    });
+  };
 
   // Active Image Index map for explore feed gallery carousels: { listingId: activeIndex }
   const [activeImageIndices, setActiveImageIndices] = useState<Record<string, number>>({});
@@ -463,24 +490,24 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   // Helper labels
   const getFoodPrefLabel = (f?: string) => {
     switch (f) {
-      case 'vegetarian': return '🥦 Vegetarian Only';
-      case 'non_vegetarian': return '🍗 Non-Vegetarian';
-      case 'both': return '🍽️ Veg & Non-Veg';
+      case 'vegetarian': return 'Vegetarian Only';
+      case 'non_vegetarian': return 'Non-Vegetarian';
+      case 'both': return 'Veg & Non-Veg';
       default: return null;
     }
   };
 
   const getOccupancyLabel = (o?: string) => {
     switch (o) {
-      case 'gov_employed': return '🏛️ Govt. Employed';
-      case 'private_employed': return '💼 Private Employed';
-      case 'self_employed': return '👨‍💼 Self Employed';
-      case 'coed': return '👫 Co-ed';
-      case 'girls_only': return '👩 Girls Only';
-      case 'boys_only': return '👨 Boys Only';
-      case 'family_only': return '👨‍👩‍👧 Family Only';
-      case 'bachelors_only': return '🎓 Bachelors Only';
-      case 'students_only': return '📚 Students Only';
+      case 'gov_employed': return 'Govt. Employed';
+      case 'private_employed': return 'Private Employed';
+      case 'self_employed': return 'Self Employed';
+      case 'coed': return 'Co-ed';
+      case 'girls_only': return 'Girls Only';
+      case 'boys_only': return 'Boys Only';
+      case 'family_only': return 'Family Only';
+      case 'bachelors_only': return 'Bachelors Only';
+      case 'students_only': return 'Students Only';
       default: return null;
     }
   };
@@ -488,10 +515,10 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   const getAvailabilityLabel = (a?: string) => {
     switch (a) {
       case 'immediate': return 'Available Now';
-      case 'two_weeks': return '📅 In 2 Weeks';
-      case 'one_month': return '📅 In 1 Month';
-      case 'three_months': return '📅 In 3 Months';
-      case 'six_months': return '📅 In 6 Months';
+      case 'two_weeks': return 'In 2 Weeks';
+      case 'one_month': return 'In 1 Month';
+      case 'three_months': return 'In 3 Months';
+      case 'six_months': return 'In 6 Months';
       default: return null;
     }
   };
@@ -1623,131 +1650,56 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
       )}
 
       <div>
-        {/* Ultra-Professional Navigation Bar with Icon & Text Below */}
-        <div className="bg-white/95 backdrop-blur-md py-2 px-4 border-b border-slate-200/70 sticky top-0 z-30 shadow-2xs">
-          <div className="flex items-center justify-center gap-8 max-w-xs mx-auto">
-            {/* Tab 1: Explore Feed */}
-            <button
-              onClick={() => {
-                setActiveMainTab('explore');
-              }}
-              className="flex flex-col items-center gap-1 transition-all cursor-pointer group"
-            >
-              <div
-                className={`p-2 rounded-2xl transition-all flex items-center justify-center ${
-                  activeMainTab === 'explore'
-                    ? 'bg-brand-gradient text-white shadow-sm scale-105'
-                    : 'bg-slate-100 group-hover:bg-slate-200 text-slate-600'
-                }`}
-              >
-                <Compass className="w-5 h-5 stroke-[2]" />
-              </div>
-              <span
-                className={`text-xs font-extrabold tracking-tight ${
-                  activeMainTab === 'explore' ? 'text-[#1A3FAA]' : 'text-slate-500 group-hover:text-slate-800'
-                }`}
-              >
-                Explore
-              </span>
-            </button>
-
-            {/* Tab 2: Add Listing */}
-            <button
-              onClick={() => {
-                setActiveMainTab('give_listing');
-              }}
-              className="flex flex-col items-center gap-1 transition-all cursor-pointer group"
-            >
-              <div
-                className={`p-2 rounded-2xl transition-all flex items-center justify-center relative ${
-                  activeMainTab === 'give_listing'
-                    ? 'bg-brand-gradient text-white shadow-sm scale-105'
-                    : 'bg-slate-100 group-hover:bg-slate-200 text-slate-600'
-                }`}
-              >
-                <Plus className="w-5 h-5 stroke-[2.5]" />
-                <span className="absolute -top-1 -right-1.5 bg-[#0097A7] text-white text-[8px] font-black px-1 rounded-full border border-white shadow-2xs">
-                  ₹50
-                </span>
-              </div>
-              <span
-                className={`text-xs font-extrabold tracking-tight ${
-                  activeMainTab === 'give_listing' ? 'text-[#1A3FAA]' : 'text-slate-500 group-hover:text-slate-800'
-                }`}
-              >
-                Add
-              </span>
-            </button>
-
-            {/* Tab 3: All Categories Menu */}
-            <button
-              onClick={() => setActiveMainTab('menu')}
-              className="flex flex-col items-center gap-1 transition-all cursor-pointer group"
-            >
-              <div
-                className={`p-2 rounded-2xl transition-all flex items-center justify-center ${
-                  activeMainTab === 'menu'
-                    ? 'bg-brand-gradient text-white shadow-sm scale-105'
-                    : 'bg-slate-100 group-hover:bg-slate-200 text-slate-600'
-                }`}
-              >
-                <Menu className="w-5 h-5 stroke-[2]" />
-              </div>
-              <span
-                className={`text-xs font-extrabold tracking-tight ${
-                  activeMainTab === 'menu' ? 'text-[#1A3FAA]' : 'text-slate-500 group-hover:text-slate-800'
-                }`}
-              >
-                Menu
-              </span>
-            </button>
-          </div>
-        </div>
-
-        {/* TAB 1: EXPLORE FEED */}
+        {/* STICKY TOP SEARCH HEADER */}
         {activeMainTab === 'explore' && (
-          <div className="p-4 space-y-3.5 max-w-lg mx-auto">
-            
-            {/* Search Bar & Filter Toggle */}
-            <div className="flex items-center gap-2">
-              <div className="flex-1 relative flex items-center">
-                <Search className="absolute left-3.5 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search location, address, plot size..."
-                  className="w-full pl-9 pr-8 py-2.5 text-xs bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-slate-900 text-slate-900 placeholder-slate-400 font-medium shadow-xs transition-all"
-                />
+          <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#0A0D14]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 p-3 shadow-2xs">
+            <div className="relative flex items-center">
+              {/* Search Icon */}
+              <Search className="absolute left-3.5 w-4 h-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
+              
+              {/* Main Search Input */}
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search location, address, plot size..."
+                className="w-full pl-10 pr-24 py-2.5 text-xs bg-white dark:bg-[#141C2E] border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A3FAA] dark:focus:ring-sky-500 transition-all placeholder-slate-400 dark:placeholder-slate-500 shadow-2xs"
+              />
+
+              {/* Right Action Group inside Search Bar (Clear Search + Integrated Filters Button) */}
+              <div className="absolute right-1.5 flex items-center gap-1.5">
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-3 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                    className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer rounded-full transition-colors"
+                    title="Clear search"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
-              </div>
 
-              <button
-                onClick={() => setShowFilterModal(true)}
-                className={`px-3 py-2.5 border rounded-2xl transition-all cursor-pointer flex items-center gap-1.5 text-xs font-semibold shadow-xs ${
-                  activeFilterCount > 0
-                    ? 'bg-[#1F4E5C] text-white border-[#1F4E5C]'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-300" />
-                <span>
-                  Filters
+                {/* Integrated Filter Button inside Search Bar */}
+                <button
+                  onClick={() => setShowFilterModal(true)}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#1A3FAA]/10 dark:bg-sky-400/15 hover:bg-[#1A3FAA]/20 dark:hover:bg-sky-400/25 text-[#1A3FAA] dark:text-sky-300 border border-[#1A3FAA]/20 dark:border-sky-400/30 text-[11px] font-extrabold rounded-xl transition-all cursor-pointer shadow-2xs shrink-0"
+                  title="Open Filters"
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-[#1A3FAA] dark:text-sky-400" />
+                  <span>Filters</span>
                   {activeFilterCount > 0 && (
-                    <span className="ml-1 px-1.5 py-0.2 bg-cyan-400 text-slate-950 rounded-full text-[10px] font-extrabold">
+                    <span className="w-4 h-4 bg-[#1A3FAA] dark:bg-sky-500 text-white text-[9px] font-black rounded-full flex items-center justify-center shadow-xs">
                       {activeFilterCount}
                     </span>
                   )}
-                </span>
-              </button>
+                </button>
+              </div>
             </div>
+          </div>
+        )}
+
+        {/* TAB 1: EXPLORE FEED */}
+        {activeMainTab === 'explore' && (
+          <div className="p-4 space-y-3.5 max-w-lg mx-auto">
 
             {/* Quick Active Filter Badges Strip */}
             {activeFilterCount > 0 && (
@@ -1819,8 +1771,15 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                   return (
                     <div
                       key={item.id}
-                      onClick={() => setSelectedPropertyDetail(item)}
-                      className="bg-white rounded-3xl border border-slate-200/80 text-left p-4 space-y-3 transition-all duration-200 relative group shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#1A3FAA]/40 hover:shadow-md cursor-pointer active:scale-[0.99]"
+                      onClick={() => {
+                        setSelectedPropertyDetail(item);
+                        setWatchHistoryIds((prev) => prev.includes(item.id) ? prev : [item.id, ...prev]);
+                      }}
+                      className={`rounded-3xl text-left p-4 space-y-3 transition-all duration-200 relative group cursor-pointer active:scale-[0.99] ${
+                        item.isReraApproved
+                          ? 'bg-white dark:bg-[#0D1117] border-2 border-emerald-500/80 dark:border-emerald-400/80 shadow-[0_0_16px_rgba(16,185,129,0.15)] bg-gradient-to-b from-emerald-50/20 to-transparent dark:from-emerald-950/10'
+                          : 'bg-white dark:bg-[#0D1117] border border-slate-200/80 dark:border-slate-800 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#1A3FAA]/40 hover:shadow-md'
+                      }`}
                     >
                       {/* Sponsored Badge */}
                       {item.isSponsored && (
@@ -1830,22 +1789,30 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                         </div>
                       )}
 
-                      {/* Header Row: Action Badge + Type */}
-                      <div className="flex items-center justify-between">
+                      {/* Header Row: Action Badge + Type + RERA */}
+                      <div className="flex items-center justify-between flex-wrap gap-1.5">
                         <div className="flex items-center gap-1.5">
                           <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-lg border ${getActionBadgeStyle(item.actionType)}`}>
                             {getActionLabel(item.actionType)}
                           </span>
-                          <span className="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg border border-slate-200 uppercase">
+                          <span className="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700 uppercase">
                             {item.propertyType}
                           </span>
                         </div>
 
-                        {item.isVerified && (
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified
-                          </span>
-                        )}
+                        <div className="flex items-center gap-1.5">
+                          {item.isReraApproved && (
+                            <span className="text-[10px] font-black text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-300 dark:border-emerald-800 flex items-center gap-1 shadow-2xs">
+                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> RERA Approved
+                            </span>
+                          )}
+
+                          {item.isVerified && !item.isReraApproved && (
+                            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> Verified
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Photo Carousel Preview */}
@@ -1861,6 +1828,15 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                           <Camera className="w-3 h-3 text-teal-400" />
                           {activeImgIdx + 1}/{totalImgs} Photos
                         </div>
+
+                        {/* Favorite Heart Button */}
+                        <button
+                          onClick={(e) => toggleFavorite(item.id, e)}
+                          className="absolute top-2.5 right-2.5 z-10 w-7.5 h-7.5 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-center shadow-md hover:scale-110 transition-transform cursor-pointer"
+                          title={savedPropertyIds.includes(item.id) ? 'Remove from favorites' : 'Save to favorites'}
+                        >
+                          <Heart className={`w-4 h-4 ${savedPropertyIds.includes(item.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-600 dark:text-slate-300'}`} />
+                        </button>
 
                         {/* Left / Right Carousel Controls */}
                         {totalImgs > 1 && (
@@ -2094,6 +2070,282 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
             </form>
           </div>
         )}
+
+        {/* TAB 3: ACTIVITY / FAVORITES FEED */}
+        {activeMainTab === 'activity' && (
+          <div className="flex flex-col h-full bg-[#F8FAFC] dark:bg-[#0A0D14] animate-fadeIn pb-12">
+            {/* Activity Header */}
+            <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#0A0D14]/95 backdrop-blur-md px-4 py-3 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between shadow-2xs">
+              <button
+                onClick={() => setActiveMainTab('explore')}
+                className="p-1.5 -ml-1 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full cursor-pointer transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
+              </button>
+              <div className="flex-1 text-center pr-6">
+                <h2 className="text-base font-black text-slate-900 dark:text-slate-100 tracking-tight">
+                  Broker Activity
+                </h2>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
+                  Saved Favorites & Watch History
+                </span>
+              </div>
+            </div>
+
+            {/* Sub-Tab Switcher */}
+            <div className="p-3 bg-white dark:bg-[#0D1117] border-b border-slate-200 dark:border-slate-800">
+              <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-[#141C2E] p-1 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <button
+                  onClick={() => setActivitySubTab('favorites')}
+                  className={`py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    activitySubTab === 'favorites'
+                      ? 'bg-white dark:bg-slate-800 text-[#1A3FAA] dark:text-sky-300 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <Heart className={`w-3.5 h-3.5 ${activitySubTab === 'favorites' ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} />
+                  <span>Favorites</span>
+                  <span className="px-1.5 py-0.2 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-black rounded-full">
+                    {savedPropertyIds.length}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActivitySubTab('history')}
+                  className={`py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    activitySubTab === 'history'
+                      ? 'bg-white dark:bg-slate-800 text-[#1A3FAA] dark:text-sky-300 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <Clock className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Watch History</span>
+                  <span className="px-1.5 py-0.2 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-black rounded-full">
+                    {watchHistoryIds.length}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3.5 max-w-lg mx-auto w-full">
+              {/* SUB-TAB 1: FAVORITES */}
+              {activitySubTab === 'favorites' && (
+                <>
+                  {savedPropertyIds.length === 0 ? (
+                    <div className="p-8 bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3 my-4 shadow-2xs">
+                      <div className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-500 flex items-center justify-center mx-auto shadow-inner">
+                        <Heart className="w-7 h-7 stroke-[2]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">No Saved Properties</h3>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+                          Tap the heart icon on any property card to bookmark it for fast client reference.
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setActiveMainTab('explore')}
+                        className="px-5 py-2.5 btn-brand text-white font-extrabold text-xs rounded-xl shadow-md cursor-pointer transition-all"
+                      >
+                        Explore Feed
+                      </button>
+                    </div>
+                  ) : (
+                    listings
+                      .filter((item) => savedPropertyIds.includes(item.id))
+                      .map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            setSelectedPropertyDetail(item);
+                            setWatchHistoryIds((prev) => prev.includes(item.id) ? prev : [item.id, ...prev]);
+                          }}
+                          className="bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200/80 dark:border-slate-800 p-3.5 space-y-3 transition-all cursor-pointer relative shadow-2xs hover:shadow-md"
+                        >
+                          <div className="flex gap-3">
+                            <img
+                              src={item.images[0]}
+                              alt={item.title}
+                              className="w-24 h-24 rounded-2xl object-cover shrink-0 border border-slate-100 dark:border-slate-800"
+                            />
+                            <div className="flex-1 min-w-0 flex flex-col justify-between">
+                              <div>
+                                <div className="flex items-center justify-between gap-1">
+                                  <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
+                                    item.actionType === 'give_rent'
+                                      ? 'bg-teal-500 text-slate-950 border-teal-300'
+                                      : 'bg-amber-400 text-slate-950 border-amber-300'
+                                  }`}>
+                                    {item.actionType === 'give_rent' ? 'For Rent' : 'For Sale'}
+                                  </span>
+                                  
+                                  <button
+                                    onClick={(e) => toggleFavorite(item.id, e)}
+                                    className="p-1.5 text-rose-500 hover:scale-110 cursor-pointer transition-transform"
+                                    title="Remove from favorites"
+                                  >
+                                    <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
+                                  </button>
+                                </div>
+
+                                <h3 className="text-xs font-extrabold text-slate-900 dark:text-slate-100 truncate mt-1">
+                                  {item.title}
+                                </h3>
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate flex items-center gap-1 mt-0.5">
+                                  <MapPin className="w-3 h-3 text-teal-600 shrink-0" />
+                                  {item.location}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                                <span className="text-xs font-black text-[#1A3FAA] dark:text-sky-400">{item.price}</span>
+                                <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400 flex items-center gap-0.5">
+                                  View <ChevronRight className="w-3 h-3" />
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                  )}
+                </>
+              )}
+
+              {/* SUB-TAB 2: WATCH HISTORY */}
+              {activitySubTab === 'history' && (
+                <>
+                  {watchHistoryIds.length === 0 ? (
+                    <div className="p-8 bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3 my-4 shadow-2xs">
+                      <div className="w-14 h-14 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center mx-auto shadow-inner">
+                        <Clock className="w-7 h-7 stroke-[2]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">No Viewed Properties</h3>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+                          Properties you inspect will automatically appear here for quick history tracking.
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setActiveMainTab('explore')}
+                        className="px-5 py-2.5 btn-brand text-white font-extrabold text-xs rounded-xl shadow-md cursor-pointer transition-all"
+                      >
+                        Browse Feed
+                      </button>
+                    </div>
+                  ) : (
+                    listings
+                      .filter((item) => watchHistoryIds.includes(item.id))
+                      .map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            setSelectedPropertyDetail(item);
+                          }}
+                          className="bg-white dark:bg-[#0D1117] rounded-3xl border border-slate-200/80 dark:border-slate-800 p-3.5 space-y-3 transition-all cursor-pointer relative shadow-2xs hover:shadow-md"
+                        >
+                          <div className="flex gap-3">
+                            <img
+                              src={item.images[0]}
+                              alt={item.title}
+                              className="w-24 h-24 rounded-2xl object-cover shrink-0 border border-slate-100 dark:border-slate-800"
+                            />
+                            <div className="flex-1 min-w-0 flex flex-col justify-between">
+                              <div>
+                                <div className="flex items-center justify-between gap-1">
+                                  <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
+                                    item.actionType === 'give_rent'
+                                      ? 'bg-teal-500 text-slate-950 border-teal-300'
+                                      : 'bg-amber-400 text-slate-950 border-amber-300'
+                                  }`}>
+                                    {item.actionType === 'give_rent' ? 'For Rent' : 'For Sale'}
+                                  </span>
+                                  
+                                  <button
+                                    onClick={(e) => toggleFavorite(item.id, e)}
+                                    className="p-1.5 text-slate-400 hover:text-rose-500 cursor-pointer transition-colors"
+                                    title={savedPropertyIds.includes(item.id) ? 'Remove from favorites' : 'Save to favorites'}
+                                  >
+                                    <Heart className={`w-4 h-4 ${savedPropertyIds.includes(item.id) ? 'fill-rose-500 text-rose-500' : ''}`} />
+                                  </button>
+                                </div>
+
+                                <h3 className="text-xs font-extrabold text-slate-900 dark:text-slate-100 truncate mt-1">
+                                  {item.title}
+                                </h3>
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate flex items-center gap-1 mt-0.5">
+                                  <MapPin className="w-3 h-3 text-teal-600 shrink-0" />
+                                  {item.location}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                                <span className="text-xs font-black text-[#1A3FAA] dark:text-sky-400">{item.price}</span>
+                                <span className="text-[10px] font-bold text-slate-500 flex items-center gap-0.5">
+                                  Viewed <ChevronRight className="w-3 h-3" />
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* STICKY BOTTOM NAVIGATION BAR */}
+      <div className="sticky bottom-0 z-30 bg-white/95 dark:bg-[#0D1117]/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-4 py-2 shadow-[0_-4px_12px_-2px_rgba(0,0,0,0.05)] flex items-center justify-around text-center">
+        {/* Tab 1: Explore Feed */}
+        <button
+          onClick={() => setActiveMainTab('explore')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'explore' ? 'text-[#1A3FAA] dark:text-sky-400 font-black' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+          }`}
+        >
+          <Compass className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Explore</span>
+        </button>
+
+        {/* Tab 2: Add Listing */}
+        <button
+          onClick={() => setActiveMainTab('give_listing')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'give_listing' ? 'text-[#1A3FAA] dark:text-sky-400 font-black' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+          }`}
+        >
+          <div className="relative flex flex-col items-center">
+            <Plus className="w-5 h-5 stroke-[2.5]" />
+            <span className="absolute -top-1 -right-2 bg-[#0097A7] text-white text-[7.5px] font-black px-1 rounded-full border border-white shadow-2xs">
+              ₹50
+            </span>
+          </div>
+          <span className="text-[10px] font-bold">Add Listing</span>
+        </button>
+
+        {/* Tab 3: Activity / Favorites */}
+        <button
+          onClick={() => setActiveMainTab('activity')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'activity' ? 'text-[#1A3FAA] dark:text-sky-400 font-black' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+          }`}
+        >
+          <Heart className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Activity</span>
+        </button>
+
+        {/* Tab 4: All Categories Menu */}
+        <button
+          onClick={() => setActiveMainTab('menu')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'menu' ? 'text-[#1A3FAA] dark:text-[#1A3FAA] font-black' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+          }`}
+        >
+          <Menu className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Menu</span>
+        </button>
       </div>
     </div>
   );

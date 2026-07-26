@@ -69,7 +69,7 @@ export const ComingSoonScreen: React.FC<{ roleTitle: string; onSwitchToBroker?: 
           </h2>
           <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 shadow-lg">
             <p className="text-xs font-bold text-teal-200 leading-relaxed">
-              We are working hard to bring you this service, please take a seat ☕✨
+              We are working hard to bring you this service, please check back soon.
             </p>
           </div>
           <p className="text-[11.5px] text-slate-400 font-medium leading-relaxed pt-1">

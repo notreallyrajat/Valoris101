@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
-/* ─── VALORIS BRAND TOKENS (extracted from logo.png) ──────────────────────────
+@variant dark (.dark &);
+
+/* ─── VALORIS BRAND TOKENS ──────────────────────────────────────────────────
    Primary gradient : Deep Royal Blue → Teal Cyan  (#1A3FAA → #0097A7)
    Accent / Arrow   : Bright Green               (#3CB043 → #76C442)
    Dark navy base   : #0F2860
    ──────────────────────────────────────────────────────────────────────────── */
 :root {
+  color-scheme: light;
   --brand-blue:        #1A3FAA;
   --brand-blue-dark:   #0F2860;
   --brand-blue-mid:    #1565C0;
@@ -34,20 +37,22 @@
   --studio-bg:         #f4f3ef;
 }
 
-/* ─── DARK MODE TOKENS ──────────────────────────────────────────────────────── */
+/* ─── PROFESSIONAL DARK MODE TOKENS ────────────────────────────────────────── */
 .dark {
+  color-scheme: dark;
   --surface-bg:        #060810;
   --surface-card:      #0D1117;
-  --surface-border:    rgba(59,130,246,0.15);
-  --text-primary:      #e2e8f0;
+  --surface-card-alt:  #141923;
+  --surface-border:    rgba(59, 130, 246, 0.20);
+  --text-primary:      #f8fafc;
+  --text-secondary:    #cbd5e1;
   --text-muted:        #94a3b8;
-  --phone-bg:          #0D1117;
-  --phone-status-bg:   #0D1117;
-  --phone-bar-bg:      #0D1117;
-  --phone-border:      rgba(59,130,246,0.20);
+  --phone-bg:          #0A0D14;
+  --phone-status-bg:   #0A0D14;
+  --phone-bar-bg:      #0A0D14;
+  --phone-border:      rgba(59, 130, 246, 0.25);
   --phone-home-bar:    #3B82F6;
-  --studio-bg:         #060810;
-  color-scheme: dark;
+  --studio-bg:         #04060A;
 }
 
 /* Apply studio bg */
@@ -56,102 +61,201 @@
   transition: background-color 0.3s ease;
 }
 
-/* ─── DARK MODE OVERRIDES — phone screen internals ──────────────────────────
-   We cascade via CSS vars into the hardcoded Tailwind bg-white / bg-gray-*
-   classes inside PhoneContainer and all screen components.                   */
+/* ─── DARK MODE OVERRIDES — Phone Chassis & Internal Surfaces ──────────────── */
 .dark .phone-screen-chassis {
   background-color: var(--phone-bg) !important;
   border-color: var(--phone-border) !important;
 }
-.dark .phone-status-bar {
-  background-color: var(--phone-status-bg) !important;
-}
-.dark .phone-bottom-bar {
-  background-color: var(--phone-bar-bg) !important;
-}
-.dark .phone-home-bar {
-  background-color: var(--phone-home-bar) !important;
-}
-
-/* Inner screen content background */
+.dark .phone-status-bar,
+.dark .phone-bottom-bar,
 .dark .phone-content {
   background-color: var(--phone-bg) !important;
 }
 
-/* All white surfaces inside phone turn dark */
+/* All default white containers & cards turn dark glass cards */
 .dark .phone-content .bg-white,
-.dark .phone-screen-chassis .bg-white {
+.dark .phone-screen-chassis .bg-white,
+.dark .bg-white {
   background-color: #0D1117 !important;
-}
-.dark .phone-content [class*="bg-gray-50"],
-.dark .phone-screen-chassis [class*="bg-gray-50"] {
-  background-color: #111827 !important;
-}
-.dark .phone-content [class*="bg-gray-100"],
-.dark .phone-screen-chassis [class*="bg-gray-100"] {
-  background-color: #1A2030 !important;
-}
-.dark .phone-content [class*="bg-slate-50"],
-.dark .phone-screen-chassis [class*="bg-slate-50"] {
-  background-color: #111827 !important;
-}
-.dark .phone-content [class*="bg-\[#F8FAFC\]"],
-.dark .phone-screen-chassis [class*="bg-\[#F8FAFC\]"] {
-  background-color: #0A0E1A !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Text colors */
-.dark .phone-content .text-gray-900,
-.dark .phone-screen-chassis .text-gray-900 { color: #f1f5f9 !important; }
-.dark .phone-content .text-gray-800,
-.dark .phone-screen-chassis .text-gray-800 { color: #e2e8f0 !important; }
-.dark .phone-content .text-gray-700,
-.dark .phone-screen-chassis .text-gray-700 { color: #cbd5e1 !important; }
-.dark .phone-content .text-gray-600,
-.dark .phone-screen-chassis .text-gray-600 { color: #94a3b8 !important; }
-.dark .phone-content .text-gray-500,
-.dark .phone-screen-chassis .text-gray-500 { color: #64748b !important; }
-.dark .phone-content .text-gray-400,
-.dark .phone-screen-chassis .text-gray-400 { color: #475569 !important; }
-
-.dark .phone-content .text-slate-900,
-.dark .phone-screen-chassis .text-slate-900 { color: #f1f5f9 !important; }
-.dark .phone-content .text-slate-800,
-.dark .phone-screen-chassis .text-slate-800 { color: #e2e8f0 !important; }
-.dark .phone-content .text-slate-700,
-.dark .phone-screen-chassis .text-slate-700 { color: #cbd5e1 !important; }
-.dark .phone-content .text-slate-600,
-.dark .phone-screen-chassis .text-slate-600 { color: #94a3b8 !important; }
-.dark .phone-content .text-slate-500,
-.dark .phone-screen-chassis .text-slate-500 { color: #64748b !important; }
-
-/* Borders */
-.dark .phone-content .border-gray-200,
-.dark .phone-screen-chassis .border-gray-200 { border-color: rgba(59,130,246,0.15) !important; }
-.dark .phone-content .border-gray-100,
-.dark .phone-screen-chassis .border-gray-100 { border-color: rgba(59,130,246,0.10) !important; }
-.dark .phone-content .border-slate-200,
-.dark .phone-screen-chassis .border-slate-200 { border-color: rgba(59,130,246,0.15) !important; }
-.dark .phone-content .border-slate-100,
-.dark .phone-screen-chassis .border-slate-100 { border-color: rgba(59,130,246,0.10) !important; }
-
-/* Inputs */
-.dark .phone-content input,
-.dark .phone-content select,
-.dark .phone-content textarea {
-  background-color: #111827 !important;
-  color: #e2e8f0 !important;
-  border-color: rgba(59,130,246,0.2) !important;
+/* ─── SPECIFIC CUSTOM HEX LIGHT BACKGROUNDS IN DARK MODE ──────────────────── */
+/* Option cards (e.g. Post Property, WhatsApp, Owner Plans, Dealer Plans, etc.) */
+.dark [class*="bg-[#F0F5FF]"],
+.dark [class*="bg-[#E2ECFF]"],
+.dark [class*="bg-[#EBF3FF]"],
+.dark [class*="bg-[#EAF3F6]"] {
+  background-color: #141C2E !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
 }
-.dark .phone-content input::placeholder,
-.dark .phone-content textarea::placeholder { color: #475569 !important; }
+.dark [class*="hover:bg-[#E2ECFF]"]:hover {
+  background-color: #1E293B !important;
+  border-color: rgba(59, 130, 246, 0.40) !important;
+}
+
+/* Light slate/gray sub-surfaces & cards */
+.dark [class*="bg-[#F4F5F8]"],
+.dark [class*="bg-[#F8FAFC]"],
+.dark [class*="bg-[#F8F9FA]"],
+.dark [class*="bg-[#F5F7FA]"],
+.dark [class*="bg-gray-50"],
+.dark [class*="bg-slate-50"],
+.dark [class*="bg-gray-100"],
+.dark [class*="bg-slate-100"] {
+  background-color: #111724 !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+.dark [class*="bg-[#F4F5F8]"] {
+  background-color: #090C13 !important;
+}
+.dark [class*="bg-slate-200/60"],
+.dark [class*="bg-slate-200"] {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ─── HIGH CONTRAST TYPOGRAPHY IN DARK MODE ───────────────────────────────── */
+.dark .text-slate-900,
+.dark .text-gray-900,
+.dark .text-slate-800,
+.dark .text-gray-800,
+.dark [class*="text-[#1C1C1C]"],
+.dark .text-black {
+  color: #F8FAFC !important;
+}
+
+.dark .text-slate-700,
+.dark .text-gray-700,
+.dark .text-slate-600,
+.dark .text-gray-600 {
+  color: #CBD5E1 !important;
+}
+
+.dark .text-slate-500,
+.dark .text-gray-500,
+.dark .text-slate-400,
+.dark .text-gray-400 {
+  color: #94A3B8 !important;
+}
+
+/* Custom hardcoded brand colors in dark mode -> Vibrant electric colors */
+.dark [class*="text-[#1A3FAA]"],
+.dark [class*="text-[#1F4E5C]"],
+.dark [class*="text-[#007a6e]"],
+.dark [class*="text-[#0F2860]"] {
+  color: #38BDF8 !important;
+}
+.dark [class*="group-hover:text-[#1A3FAA]"]:hover {
+  color: #38BDF8 !important;
+}
+
+/* Icon & Action Colors in Dark Mode */
+.dark .text-blue-600,
+.dark [class*="text-[#0066FF]"] {
+  color: #60A5FA !important;
+}
+.dark .text-emerald-600,
+.dark .text-emerald-700,
+.dark [class*="text-[#00B050]"],
+.dark .text-green-600,
+.dark .text-green-800 {
+  color: #34D399 !important;
+}
+.dark .text-amber-600,
+.dark .text-amber-500,
+.dark .text-amber-900 {
+  color: #FBBF24 !important;
+}
+.dark .text-purple-600 {
+  color: #C084FC !important;
+}
+.dark .text-teal-600,
+.dark .text-teal-800 {
+  color: #2DD4BF !important;
+}
+.dark .text-rose-600 {
+  color: #FB7185 !important;
+}
+.dark .text-red-600,
+.dark .text-red-700,
+.dark .text-\[\#DC2626\] {
+  color: #F87171 !important;
+}
+
+/* ─── VIBRANT GLOWING BADGES IN DARK MODE ─────────────────────────────────── */
+.dark [class*="bg-teal-50"],
+.dark [class*="bg-teal-100"] {
+  background-color: rgba(45, 212, 191, 0.14) !important;
+  color: #2DD4BF !important;
+  border-color: rgba(45, 212, 191, 0.30) !important;
+}
+.dark [class*="bg-amber-50"],
+.dark [class*="bg-amber-100"] {
+  background-color: rgba(251, 191, 36, 0.14) !important;
+  color: #FBBF24 !important;
+  border-color: rgba(251, 191, 36, 0.30) !important;
+}
+.dark [class*="bg-emerald-50"],
+.dark [class*="bg-emerald-100"],
+.dark [class*="bg-green-50"] {
+  background-color: rgba(52, 211, 153, 0.14) !important;
+  color: #34D399 !important;
+  border-color: rgba(52, 211, 153, 0.30) !important;
+}
+.dark [class*="bg-blue-50"],
+.dark [class*="bg-blue-100"],
+.dark [class*="bg-indigo-50"] {
+  background-color: rgba(96, 165, 250, 0.14) !important;
+  color: #60A5FA !important;
+  border-color: rgba(96, 165, 250, 0.30) !important;
+}
+.dark [class*="bg-sky-50"] {
+  background-color: rgba(56, 189, 248, 0.14) !important;
+  color: #38BDF8 !important;
+  border-color: rgba(56, 189, 248, 0.30) !important;
+}
+.dark [class*="bg-rose-50"],
+.dark [class*="bg-red-50"] {
+  background-color: rgba(251, 113, 133, 0.14) !important;
+  color: #FB7185 !important;
+  border-color: rgba(251, 113, 133, 0.30) !important;
+}
+
+/* ─── FORM INPUTS, SELECTS & TEXTAREAS IN DARK MODE ───────────────────────── */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #111724 !important;
+  color: #F8FAFC !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748B !important;
+}
+.dark option {
+  background-color: #0D1117;
+  color: #F8FAFC;
+}
+
+/* ─── BORDERS IN DARK MODE ─────────────────────────────────────────────────── */
+.dark .border-slate-200,
+.dark .border-gray-200,
+.dark .border-slate-100,
+.dark .border-gray-100,
+.dark [class*="border-blue-100"],
+.dark [class*="border-slate-200"] {
+  border-color: rgba(59, 130, 246, 0.18) !important;
+}
 
 /* Outer header dark */
 .dark .app-header {
-  background-color: rgba(6,8,16,0.85) !important;
-  border-color: rgba(59,130,246,0.15) !important;
+  background-color: rgba(6, 8, 16, 0.90) !important;
+  border-color: rgba(59, 130, 246, 0.20) !important;
 }
-.dark .app-header * { color: #e2e8f0; }
+.dark .app-header * {
+  color: #e2e8f0;
+}
 
 /* ─── BRAND GRADIENT UTILITIES ──────────────────────────────────────────────── */
 .btn-brand {
@@ -170,13 +274,17 @@
   background: linear-gradient(135deg, rgba(26,63,170,0.08) 0%, rgba(0,151,167,0.10) 100%);
   border: 1px solid rgba(26,63,170,0.15);
 }
+.dark .bg-brand-tint {
+  background: linear-gradient(135deg, rgba(26,63,170,0.25) 0%, rgba(0,151,167,0.25) 100%);
+  border: 1px solid rgba(56,189,248,0.30);
+}
 
 /* ─── Custom scrollbars ──────────────────────────────────────────────────────*/
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
-.dark ::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.25); }
+.dark ::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.35); }
 
 /* ─── Studio texture background ─────────────────────────────────────────────*/
 .bg-studio-grid {
@@ -187,15 +295,14 @@
 }
 .dark .bg-studio-grid {
   background-image:
-    linear-gradient(to right, rgba(59,130,246,0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59,130,246,0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(59,130,246,0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59,130,246,0.07) 1px, transparent 1px);
 }
 
 /* ─── Dark mode transition ───────────────────────────────────────────────────*/
 *, *::before, *::after {
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.15s ease;
 }
-/* Exception: don't slow down animations */
 .animate-spin, .animate-fadeIn { transition: none !important; }
 
 /* ─── ANDROID & MOBILE RESPONSIVE OPTIMIZATIONS ─────────────────────────────*/
@@ -207,7 +314,6 @@ html, body {
   touch-action: manipulation;
 }
 
-/* Hide scrollbars for slick mobile tabs */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -216,8 +322,8 @@ html, body {
   scrollbar-width: none;
 }
 
-/* Ensure smooth touch momentum scrolling on mobile devices */
 .phone-content, .overflow-y-auto {
   -webkit-overflow-scrolling: touch;
 }
+
 

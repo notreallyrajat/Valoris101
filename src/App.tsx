@@ -102,15 +102,6 @@ export default function App() {
                 </p>
               </div>
             </div>
-
-            {/* Mobile Dark Mode Toggle */}
-            <button
-              onClick={() => setIsDarkMode((d) => !d)}
-              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              className="sm:hidden p-1.5 rounded-xl border bg-white border-gray-200 text-gray-700"
-            >
-              {isDarkMode ? <Moon className="w-4 h-4 text-blue-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
-            </button>
           </div>
 
           {/* View Mode Controls (Horizontal Scrollable on Mobile) */}
@@ -152,25 +143,25 @@ export default function App() {
             </button>
           </div>
 
-          {/* Role Quick Selector & Reset */}
-          <div className="flex items-center justify-between w-full sm:w-auto gap-2 overflow-x-auto no-scrollbar">
+          {/* Role Quick Selector, Reset & Dark Mode Toggle */}
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => {
                 setSelectedRole('broker');
                 setInteractiveStep(6);
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1 btn-brand text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 btn-brand text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <Building2 className="w-3.5 h-3.5 text-[#4ade80]" />
-              Broker Dashboard
+              <span className="hidden xs:inline">Broker</span> Dashboard
             </button>
 
             <div className="flex items-center gap-1 shrink-0">
-              <label className="text-[11px] font-bold text-gray-600">Role:</label>
+              <label className="text-[11px] font-bold text-gray-600 hidden xs:inline">Role:</label>
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="px-2 py-1 text-xs font-bold bg-white border border-gray-200 rounded-xl text-gray-800 focus:ring-2 focus:ring-[#00a896] cursor-pointer"
+                className="px-2 py-1.5 text-xs font-bold bg-white border border-gray-200 rounded-xl text-gray-800 focus:ring-2 focus:ring-[#00a896] cursor-pointer"
               >
                 <option value="broker">Broker</option>
                 <option value="customer">Customer</option>
@@ -182,26 +173,34 @@ export default function App() {
 
             <button
               onClick={handleReset}
-              className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition-all cursor-pointer shrink-0"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition-all cursor-pointer shrink-0"
+              title="Reset Flow"
             >
-              <RotateCcw className="w-3 h-3 text-gray-500" />
-              Reset
+              <RotateCcw className="w-3.5 h-3.5 text-gray-500" />
+              <span className="hidden md:inline">Reset</span>
             </button>
 
-            {/* Desktop Dark Mode Toggle */}
+            {/* Header Dark Mode Toggle Button (Always Visible) */}
             <button
               onClick={() => setIsDarkMode((d) => !d)}
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer overflow-hidden ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 ${
                 isDarkMode
-                  ? 'bg-[#0F172A] border-blue-500/40 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.3)]'
-                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                  ? 'bg-blue-950/80 border-blue-400 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.35)]'
+                  : 'bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-amber-300 text-amber-900 shadow-2xs hover:bg-amber-100/50'
               }`}
             >
-              <span className={`transition-transform duration-300 ${isDarkMode ? 'rotate-0' : 'rotate-180'}`}>
-                {isDarkMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
-              </span>
-              <span>{isDarkMode ? 'Dark' : 'Light'}</span>
+              {isDarkMode ? (
+                <>
+                  <Moon className="w-4 h-4 text-blue-400 animate-pulse" />
+                  <span>Dark Mode</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="w-4 h-4 text-amber-500 fill-amber-400" />
+                  <span>Light Mode</span>
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -406,6 +405,31 @@ export default function App() {
           <div>React + Vite + Tailwind • OTP & Password Flow Included</div>
         </div>
       </footer>
+
+      {/* Floating Theme Switcher Widget (Always Fixed & Accessible at Bottom Right) */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <button
+          onClick={() => setIsDarkMode((d) => !d)}
+          className={`flex items-center gap-2 px-3.5 py-2.5 rounded-full text-xs font-black shadow-xl border backdrop-blur-md transition-all active:scale-95 cursor-pointer ${
+            isDarkMode
+              ? 'bg-slate-900/90 text-blue-300 border-blue-500/50 shadow-blue-900/40 hover:bg-slate-800'
+              : 'bg-white/90 text-gray-800 border-gray-300 shadow-gray-400/30 hover:bg-gray-50'
+          }`}
+          title="Toggle Theme"
+        >
+          {isDarkMode ? (
+            <>
+              <Moon className="w-4 h-4 text-blue-400 animate-pulse" />
+              <span>Dark Mode ON</span>
+            </>
+          ) : (
+            <>
+              <Sun className="w-4 h-4 text-amber-500 fill-amber-400" />
+              <span>Light Mode ON</span>
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
