@@ -20,11 +20,11 @@ export const ComingSoonScreen: React.FC<{ roleTitle: string; onSwitchToBroker?: 
   roleTitle,
 }) => {
   return (
-    <div className="w-full h-full flex flex-col justify-between p-6 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 text-white overflow-y-auto animate-fadeIn text-center relative">
+    <div className="w-full h-full flex flex-col justify-between p-6 bg-gradient-to-b from-[#0F2860] via-slate-900 to-[#0A1931] text-white overflow-y-auto animate-fadeIn text-center relative">
       
       {/* Background Decorative Blur Orbs */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-48 h-48 bg-[#00a896]/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-amber-500/15 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-48 h-48 bg-[#1A3FAA]/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#0097A7]/20 rounded-full blur-2xl pointer-events-none" />
 
       {/* Top Header Badge */}
       <div className="flex items-center justify-between z-10">
@@ -34,7 +34,7 @@ export const ComingSoonScreen: React.FC<{ roleTitle: string; onSwitchToBroker?: 
             {roleTitle} Portal
           </span>
         </div>
-        <span className="text-[10px] font-black uppercase tracking-wider text-teal-300 bg-[#00a896]/20 border border-[#00a896]/30 px-2.5 py-0.5 rounded-full shadow-xs">
+        <span className="text-[10px] font-black uppercase tracking-wider text-cyan-300 bg-[#0097A7]/25 border border-[#0097A7]/40 px-2.5 py-0.5 rounded-full shadow-xs">
           Coming Soon
         </span>
       </div>
@@ -44,9 +44,9 @@ export const ComingSoonScreen: React.FC<{ roleTitle: string; onSwitchToBroker?: 
         
         {/* Custom High-Fidelity SVG Lounge & Coffee Illustration */}
         <div className="relative group">
-          <div className="w-28 h-28 rounded-3xl bg-gradient-to-tr from-[#092C3E] via-[#10435c] to-[#007a6e] p-0.5 shadow-2xl flex items-center justify-center relative overflow-hidden border border-white/20">
+          <div className="w-28 h-28 rounded-3xl bg-gradient-to-tr from-[#0F2860] via-[#1A3FAA] to-[#0097A7] p-0.5 shadow-2xl flex items-center justify-center relative overflow-hidden border border-white/20">
             <div className="w-full h-full bg-slate-900/90 rounded-[22px] flex flex-col items-center justify-center p-3 relative">
-              <Armchair className="w-12 h-12 text-teal-300 stroke-[1.5] drop-shadow-md" />
+              <Armchair className="w-12 h-12 text-cyan-300 stroke-[1.5] drop-shadow-md" />
               <div className="absolute top-3 right-3 bg-amber-400/20 p-1.5 rounded-full border border-amber-400/40">
                 <Coffee className="w-4 h-4 text-amber-300" />
               </div>
@@ -54,10 +54,10 @@ export const ComingSoonScreen: React.FC<{ roleTitle: string; onSwitchToBroker?: 
           </div>
 
           {/* Floating Sparkles & Pulse Rings */}
-          <div className="absolute -top-2 -right-2 bg-amber-400 text-slate-950 p-1.5 rounded-full shadow-md animate-bounce">
-            <Sparkles className="w-3.5 h-3.5 fill-slate-950" />
+          <div className="absolute -top-2 -right-2 bg-[#3CB043] text-white p-1.5 rounded-full shadow-md animate-bounce">
+            <Sparkles className="w-3.5 h-3.5 fill-white" />
           </div>
-          <div className="absolute -bottom-2 -left-2 bg-[#00a896] text-white p-1.5 rounded-full shadow-md">
+          <div className="absolute -bottom-2 -left-2 bg-[#1A3FAA] text-white p-1.5 rounded-full shadow-md">
             <Compass className="w-3.5 h-3.5" />
           </div>
         </div>

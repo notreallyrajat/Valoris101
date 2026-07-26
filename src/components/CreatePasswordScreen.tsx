@@ -113,7 +113,7 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
                   setPassword(e.target.value);
                   if (error) setError(null);
                 }}
-                className="w-full pl-10 pr-10 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00A896]/40 focus:border-[#00A896] transition-all text-gray-800 placeholder-gray-400 font-medium"
+                className="w-full pl-10 pr-10 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1A3FAA]/40 focus:border-[#1A3FAA] transition-all text-gray-800 placeholder-gray-400 font-medium"
               />
               <button
                 type="button"
@@ -147,7 +147,7 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
                     ? 'border-red-300 focus:ring-red-200 focus:border-red-400'
                     : confirmPassword && passwordsMatch
                     ? 'border-emerald-400 focus:ring-emerald-200 focus:border-emerald-500 bg-emerald-50/20'
-                    : 'border-gray-200 focus:ring-[#00A896]/40 focus:border-[#00A896]'
+                    : 'border-gray-200 focus:ring-[#1A3FAA]/40 focus:border-[#1A3FAA]'
                 }`}
               />
               <button
@@ -217,7 +217,7 @@ export const CreatePasswordScreen: React.FC<CreatePasswordScreenProps> = ({
             <button
               type="button"
               onClick={handleFillSample}
-              className="text-[11px] text-[#007a6e] font-bold hover:underline cursor-pointer"
+              className="text-[11px] text-[#1A3FAA] font-bold hover:underline cursor-pointer"
             >
               Fill Sample Password (ValorisPass2026!)
             </button>

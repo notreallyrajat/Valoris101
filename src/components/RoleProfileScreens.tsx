@@ -28,14 +28,14 @@ const ProfilePhotoUpload = ({ label = 'Upload Photo' }: { label?: string }) => {
   return (
     <div className="flex flex-col items-center justify-center my-3">
       <label className="relative cursor-pointer group">
-        <div className="w-20 h-20 rounded-full bg-[#EAF3F6] border-2 border-[#1F4E5C]/20 flex items-center justify-center overflow-hidden shadow-xs group-hover:border-[#1F4E5C] transition-all">
+        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1A3FAA]/10 to-[#0097A7]/10 border-2 border-[#1A3FAA]/20 flex items-center justify-center overflow-hidden shadow-xs group-hover:border-[#1A3FAA] transition-all">
           {photo ? (
             <img src={photo} alt="Profile" className="w-full h-full object-cover" />
           ) : (
-            <div className="text-[#1F4E5C] font-bold text-xl">VS</div>
+            <div className="text-[#1A3FAA] font-bold text-xl">VS</div>
           )}
         </div>
-        <div className="absolute bottom-0 right-0 w-7 h-7 bg-[#1F4E5C] text-white rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+        <div className="absolute bottom-0 right-0 w-7 h-7 bg-brand-gradient text-white rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
           <Camera className="w-3.5 h-3.5" />
         </div>
         <input type="file" accept="image/*" onChange={handleFile} className="hidden" />
@@ -75,9 +75,9 @@ const MultiTagInput = ({
         {tags.map((tag, idx) => (
           <span
             key={idx}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#EAF3F6] text-[#1F4E5C] border border-[#1F4E5C]/15"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 text-[#1A3FAA] border border-[#1A3FAA]/20"
           >
-            <MapPin className="w-3 h-3 text-[#1F4E5C]" />
+            <MapPin className="w-3 h-3 text-[#1A3FAA]" />
             {tag}
             <button
               type="button"
@@ -96,7 +96,7 @@ const MultiTagInput = ({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F4E5C]/30 focus:border-[#1F4E5C] text-gray-800 placeholder-gray-400 font-medium"
+          className="flex-1 px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1A3FAA]/30 focus:border-[#1A3FAA] text-gray-800 placeholder-gray-400 font-medium"
         />
         <button
           type="button"
@@ -106,7 +106,7 @@ const MultiTagInput = ({
               setInput('');
             }
           }}
-          className="px-3 py-2.5 bg-[#EAF3F6] text-[#1F4E5C] font-bold text-xs rounded-xl hover:bg-[#1F4E5C] hover:text-white transition-colors cursor-pointer"
+          className="px-3 py-2.5 bg-[#1A3FAA]/10 text-[#1A3FAA] font-bold text-xs rounded-xl hover:bg-[#1A3FAA] hover:text-white transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -178,7 +178,7 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
+          <span className="text-[11px] font-bold tracking-wider text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 px-2.5 py-1 rounded-full border border-[#1A3FAA]/20">
             Broker Profile Setup
           </span>
         </div>
@@ -208,7 +208,7 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
               value={firmName}
               onChange={(e) => setFirmName(e.target.value)}
               placeholder="e.g. Apex Realty"
-              className="w-full px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F4E5C]/30 focus:border-[#1F4E5C] text-gray-800 font-semibold"
+              className="w-full px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1A3FAA]/30 focus:border-[#1A3FAA] text-gray-800 font-semibold"
             />
           </div>
 
@@ -226,7 +226,7 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
                 value={reraNum}
                 onChange={(e) => setReraNum(e.target.value)}
                 placeholder="e.g. PRM/KA/RERA/1251/310/PR/210 (if registered)"
-                className="w-full px-3.5 py-2.5 pr-9 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F4E5C]/30 focus:border-[#1F4E5C] text-gray-800 font-semibold uppercase tracking-wider"
+                className="w-full px-3.5 py-2.5 pr-9 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1A3FAA]/30 focus:border-[#1A3FAA] text-gray-800 font-semibold uppercase tracking-wider"
               />
               <ShieldCheck className={`absolute right-3 w-4 h-4 ${reraNum ? 'text-emerald-600' : 'text-gray-300'}`} />
             </div>
@@ -255,7 +255,7 @@ const BrokerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =>
                     onClick={() => togglePropertyType(type)}
                     className={`flex-1 py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       selected
-                        ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C]'
+                        ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] text-[#1A3FAA]'
                         : 'bg-gray-50 border-gray-200 text-gray-600'
                     }`}
                   >
@@ -318,7 +318,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
+          <span className="text-[11px] font-bold tracking-wider text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 px-2.5 py-1 rounded-full border border-[#1A3FAA]/20">
             Investor Profile Setup
           </span>
         </div>
@@ -342,7 +342,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
               onClick={() => setInvestorType('firm')}
               className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 investorType === 'firm'
-                  ? 'bg-white text-[#1F4E5C] shadow-xs'
+                  ? 'bg-white text-[#1A3FAA] shadow-xs'
                   : 'text-gray-500'
               }`}
             >
@@ -353,7 +353,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
               onClick={() => setInvestorType('individual')}
               className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 investorType === 'individual'
-                  ? 'bg-white text-[#1F4E5C] shadow-xs'
+                  ? 'bg-white text-[#1A3FAA] shadow-xs'
                   : 'text-gray-500'
               }`}
             >
@@ -370,7 +370,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                 type="text"
                 value={firmName}
                 onChange={(e) => setFirmName(e.target.value)}
-                className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F4E5C]/30 text-gray-800 font-semibold"
+                className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1A3FAA]/30 text-gray-800 font-semibold"
               />
             </div>
           )}
@@ -388,7 +388,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                   onClick={() => setFocus(opt)}
                   className={`flex-1 py-2 text-xs font-bold rounded-xl border cursor-pointer ${
                     focus === opt
-                      ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C]'
+                      ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] text-[#1A3FAA]'
                       : 'bg-gray-50 border-gray-200 text-gray-600'
                   }`}
                 >
@@ -402,7 +402,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
           <div className="space-y-1 bg-gray-50/80 p-3 rounded-xl border border-gray-200">
             <div className="flex justify-between items-center text-xs">
               <span className="font-bold text-gray-800">Target Ticket Size</span>
-              <span className="font-extrabold text-[#1F4E5C]">
+              <span className="font-extrabold text-[#1A3FAA]">
                 ₹ {ticketSize >= 100 ? `${(ticketSize / 100).toFixed(1)} Cr` : `${ticketSize} Lakhs`}
               </span>
             </div>
@@ -413,7 +413,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
               step="10"
               value={ticketSize}
               onChange={(e) => setTicketSize(Number(e.target.value))}
-              className="w-full accent-[#1F4E5C] cursor-pointer"
+              className="w-full accent-[#1A3FAA] cursor-pointer"
             />
           </div>
 
@@ -432,7 +432,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                     onClick={() => toggleSector(sec)}
                     className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#1F4E5C] text-white border-[#1F4E5C]'
+                        ? 'bg-[#1A3FAA] text-white border-[#1A3FAA]'
                         : 'bg-gray-50 text-gray-600 border-gray-200'
                     }`}
                   >
@@ -454,7 +454,7 @@ const InvestorProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                 type="text"
                 value={linkedin}
                 onChange={(e) => setLinkedin(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F4E5C]/30 text-gray-800 font-medium"
+                className="w-full pl-9 pr-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1A3FAA]/30 text-gray-800 font-medium"
               />
             </div>
           </div>
@@ -496,7 +496,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
+          <span className="text-[11px] font-bold tracking-wider text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 px-2.5 py-1 rounded-full border border-[#1A3FAA]/20">
             Landlord Setup
           </span>
         </div>
@@ -536,7 +536,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                     onClick={() => toggleType(t)}
                     className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       selected
-                        ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C]'
+                        ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] text-[#1A3FAA]'
                         : 'bg-gray-50 border-gray-200 text-gray-600'
                     }`}
                   >
@@ -551,7 +551,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
           <div className="space-y-1 bg-gray-50 p-3 rounded-xl border border-gray-200">
             <div className="flex justify-between items-center text-xs">
               <span className="font-bold text-gray-800">Portfolio Value Range</span>
-              <span className="font-extrabold text-[#1F4E5C]">₹ {portfolioVal} Cr+</span>
+              <span className="font-extrabold text-[#1A3FAA]">₹ {portfolioVal} Cr+</span>
             </div>
             <input
               type="range"
@@ -560,7 +560,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
               step="0.5"
               value={portfolioVal}
               onChange={(e) => setPortfolioVal(Number(e.target.value))}
-              className="w-full accent-[#1F4E5C] cursor-pointer"
+              className="w-full accent-[#1A3FAA] cursor-pointer"
             />
           </div>
 
@@ -577,7 +577,7 @@ const LandlordProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                   onClick={() => setLeaseTerm(term)}
                   className={`flex-1 py-2 text-xs font-bold rounded-xl border cursor-pointer ${
                     leaseTerm === term
-                      ? 'bg-[#1F4E5C] text-white border-[#1F4E5C]'
+                      ? 'bg-[#1A3FAA] text-white border-[#1A3FAA]'
                       : 'bg-gray-50 border-gray-200 text-gray-600'
                   }`}
                 >
@@ -618,7 +618,7 @@ const FounderProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
+          <span className="text-[11px] font-bold tracking-wider text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 px-2.5 py-1 rounded-full border border-[#1A3FAA]/20">
             Founder Setup
           </span>
         </div>
@@ -641,7 +641,7 @@ const FounderProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =
               type="text"
               value={startupName}
               onChange={(e) => setStartupName(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F4E5C]/30 text-gray-800 font-semibold"
+              className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1A3FAA]/30 text-gray-800 font-semibold"
             />
           </div>
 
@@ -655,7 +655,7 @@ const FounderProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =
                   onClick={() => setStage(s)}
                   className={`flex-1 py-2 text-xs font-bold rounded-xl border cursor-pointer ${
                     stage === s
-                      ? 'bg-[#1F4E5C] text-white border-[#1F4E5C]'
+                      ? 'bg-[#1A3FAA] text-white border-[#1A3FAA]'
                       : 'bg-gray-50 border-gray-200 text-gray-600'
                   }`}
                 >
@@ -671,7 +671,7 @@ const FounderProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) =
               type="text"
               value={funding}
               onChange={(e) => setFunding(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F4E5C]/30 text-gray-800 font-semibold"
+              className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1A3FAA]/30 text-gray-800 font-semibold"
             />
           </div>
         </div>
@@ -711,7 +711,7 @@ const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
     'Delhi', 'Jammu & Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry',
   ];
 
-  const inputClass = "w-full px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F4E5C]/30 focus:border-[#1F4E5C] text-gray-800 font-semibold placeholder-gray-400";
+  const inputClass = "w-full px-3.5 py-2.5 text-xs bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1A3FAA]/30 focus:border-[#1A3FAA] text-gray-800 font-semibold placeholder-gray-400";
   const labelClass = "block text-xs font-bold text-gray-800 ml-0.5 mb-1";
 
   return (
@@ -725,7 +725,7 @@ const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <span className="text-[11px] font-bold tracking-wider text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
+          <span className="text-[11px] font-bold tracking-wider text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 px-2.5 py-1 rounded-full border border-[#1A3FAA]/20">
             Customer Profile
           </span>
         </div>
@@ -837,7 +837,7 @@ const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                   }}
                   className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer capitalize ${
                     employment === opt
-                      ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C]'
+                      ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] text-[#1A3FAA]'
                       : 'bg-gray-50 border-gray-200 text-gray-500'
                   }`}
                 >
@@ -863,7 +863,7 @@ const CustomerProfileSetup: React.FC<{ onBack: () => void; onComplete: (d: any) 
                     onClick={() => setSector(opt.value)}
                     className={`flex flex-col items-center py-2.5 px-1.5 text-center rounded-xl border transition-all cursor-pointer ${
                       sector === opt.value
-                        ? 'bg-[#1F4E5C] border-[#1F4E5C] text-white'
+                        ? 'bg-[#1A3FAA] border-[#1A3FAA] text-white'
                         : 'bg-gray-50 border-gray-200 text-gray-600'
                     }`}
                   >

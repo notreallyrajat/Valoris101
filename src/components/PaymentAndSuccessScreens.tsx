@@ -51,8 +51,8 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
           >
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
-          <div className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5C] bg-[#EAF3F6] px-2.5 py-1 rounded-full">
-            <Lock className="w-3 h-3" />
+          <div className="flex items-center gap-1 text-[11px] font-bold text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 px-2.5 py-1 rounded-full border border-[#1A3FAA]/20">
+            <Lock className="w-3 h-3 text-[#1A3FAA]" />
             256-Bit SSL Secure
           </div>
         </div>
@@ -79,8 +79,8 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               </span>
             </div>
             <div className="text-right">
-              <span className="text-sm font-black text-[#1F4E5C]">₹ 399</span>
-              <span className="text-[9px] text-emerald-600 font-bold block">
+              <span className="text-sm font-black text-[#1A3FAA]">₹ 399</span>
+              <span className="text-[9px] text-[#3CB043] font-bold block">
                 All Inclusive
               </span>
             </div>
@@ -106,7 +106,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               onClick={() => setMethod('upi')}
               className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                 method === 'upi'
-                  ? 'bg-[#EAF3F6] border-[#1F4E5C] ring-1 ring-[#1F4E5C]/30'
+                  ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] ring-1 ring-[#1A3FAA]/30'
                   : 'bg-white border-gray-200'
               }`}
             >
@@ -123,7 +123,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               </div>
               <div
                 className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                  method === 'upi' ? 'border-[#1F4E5C] bg-[#1F4E5C] text-white' : 'border-gray-300'
+                  method === 'upi' ? 'border-[#1A3FAA] bg-[#1A3FAA] text-white' : 'border-gray-300'
                 }`}
               >
                 {method === 'upi' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -135,7 +135,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               onClick={() => setMethod('qr')}
               className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                 method === 'qr'
-                  ? 'bg-[#EAF3F6] border-[#1F4E5C] ring-1 ring-[#1F4E5C]/30'
+                  ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] ring-1 ring-[#1A3FAA]/30'
                   : 'bg-white border-gray-200'
               }`}
             >
@@ -150,7 +150,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               </div>
               <div
                 className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                  method === 'qr' ? 'border-[#1F4E5C] bg-[#1F4E5C] text-white' : 'border-gray-300'
+                  method === 'qr' ? 'border-[#1A3FAA] bg-[#1A3FAA] text-white' : 'border-gray-300'
                 }`}
               >
                 {method === 'qr' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -162,7 +162,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               onClick={() => setMethod('card')}
               className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                 method === 'card'
-                  ? 'bg-[#EAF3F6] border-[#1F4E5C] ring-1 ring-[#1F4E5C]/30'
+                  ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] ring-1 ring-[#1A3FAA]/30'
                   : 'bg-white border-gray-200'
               }`}
             >
@@ -177,7 +177,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
               </div>
               <div
                 className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                  method === 'card' ? 'border-[#1F4E5C] bg-[#1F4E5C] text-white' : 'border-gray-300'
+                  method === 'card' ? 'border-[#1A3FAA] bg-[#1A3FAA] text-white' : 'border-gray-300'
                 }`}
               >
                 {method === 'card' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -188,7 +188,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
 
         {/* Guarantee Badge */}
         <div className="mt-4 flex items-center gap-2 justify-center text-[11px] text-gray-500 font-semibold">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <ShieldCheck className="w-4 h-4 text-[#3CB043]" />
           <span>Money-back guarantee & Instant setup notification</span>
         </div>
       </div>
@@ -197,7 +197,7 @@ export const PaymentPortalScreen: React.FC<PaymentPortalProps> = ({
       <button
         onClick={handlePay}
         disabled={isProcessing}
-        className="w-full py-3.5 mt-4 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+        className="w-full py-3.5 mt-4 btn-brand active:scale-[0.99] font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
       >
         {isProcessing ? (
           <span className="flex items-center gap-2">
@@ -231,7 +231,7 @@ export const PaymentSuccessScreen: React.FC<PaymentSuccessProps> = ({
         
         {/* Success Icon Badge with Pulse */}
         <div className="relative">
-          <div className="w-20 h-20 rounded-full bg-emerald-100 text-[#1F4E5C] flex items-center justify-center shadow-lg animate-pulse">
+          <div className="w-20 h-20 rounded-full bg-emerald-100 text-[#1A3FAA] flex items-center justify-center shadow-lg animate-pulse">
             <CheckCircle2 className="w-12 h-12 stroke-[2.5] text-emerald-600" />
           </div>
           <div className="absolute -top-1 -right-1 bg-amber-400 text-gray-900 p-1.5 rounded-full shadow-xs">
@@ -258,23 +258,23 @@ export const PaymentSuccessScreen: React.FC<PaymentSuccessProps> = ({
           <div className="space-y-1.5 pt-2 border-t border-gray-200/80 text-[11px]">
             <div className="flex items-center justify-between text-gray-600">
               <span className="flex items-center gap-1.5 font-semibold">
-                <Mail className="w-3.5 h-3.5 text-[#1F4E5C]" /> Email Sent To:
+                <Mail className="w-3.5 h-3.5 text-[#1A3FAA]" /> Email Sent To:
               </span>
               <span className="font-bold text-gray-900 truncate max-w-[140px]">{userEmail}</span>
             </div>
 
             <div className="flex items-center justify-between text-gray-600">
               <span className="flex items-center gap-1.5 font-semibold">
-                <MessageSquare className="w-3.5 h-3.5 text-[#1F4E5C]" /> SMS Sent To:
+                <MessageSquare className="w-3.5 h-3.5 text-[#1A3FAA]" /> SMS Sent To:
               </span>
               <span className="font-bold text-gray-900">{userPhone}</span>
             </div>
 
             <div className="flex items-center justify-between text-gray-600">
               <span className="flex items-center gap-1.5 font-semibold">
-                <Building className="w-3.5 h-3.5 text-[#1F4E5C]" /> Assigned Role:
+                <Building className="w-3.5 h-3.5 text-[#1A3FAA]" /> Assigned Role:
               </span>
-              <span className="font-bold text-[#1F4E5C]">{roleTitle}</span>
+              <span className="font-bold text-[#1A3FAA]">{roleTitle}</span>
             </div>
           </div>
         </div>
@@ -283,7 +283,7 @@ export const PaymentSuccessScreen: React.FC<PaymentSuccessProps> = ({
       {/* Explore Dashboard CTA */}
       <button
         onClick={onExploreDashboard}
-        className="w-full py-3.5 bg-[#1F4E5C] hover:bg-[#163842] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+        className="w-full py-3.5 btn-brand active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
       >
         Explore Dashboard
       </button>

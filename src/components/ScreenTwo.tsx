@@ -104,7 +104,7 @@ export const ScreenTwo: React.FC<ScreenTwoProps> = ({
                 onClick={() => handleSelect(role.id)}
                 className={`w-full p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                   isSelected
-                    ? 'bg-[#EBF7F6] stroke-teal-700 border-[#00a896] shadow-sm ring-1 ring-[#00a896]/30'
+                    ? 'bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 border-[#1A3FAA] shadow-sm ring-1 ring-[#1A3FAA]/30'
                     : 'bg-white border-gray-100 hover:border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.03)]'
                 }`}
               >
@@ -112,7 +112,7 @@ export const ScreenTwo: React.FC<ScreenTwoProps> = ({
                   <div
                     className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                       isSelected
-                        ? 'bg-[#00a896]/15 text-[#007a6e]'
+                        ? 'bg-brand-gradient text-white shadow-xs'
                         : 'bg-gray-50 text-gray-600 border border-gray-100'
                     }`}
                   >
@@ -128,7 +128,7 @@ export const ScreenTwo: React.FC<ScreenTwoProps> = ({
                 {/* Radio Check Circle */}
                 <div className="flex-shrink-0 ml-1">
                   {isSelected ? (
-                    <div className="w-6 h-6 rounded-full bg-[#00a896] flex items-center justify-center text-white shadow-sm">
+                    <div className="w-6 h-6 rounded-full bg-[#1A3FAA] flex items-center justify-center text-white shadow-sm">
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                   ) : (
@@ -145,7 +145,7 @@ export const ScreenTwo: React.FC<ScreenTwoProps> = ({
       <div className="pt-4 mt-2">
         <button
           onClick={handleNext}
-          className="w-full py-3.5 bg-gray-100 hover:bg-[#00a896] hover:text-white text-gray-700 font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.99] group"
+          className="w-full py-3.5 btn-brand font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-[0.99] group"
         >
           <ArrowRight className="w-5 h-5 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
         </button>

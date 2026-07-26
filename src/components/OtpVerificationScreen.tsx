@@ -118,7 +118,7 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
 
         {/* Shield Icon Header */}
         <div className="flex flex-col items-center text-center mt-2 mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#EBF7F6] border border-[#00a896]/30 flex items-center justify-center text-[#007a6e] shadow-xs mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1A3FAA]/10 to-[#0097A7]/15 border border-[#1A3FAA]/20 flex items-center justify-center text-[#1A3FAA] shadow-xs mb-3">
             <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
           </div>
           <h1 className="text-[21px] font-extrabold text-gray-900 tracking-tight leading-tight">
@@ -149,8 +149,8 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
                 onPaste={handlePaste}
                 className={`w-11 h-12 text-center text-lg font-black rounded-xl border transition-all focus:outline-none ${
                   digit
-                    ? 'border-[#00a896] bg-[#EBF7F6]/50 text-[#092C3E] ring-2 ring-[#00a896]/20'
-                    : 'border-gray-200 bg-gray-50/50 text-gray-900 focus:border-[#00a896] focus:bg-white'
+                    ? 'border-[#1A3FAA] bg-gradient-to-br from-[#1A3FAA]/5 to-[#0097A7]/10 text-[#0F2860] ring-2 ring-[#1A3FAA]/20'
+                    : 'border-gray-200 bg-gray-50/50 text-gray-900 focus:border-[#1A3FAA] focus:bg-white'
                 }`}
               />
             ))}
@@ -161,9 +161,9 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
             <button
               type="button"
               onClick={handleQuickFill}
-              className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 hover:bg-teal-100/80 border border-[#00a896]/30 text-[#007a6e] text-[11px] font-bold rounded-full transition-all cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 hover:from-[#1A3FAA]/20 hover:to-[#0097A7]/20 border border-[#1A3FAA]/30 text-[#1A3FAA] text-[11px] font-bold rounded-full transition-all cursor-pointer shadow-2xs"
             >
-              <CheckCircle2 className="w-3.5 h-3.5" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#3CB043]" />
               Auto-fill Test OTP (123456)
             </button>
           </div>
@@ -187,7 +187,7 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
                 type="button"
                 onClick={handleResendCode}
                 disabled={isResending}
-                className="text-[#007a6e] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                className="text-[#1A3FAA] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                 Resend OTP Code
@@ -208,7 +208,7 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
       {/* Progress Footer */}
       <div className="w-full pt-3 border-t border-gray-100 flex items-center gap-3">
         <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden flex">
-          <div className="w-2/5 h-full bg-[#00a896] rounded-full transition-all duration-300"></div>
+          <div className="w-2/5 h-full bg-brand-bar rounded-full transition-all duration-300"></div>
         </div>
         <span className="text-[11px] font-semibold text-gray-400 tracking-wider">
           OTP Verification

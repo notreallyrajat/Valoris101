@@ -17,6 +17,42 @@ import {
   Calendar,
   ArrowLeft,
   Lock,
+  ChevronDown,
+  Plus,
+  Layers,
+  Zap,
+  Shield,
+  Car,
+  Waves,
+  Dumbbell,
+  Trees,
+  Compass,
+  Droplets,
+  Key,
+  Store,
+  TrendingUp,
+  Clock,
+  HelpCircle,
+  Heart,
+  Menu,
+  Crown,
+  ArrowUp,
+  ThumbsUp,
+  MessageCircle,
+  IndianRupee,
+  Eye,
+  Users,
+  Phone,
+  Headphones,
+  MessageSquare,
+  Bell,
+  Globe,
+  FileText,
+  Tag,
+  Sparkles,
+  Crop,
+  PiggyBank,
+  Armchair,
 } from 'lucide-react';
 
 interface CustomerDashboardProps {
@@ -166,10 +202,32 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   const [furnishingFilter, setFurnishingFilter] = useState<'all' | 'fully_furnished' | 'semifurnished' | 'unfurnished'>('all');
   const [pgSharingFilter, setPgSharingFilter] = useState<'all' | 'single' | 'double'>('all');
   const [foodPrefFilter, setFoodPrefFilter] = useState<'all' | 'vegetarian' | 'non_vegetarian' | 'both'>('all');
-  const [occupancyFilter, setOccupancyFilter] = useState<'all' | 'coed' | 'girls_only' | 'boys_only' | 'family_only' | 'bachelors_only' | 'students_only'>('all');
+  const [occupancyFilter, setOccupancyFilter] = useState<'all' | 'coed' | 'girls_only' | 'boys_only' | 'family_only' | 'bachelors_only' | 'students_only' | 'gov_employed' | 'private_employed' | 'self_employed'>('all');
   const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'immediate' | 'two_weeks' | 'one_month' | 'three_months' | 'six_months'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filterCategoryTab, setFilterCategoryTab] = useState<'type' | 'bhk' | 'pg' | 'furnishing' | 'food' | 'occupancy' | 'availability'>('type');
+  const [filterViewStyle, setFilterViewStyle] = useState<'valoris' | '2panel'>('valoris');
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [minBudget, setMinBudget] = useState('No Min');
+  const [maxBudget, setMaxBudget] = useState('No Max');
+  const [constructionStatus, setConstructionStatus] = useState<'all' | 'ready_to_move' | 'under_construction' | 'new_launch'>('all');
+  const [ownershipType, setOwnershipType] = useState<'all' | 'freehold' | 'leasehold'>('all');
+  const [locationChips, setLocationChips] = useState<string[]>(['Jodhpur', 'Koramangala']);
+  const [locationInput, setLocationInput] = useState('');
+  const [activeMainTab, setActiveMainTab] = useState<'home' | 'search' | 'sell_rent' | 'activity' | 'menu'>('menu');
+  const [categorySidebarTab, setCategorySidebarTab] = useState<'sell_rent' | 'buy_residential' | 'rent_pg' | 'buy_commercial' | 'lease_commercial' | 'price_insights' | 'activity_support'>('sell_rent');
+  const [postedByFilter, setPostedByFilter] = useState<'all' | 'owner' | 'builder' | 'agent'>('all');
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [builtAreaSqft, setBuiltAreaSqft] = useState<number>(1200);
+  const [carpetAreaSqft, setCarpetAreaSqft] = useState<number>(950);
+  const [floorPrefFilter, setFloorPrefFilter] = useState<'all' | 'ground' | 'low_rise' | 'mid_rise' | 'high_rise' | 'top_floor' | 'penthouse'>('all');
+  const [facingFilter, setFacingFilter] = useState<'all' | 'east' | 'west' | 'north' | 'south' | 'ne' | 'nw' | 'se'>('all');
+  const [ageOfPropertyFilter, setAgeOfPropertyFilter] = useState<'all' | 'under_construction' | '0_1' | '1_5' | '5_10' | '10_plus'>('all');
+  const [bathroomsFilter, setBathroomsFilter] = useState<'all' | '1' | '2' | '3' | '4_plus'>('all');
+  const [parkingTypeFilter, setParkingTypeFilter] = useState<'all' | 'covered' | 'open' | 'no_pref'>('all');
+  const [waterSupplyFilter, setWaterSupplyFilter] = useState<string[]>([]);
+  const [saleTypeFilter, setSaleTypeFilter] = useState<'all' | 'new_launch' | 'resale'>('all');
 
   // Contact / Visit Schedule Modal State
   const [selectedPropertyForContact, setSelectedPropertyForContact] = useState<CustomerPropertyItem | null>(null);
@@ -219,18 +277,18 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
       if (bhkFilter === '4bhk') matchesBhk = item.bhk.includes('4 BHK');
     }
 
-    // PG Sharing Filter
+    // PG Sharing Filter (Ignored for Buy)
     let matchesPgSharing = true;
-    if (pgSharingFilter !== 'all' && item.propertyType === 'pg' && item.sharingType) {
+    if (transactionFilter !== 'buy' && pgSharingFilter !== 'all' && item.propertyType === 'pg' && item.sharingType) {
       if (pgSharingFilter === 'single') matchesPgSharing = item.sharingType.toLowerCase().includes('single');
       if (pgSharingFilter === 'double') matchesPgSharing = item.sharingType.toLowerCase().includes('double');
     }
 
-    // Food preference filter
-    const matchesFoodPref = foodPrefFilter === 'all' || item.foodPreference === foodPrefFilter;
+    // Food preference filter (Ignored for Buy)
+    const matchesFoodPref = transactionFilter === 'buy' || foodPrefFilter === 'all' || item.foodPreference === foodPrefFilter;
 
-    // Occupancy type filter
-    const matchesOccupancy = occupancyFilter === 'all' || item.occupancyType === occupancyFilter;
+    // Occupancy type filter (Ignored for Buy)
+    const matchesOccupancy = transactionFilter === 'buy' || occupancyFilter === 'all' || item.occupancyType === occupancyFilter;
 
     // Availability filter
     const matchesAvailability = availabilityFilter === 'all' || item.availableFrom === availabilityFilter;
@@ -242,10 +300,12 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
     (transactionFilter !== 'all' ? 1 : 0) +
     (furnishingFilter !== 'all' ? 1 : 0) +
     (bhkFilter !== 'all' ? 1 : 0) +
-    (pgSharingFilter !== 'all' ? 1 : 0) +
-    (foodPrefFilter !== 'all' ? 1 : 0) +
-    (occupancyFilter !== 'all' ? 1 : 0) +
-    (availabilityFilter !== 'all' ? 1 : 0);
+    (constructionStatus !== 'all' ? 1 : 0) +
+    (ownershipType !== 'all' ? 1 : 0) +
+    (transactionFilter !== 'buy' && pgSharingFilter !== 'all' ? 1 : 0) +
+    (transactionFilter !== 'buy' && foodPrefFilter !== 'all' ? 1 : 0) +
+    (transactionFilter !== 'buy' && occupancyFilter !== 'all' ? 1 : 0) +
+    (transactionFilter !== 'buy' && availabilityFilter !== 'all' ? 1 : 0);
 
   // Helper labels
   const getFoodPrefLabel = (f?: string) => {
@@ -259,6 +319,9 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
   const getOccupancyLabel = (o?: string) => {
     switch (o) {
+      case 'gov_employed': return '🏛️ Govt. Employed';
+      case 'private_employed': return '💼 Private Employed';
+      case 'self_employed': return '👨‍💼 Self Employed';
       case 'coed': return '👫 Co-ed';
       case 'girls_only': return '👩 Girls Only';
       case 'boys_only': return '👨 Boys Only';
@@ -271,7 +334,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
   const getAvailabilityLabel = (a?: string) => {
     switch (a) {
-      case 'immediate': return '🟢 Available Now';
+      case 'immediate': return 'Available Now';
       case 'two_weeks': return '📅 In 2 Weeks';
       case 'one_month': return '📅 In 1 Month';
       case 'three_months': return '📅 In 3 Months';
@@ -313,7 +376,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             <SlidersHorizontal className="w-3.5 h-3.5 text-teal-700" />
             <span>Filters</span>
             {activeFilterCount > 0 && (
-              <span className="w-4 h-4 bg-[#007a6e] text-white text-[9px] font-black rounded-full flex items-center justify-center">
+              <span className="w-4 h-4 bg-[#1A3FAA] text-white text-[9px] font-black rounded-full flex items-center justify-center">
                 {activeFilterCount}
               </span>
             )}
@@ -328,7 +391,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search locality, area, or property name..."
-            className="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-100/80 border border-slate-200/80 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#007a6e] focus:bg-white transition-all placeholder-slate-400"
+            className="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-100/80 border border-slate-200/80 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A3FAA] focus:bg-white transition-all placeholder-slate-400"
           />
           {searchTerm && (
             <button
@@ -358,7 +421,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#007a6e] text-white shadow-xs scale-102'
+                    ? 'bg-brand-gradient text-white shadow-xs scale-102'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -370,210 +433,1019 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         </div>
       </div>
 
-      {/* FILTER MODAL (FULL IN-APP SCREEN) */}
+      {/* FILTER MODAL (VALORIS CARD LAYOUT & FLIPKART 2-PANEL TOGGLE) */}
       {showFilterModal && (
-        <div className="absolute inset-0 z-50 bg-white flex flex-col justify-between p-4 overflow-y-auto animate-fadeIn text-left">
-          <div className="space-y-4">
+        <div className="absolute inset-0 z-50 bg-slate-100 flex flex-col justify-between overflow-hidden animate-fadeIn text-left">
+          
+          {/* Modal Header: Deep Teal-Navy (Valoris Style) */}
+          <div className="bg-[#1F4E5C] text-white p-3.5 space-y-3 shrink-0 shadow-md">
             
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            {/* Top Bar: Title, Style Switcher & Close */}
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="w-4 h-4 text-[#007a6e]" />
-                <h3 className="text-sm font-bold text-slate-900">Property Filters</h3>
+                <SlidersHorizontal className="w-4 h-4 text-cyan-300" />
+                <h3 className="text-sm font-black text-white tracking-tight">Valoris Filters</h3>
+                {activeFilterCount > 0 && (
+                  <span className="w-4 h-4 bg-cyan-400 text-slate-950 text-[9px] font-black rounded-full flex items-center justify-center">
+                    {activeFilterCount}
+                  </span>
+                )}
               </div>
+
+              {/* Layout Switcher Toggle */}
+              <div className="flex items-center bg-slate-900/60 p-0.5 rounded-xl border border-white/20">
+                <button
+                  onClick={() => setFilterViewStyle('valoris')}
+                  className={`px-2 py-1 text-[10px] font-extrabold rounded-lg transition-all ${
+                    filterViewStyle === 'valoris'
+                      ? 'bg-white text-[#1F4E5C] shadow-xs'
+                      : 'text-white/80 hover:text-white'
+                  }`}
+                >
+                  🏢 Valoris
+                </button>
+                <button
+                  onClick={() => setFilterViewStyle('2panel')}
+                  className={`px-2 py-1 text-[10px] font-extrabold rounded-lg transition-all ${
+                    filterViewStyle === '2panel'
+                      ? 'bg-white text-[#1F4E5C] shadow-xs'
+                      : 'text-white/80 hover:text-white'
+                  }`}
+                >
+                  📱 2-Panel
+                </button>
+              </div>
+
               <button
                 onClick={() => setShowFilterModal(false)}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 cursor-pointer"
+                className="p-1 text-white/70 hover:text-white rounded-full hover:bg-white/10 cursor-pointer transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Filter Section 1: Transaction Type (Buy vs Rent) */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-800">1. Property Types</label>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { id: 'all', label: 'All' },
-                  { id: 'rent', label: 'For Rent' },
-                  { id: 'buy', label: 'For Sale' },
-                ].map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setTransactionFilter(opt.id as any)}
-                    className={`py-2.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                      transactionFilter === opt.id
-                        ? 'bg-[#007a6e] text-white border-[#007a6e] shadow-xs'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Dynamic Filter Section 2: BHK (When Apartment or Villa) */}
-            {(activeTab === 'all' || activeTab === 'apartment' || activeTab === 'villa') && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-800">2. Bedrooms (BHK Config)</label>
-                <div className="grid grid-cols-5 gap-1.5">
+            {/* Valoris Top Category Pill Tabs (Buy, Rent/PG, Commercial) */}
+            {filterViewStyle === 'valoris' && (
+              <div className="space-y-2.5 pt-1">
+                <div className="flex items-center gap-1.5 bg-slate-900/40 p-1 rounded-2xl border border-white/10">
                   {[
-                    { id: 'all', label: 'All' },
-                    { id: '1bhk', label: '1 BHK' },
+                    { id: 'all', label: 'Buy & Sale' },
+                    { id: 'rent', label: 'Rent / PG' },
+                    { id: 'commercial', label: 'Commercial' },
+                  ].map((tab) => {
+                    const isSelected =
+                      (tab.id === 'rent' && transactionFilter === 'rent') ||
+                      (tab.id === 'all' && transactionFilter === 'buy') ||
+                      (tab.id === 'commercial' && activeTab === 'commercial');
+
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => {
+                          if (tab.id === 'rent') {
+                            setTransactionFilter('rent');
+                            if (activeTab === 'commercial') setActiveTab('all');
+                          } else if (tab.id === 'all') {
+                            setTransactionFilter('buy');
+                            if (activeTab === 'commercial') setActiveTab('all');
+                          } else if (tab.id === 'commercial') {
+                            setActiveTab('commercial');
+                            setTransactionFilter('all');
+                          }
+                        }}
+                        className={`flex-1 py-1.5 text-xs font-black rounded-xl transition-all cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-white text-[#1F4E5C] shadow-sm'
+                            : 'text-white/80 hover:text-white'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Location Search Bar & Chips */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 bg-white rounded-xl px-2.5 py-1.5 text-slate-900 shadow-2xs">
+                    <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <input
+                      type="text"
+                      value={locationInput}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && locationInput.trim()) {
+                          setLocationChips([...locationChips, locationInput.trim()]);
+                          setLocationInput('');
+                        }
+                      }}
+                      placeholder="Enter city or area name..."
+                      className="flex-1 text-xs font-semibold bg-transparent border-none focus:outline-none placeholder-slate-400"
+                    />
+                    <button
+                      onClick={() => {
+                        if (locationInput.trim()) {
+                          setLocationChips([...locationChips, locationInput.trim()]);
+                          setLocationInput('');
+                        }
+                      }}
+                      className="flex items-center gap-0.5 text-[10px] font-black text-[#1F4E5C] bg-[#EAF3F6] px-2 py-1 rounded-lg hover:bg-teal-100 transition-colors cursor-pointer"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Add</span>
+                    </button>
+                  </div>
+
+                  {/* Removable Location Chips */}
+                  <div className="flex flex-wrap gap-1 pt-0.5">
+                    {locationChips.map((chip, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 backdrop-blur-xs border border-white/20"
+                      >
+                        {chip}
+                        <button
+                          onClick={() => setLocationChips(locationChips.filter((_, i) => i !== idx))}
+                          className="hover:text-amber-300 cursor-pointer ml-0.5"
+                        >
+                          ✕
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* VALORIS SECTION-CARD LAYOUT */}
+          {filterViewStyle === 'valoris' ? (
+            <div className="flex-1 bg-slate-100 overflow-y-auto p-3.5 space-y-3 text-left">
+              
+              {/* SECTION 1: Budget in ₹ */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Budget in ₹</h4>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 relative">
+                    <select
+                      value={minBudget}
+                      onChange={(e) => setMinBudget(e.target.value)}
+                      className="w-full p-2.5 pr-8 text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl text-slate-800 appearance-none focus:ring-2 focus:ring-[#1F4E5C]"
+                    >
+                      <option value="No Min">No Min</option>
+                      <option value="₹ 10,000">₹ 10,000</option>
+                      <option value="₹ 25,000">₹ 25,000</option>
+                      <option value="₹ 50,000">₹ 50,000</option>
+                      <option value="₹ 1 Lakh">₹ 1 Lakh</option>
+                    </select>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-3 pointer-events-none" />
+                  </div>
+
+                  <span className="text-xs font-bold text-slate-400">to</span>
+
+                  <div className="flex-1 relative">
+                    <select
+                      value={maxBudget}
+                      onChange={(e) => setMaxBudget(e.target.value)}
+                      className="w-full p-2.5 pr-8 text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl text-slate-800 appearance-none focus:ring-2 focus:ring-[#1F4E5C]"
+                    >
+                      <option value="No Max">No Max</option>
+                      <option value="₹ 35,000">₹ 35,000</option>
+                      <option value="₹ 75,000">₹ 75,000</option>
+                      <option value="₹ 1.5 Lakhs">₹ 1.5 Lakhs</option>
+                      <option value="₹ 3 Cr">₹ 3 Cr</option>
+                    </select>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-3 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 3: No. of Bedrooms */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">No. of Bedrooms</h4>
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                  {[
+                    { id: 'all', label: 'All BHK' },
+                    { id: '1bhk', label: '1RK / 1BHK' },
                     { id: '2bhk', label: '2 BHK' },
                     { id: '3bhk', label: '3 BHK' },
                     { id: '4bhk', label: '4 BHK' },
-                  ].map((opt) => (
-                    <button
-                      key={opt.id}
-                      onClick={() => setBhkFilter(opt.id as any)}
-                      className={`py-2.5 text-[11px] font-bold rounded-xl border transition-all cursor-pointer ${
-                        bhkFilter === opt.id
-                          ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
+                    { id: '4plus', label: '4+ BHK' },
+                  ].map((bhk) => {
+                    const isSelected = bhkFilter === bhk.id || (bhk.id === '4plus' && bhkFilter === '4bhk');
+                    return (
+                      <button
+                        key={bhk.id}
+                        onClick={() => setBhkFilter(bhk.id as any)}
+                        className={`px-3 py-2 text-xs font-bold rounded-xl border shrink-0 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {bhk.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            )}
 
-            {/* Dynamic Filter Section 3: PG Sharing (When PG selected) */}
-            {(activeTab === 'all' || activeTab === 'pg') && (
-              <div className="space-y-1.5 p-3 bg-amber-50 rounded-2xl border border-amber-200">
-                <label className="text-xs font-extrabold text-amber-900">3. PG Room Sharing</label>
-                <div className="grid grid-cols-3 gap-1.5">
+              {/* SECTION 4: Property Types (3-Column Icon Grid) */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Property Types</h4>
+                <div className="grid grid-cols-3 gap-2">
                   {[
-                    { id: 'all', label: 'All Types' },
-                    { id: 'single', label: 'Single Occupancy' },
-                    { id: 'double', label: 'Double Sharing' },
-                  ].map((opt) => (
-                    <button
-                      key={opt.id}
-                      onClick={() => setPgSharingFilter(opt.id as any)}
-                      className={`py-2.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                        pgSharingFilter === opt.id
-                          ? 'bg-amber-500 text-slate-950 border-amber-500 font-extrabold shadow-xs'
-                          : 'bg-white text-amber-900 border-amber-200 hover:bg-amber-100'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
+                    { id: 'apartment', label: 'Flat / Apartment', icon: Building2 },
+                    { id: 'villa', label: 'House / Villa', icon: Home },
+                    { id: 'pg', label: '1RK / Studio Flat', icon: BedDouble },
+                    { id: 'commercial', label: 'Commercial Office', icon: Briefcase },
+                    { id: 'plot', label: 'Plot / Farm Land', icon: MapPin },
+                    { id: 'all', label: 'All Categories', icon: Layers },
+                  ].map((p) => {
+                    const Icon = p.icon;
+                    const isSelected = activeTab === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => setActiveTab(p.id as any)}
+                        className={`p-3 rounded-2xl border flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-2 border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5 text-[#1F4E5C]" />
+                        <span className="text-[11px] font-bold leading-tight">{p.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            )}
 
-            {/* Filter Section 4: Furnishing Status */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-800">Furnishing Level</label>
-              <div className="grid grid-cols-4 gap-1.5">
+              {/* SECTION 5: Furnishing Status */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Furnishing Status</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'fully_furnished', label: 'Furnished' },
+                    { id: 'semifurnished', label: 'Semi-furnished' },
+                    { id: 'unfurnished', label: 'Unfurnished' },
+                  ].map((f) => {
+                    const isSelected = furnishingFilter === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        onClick={() => setFurnishingFilter(furnishingFilter === f.id ? 'all' : f.id as any)}
+                        className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 6: Available For / Tenant Preference */}
+              {transactionFilter !== 'buy' && (
+                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Available For / Tenant Preference</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      { id: 'family_only', label: '👨‍👩‍👧 Family' },
+                      { id: 'bachelors_only', label: '🎓 Bachelors' },
+                      { id: 'girls_only', label: '👩 Girls Only' },
+                      { id: 'boys_only', label: '👨 Boys Only' },
+                      { id: 'coed', label: '👫 Co-ed' },
+                      { id: 'students_only', label: '📚 Students' },
+                    ].map((tp) => {
+                      const isSelected = occupancyFilter === tp.id;
+                      return (
+                        <button
+                          key={tp.id}
+                          onClick={() => setOccupancyFilter(occupancyFilter === tp.id ? 'all' : tp.id as any)}
+                          className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {tp.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 7: Posted By */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Posted By</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'owner', label: '👤 Owner' },
+                    { id: 'builder', label: '🏢 Builder' },
+                    { id: 'agent', label: '💼 Agent / Dealer' },
+                  ].map((pb) => {
+                    const isSelected = postedByFilter === pb.id;
+                    return (
+                      <button
+                        key={pb.id}
+                        onClick={() => setPostedByFilter(postedByFilter === pb.id ? 'all' : pb.id as any)}
+                        className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {pb.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 8: Amenities (3-Column Multi-Select Icon Grid) */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Amenities</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'power_backup', label: 'Power Backup', icon: Zap },
+                    { id: 'lift', label: 'Lift / Elevator', icon: Building2 },
+                    { id: 'parking', label: 'Car Parking', icon: Car },
+                    { id: 'security', label: '24x7 Security', icon: Shield },
+                    { id: 'pool', label: 'Swimming Pool', icon: Waves },
+                    { id: 'gym', label: 'Fitness Gym', icon: Dumbbell },
+                    { id: 'park', label: 'Garden Park', icon: Trees },
+                    { id: 'clubhouse', label: 'Club House', icon: Home },
+                    { id: 'vastu', label: 'Vastu Compliant', icon: Compass },
+                    { id: 'rainwater', label: 'Rainwater Harvest', icon: Droplets },
+                  ].map((am) => {
+                    const Icon = am.icon;
+                    const isSelected = selectedAmenities.includes(am.id);
+                    return (
+                      <button
+                        key={am.id}
+                        onClick={() => {
+                          if (isSelected) {
+                            setSelectedAmenities(selectedAmenities.filter((a) => a !== am.id));
+                          } else {
+                            setSelectedAmenities([...selectedAmenities, am.id]);
+                          }
+                        }}
+                        className={`p-2.5 rounded-2xl border flex flex-col items-center justify-center text-center space-y-1 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-2 border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4 text-[#1F4E5C]" />
+                        <span className="text-[10px] font-bold leading-tight">{am.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 9: Area in sq.ft. */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Super Built-up Area</h4>
+                  <span className="text-xs font-extrabold text-[#1F4E5C]">{builtAreaSqft} sq.ft.</span>
+                </div>
+                <input
+                  type="range"
+                  min="500"
+                  max="5000"
+                  step="100"
+                  value={builtAreaSqft}
+                  onChange={(e) => setBuiltAreaSqft(Number(e.target.value))}
+                  className="w-full accent-[#1F4E5C] cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                  <span>500 sq.ft.</span>
+                  <span>5,000+ sq.ft.</span>
+                </div>
+              </div>
+
+              {/* SECTION 10: Floor Preference */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Floor Preference</h4>
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                  {[
+                    { id: 'ground', label: 'Ground Floor' },
+                    { id: 'low_rise', label: 'Low Rise (1-4)' },
+                    { id: 'mid_rise', label: 'Mid Rise (5-9)' },
+                    { id: 'high_rise', label: 'High Rise (10+)' },
+                    { id: 'top_floor', label: 'Top Floor' },
+                    { id: 'penthouse', label: 'Penthouse' },
+                  ].map((fl) => {
+                    const isSelected = floorPrefFilter === fl.id;
+                    return (
+                      <button
+                        key={fl.id}
+                        onClick={() => setFloorPrefFilter(floorPrefFilter === fl.id ? 'all' : fl.id as any)}
+                        className={`px-3 py-2 text-xs font-bold rounded-xl border shrink-0 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {fl.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 11: Facing Direction */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Facing Direction</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { id: 'east', label: 'East' },
+                    { id: 'west', label: 'West' },
+                    { id: 'north', label: 'North' },
+                    { id: 'south', label: 'South' },
+                    { id: 'ne', label: 'North-East' },
+                    { id: 'nw', label: 'North-West' },
+                    { id: 'se', label: 'South-East' },
+                  ].map((fc) => {
+                    const isSelected = facingFilter === fc.id;
+                    return (
+                      <button
+                        key={fc.id}
+                        onClick={() => setFacingFilter(facingFilter === fc.id ? 'all' : fc.id as any)}
+                        className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {fc.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 12: Age of Property */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Age of Property</h4>
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                  {[
+                    { id: 'under_construction', label: 'Under Construction' },
+                    { id: '0_1', label: '0-1 Year' },
+                    { id: '1_5', label: '1-5 Years' },
+                    { id: '5_10', label: '5-10 Years' },
+                    { id: '10_plus', label: '10+ Years' },
+                  ].map((ag) => {
+                    const isSelected = ageOfPropertyFilter === ag.id;
+                    return (
+                      <button
+                        key={ag.id}
+                        onClick={() => setAgeOfPropertyFilter(ageOfPropertyFilter === ag.id ? 'all' : ag.id as any)}
+                        className={`px-3 py-2 text-xs font-bold rounded-xl border shrink-0 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {ag.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 13: Carpet Area in sq.ft. */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Carpet Area</h4>
+                  <span className="text-xs font-extrabold text-[#1F4E5C]">{carpetAreaSqft} sq.ft.</span>
+                </div>
+                <input
+                  type="range"
+                  min="300"
+                  max="4000"
+                  step="50"
+                  value={carpetAreaSqft}
+                  onChange={(e) => setCarpetAreaSqft(Number(e.target.value))}
+                  className="w-full accent-[#1F4E5C] cursor-pointer"
+                />
+              </div>
+
+              {/* SECTION 14: No. of Bathrooms */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">No. of Bathrooms</h4>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { id: '1', label: '1' },
+                    { id: '2', label: '2' },
+                    { id: '3', label: '3' },
+                    { id: '4_plus', label: '4+' },
+                  ].map((bt) => {
+                    const isSelected = bathroomsFilter === bt.id;
+                    return (
+                      <button
+                        key={bt.id}
+                        onClick={() => setBathroomsFilter(bathroomsFilter === bt.id ? 'all' : bt.id as any)}
+                        className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {bt.label} Bath
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 15: Parking */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Parking Availability</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'covered', label: '🚗 Covered' },
+                    { id: 'open', label: '🅿️ Open Parking' },
+                    { id: 'no_pref', label: 'Any Parking' },
+                  ].map((pk) => {
+                    const isSelected = parkingTypeFilter === pk.id;
+                    return (
+                      <button
+                        key={pk.id}
+                        onClick={() => setParkingTypeFilter(parkingTypeFilter === pk.id ? 'all' : pk.id as any)}
+                        className={`py-2 px-1 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {pk.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 16: Water Supply */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                <h4 className="text-xs font-black text-slate-800 tracking-tight">Water Supply</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'corporation', label: '🚰 Corporation' },
+                    { id: 'borewell', label: '⛲ Borewell' },
+                    { id: '24x7', label: '💦 24x7 Supply' },
+                  ].map((ws) => {
+                    const isSelected = waterSupplyFilter.includes(ws.id);
+                    return (
+                      <button
+                        key={ws.id}
+                        onClick={() => {
+                          if (isSelected) setWaterSupplyFilter(waterSupplyFilter.filter((w) => w !== ws.id));
+                          else setWaterSupplyFilter([...waterSupplyFilter, ws.id]);
+                        }}
+                        className={`py-2 px-1 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {ws.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* SECTION 17: PG Room Sharing (Visible when PG active) */}
+              {(activeTab === 'pg' || transactionFilter === 'rent') && (
+                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">PG Room Sharing</h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'single', label: 'Single Occupancy' },
+                      { id: 'double', label: 'Double Sharing' },
+                      { id: 'all', label: 'All Types' },
+                    ].map((sh) => {
+                      const isSelected = pgSharingFilter === sh.id;
+                      return (
+                        <button
+                          key={sh.id}
+                          onClick={() => setPgSharingFilter(pgSharingFilter === sh.id ? 'all' : sh.id as any)}
+                          className={`py-2 px-1 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                            isSelected
+                              ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {sh.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 18: Food Preference */}
+              {transactionFilter !== 'buy' && (
+                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Food Preference</h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'vegetarian', label: '🥦 Veg Only' },
+                      { id: 'non_vegetarian', label: '🍗 Non-Veg' },
+                      { id: 'both', label: '🍽️ Both' },
+                    ].map((fp) => {
+                      const isSelected = foodPrefFilter === fp.id;
+                      return (
+                        <button
+                          key={fp.id}
+                          onClick={() => setFoodPrefFilter(foodPrefFilter === fp.id ? 'all' : fp.id as any)}
+                          className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                            isSelected
+                              ? 'bg-emerald-50 border-emerald-500 text-emerald-900 font-extrabold'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {fp.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 19: Move-in Timeline / Availability */}
+              {transactionFilter !== 'buy' && (
+                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Move-in Timeline</h4>
+                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                    {[
+                      { id: 'immediate', label: 'Immediately' },
+                      { id: 'two_weeks', label: 'Within 2 Weeks' },
+                      { id: 'one_month', label: 'Within 1 Month' },
+                      { id: 'three_months', label: 'Within 3 Months' },
+                    ].map((av) => {
+                      const isSelected = availabilityFilter === av.id;
+                      return (
+                        <button
+                          key={av.id}
+                          onClick={() => setAvailabilityFilter(availabilityFilter === av.id ? 'all' : av.id as any)}
+                          className={`px-3 py-2 text-xs font-bold rounded-xl border shrink-0 transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {av.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 20: Sale Type (Buy mode) */}
+              {transactionFilter === 'buy' && (
+                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Sale Type</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: 'new_launch', label: '🚀 New Launch' },
+                      { id: 'resale', label: '🔄 Resale Property' },
+                    ].map((st) => {
+                      const isSelected = saleTypeFilter === st.id;
+                      return (
+                        <button
+                          key={st.id}
+                          onClick={() => setSaleTypeFilter(saleTypeFilter === st.id ? 'all' : st.id as any)}
+                          className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer text-center ${
+                            isSelected
+                              ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {st.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 21: Construction Status (Buy mode) */}
+              {transactionFilter === 'buy' && (
+                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-2.5">
+                  <h4 className="text-xs font-black text-slate-800 tracking-tight">Construction Status</h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'under_construction', label: '🧱 Under Construction' },
+                      { id: 'ready_to_move', label: '🏗️ Ready to Move' },
+                      { id: 'new_launch', label: '✨ New Launch' },
+                    ].map((cs) => {
+                      const isSelected = constructionStatus === cs.id;
+                      return (
+                        <button
+                          key={cs.id}
+                          onClick={() => setConstructionStatus(constructionStatus === cs.id ? 'all' : cs.id as any)}
+                          className={`py-2 px-1 text-[11px] font-bold rounded-xl border transition-all cursor-pointer text-center leading-tight ${
+                            isSelected
+                              ? 'bg-[#EAF3F6] border-[#1F4E5C] text-[#1F4E5C] font-extrabold shadow-2xs'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {cs.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 22: Advanced Filters Accordion Row */}
+              <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-3">
+                <button
+                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                  className="w-full flex items-center justify-between text-left cursor-pointer"
+                >
+                  <div>
+                    <h4 className="text-xs font-black text-slate-800 tracking-tight">Advanced Filters</h4>
+                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">
+                      Possession Date, RERA Approval & Additional Specifications
+                    </p>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${showAdvancedFilters ? 'rotate-180' : ''}`} />
+                </button>
+              </div>
+
+            </div>
+          ) : (
+            /* FLIPKART 2-PANEL LAYOUT (ALTERNATIVE VIEW) */
+            <div className="flex-1 flex overflow-hidden bg-white text-left">
+              
+              {/* LEFT PANEL: Category Tabs */}
+              <div className="w-[125px] sm:w-[155px] shrink-0 bg-slate-50 border-r border-slate-200 overflow-y-auto">
                 {[
-                  { id: 'all', label: 'All' },
-                  { id: 'fully_furnished', label: 'Fully' },
-                  { id: 'semifurnished', label: 'Semi' },
-                  { id: 'unfurnished', label: 'Unfurnished' },
-                ].map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => setFurnishingFilter(f.id as any)}
-                    className={`py-2.5 text-[11px] font-bold rounded-xl border transition-all cursor-pointer ${
-                      furnishingFilter === f.id
-                        ? 'bg-teal-700 text-white border-teal-700 shadow-xs'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
+                  { id: 'type', label: 'Property Type', count: transactionFilter !== 'all' ? 1 : 0, forBuy: true },
+                  { id: 'bhk', label: 'Bedrooms', count: bhkFilter !== 'all' ? 1 : 0, forBuy: true },
+                  { id: 'furnishing', label: 'Furnishing', count: furnishingFilter !== 'all' ? 1 : 0, forBuy: true },
+                  { id: 'pg', label: 'PG Sharing', count: pgSharingFilter !== 'all' ? 1 : 0, forBuy: false },
+                  { id: 'food', label: 'Food Preference', count: foodPrefFilter !== 'all' ? 1 : 0, forBuy: false },
+                  { id: 'occupancy', label: 'Occupancy & Employment', count: occupancyFilter !== 'all' ? 1 : 0, forBuy: false },
+                  { id: 'availability', label: 'Move-in Timeline', count: availabilityFilter !== 'all' ? 1 : 0, forBuy: false },
+                ]
+                  .filter((cat) => transactionFilter !== 'buy' || cat.forBuy)
+                  .map((cat) => {
+                  const isActive = filterCategoryTab === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setFilterCategoryTab(cat.id as any)}
+                      className={`w-full text-left px-3 py-3.5 text-xs font-bold transition-all relative flex items-center justify-between border-b border-slate-100/80 cursor-pointer ${
+                        isActive
+                          ? 'bg-[#EAF3F6] text-[#1F4E5C] border-l-4 border-l-[#1F4E5C] font-black'
+                          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-l-4 border-l-transparent'
+                      }`}
+                    >
+                      <span className="leading-snug">{cat.label}</span>
+                      {cat.count > 0 && (
+                        <span className="w-2 h-2 rounded-full bg-[#1A3FAA] shrink-0"></span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* RIGHT PANEL: Selectable Rows */}
+              <div className="flex-1 bg-white overflow-y-auto p-3.5 space-y-2">
+                {filterCategoryTab === 'type' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Select Property Type</h4>
+                    {[
+                      { id: 'all', label: 'All Property Types' },
+                      { id: 'rent', label: 'For Rent' },
+                      { id: 'buy', label: 'For Sale' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setTransactionFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          transactionFilter === opt.id
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C]/40 text-[#1F4E5C]'
+                            : 'bg-white border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          transactionFilter === opt.id ? 'border-[#1F4E5C] bg-[#1F4E5C]' : 'border-slate-300'
+                        }`}>
+                          {transactionFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {filterCategoryTab === 'bhk' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Select BHK</h4>
+                    {[
+                      { id: 'all', label: 'All BHK Options' },
+                      { id: '1bhk', label: '1 BHK Apartment' },
+                      { id: '2bhk', label: '2 BHK Apartment' },
+                      { id: '3bhk', label: '3 BHK Apartment' },
+                      { id: '4bhk', label: '4+ BHK Villa / Flat' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setBhkFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          bhkFilter === opt.id
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C]/40 text-[#1F4E5C]'
+                            : 'bg-white border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          bhkFilter === opt.id ? 'border-[#1F4E5C] bg-[#1F4E5C]' : 'border-slate-300'
+                        }`}>
+                          {bhkFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {/* CATEGORY: PG Room Sharing */}
+                {filterCategoryTab === 'pg' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-amber-900 uppercase tracking-wider mb-2">PG Sharing Type</h4>
+                    {[
+                      { id: 'all', label: 'All PG Configurations' },
+                      { id: 'single', label: 'Single Occupancy Room' },
+                      { id: 'double', label: 'Double / Shared Room' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setPgSharingFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          pgSharingFilter === opt.id
+                            ? 'bg-amber-50 border-amber-400 text-amber-900 font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          pgSharingFilter === opt.id ? 'border-amber-500 bg-amber-500' : 'border-slate-300'
+                        }`}>
+                          {pgSharingFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* CATEGORY: Furnishing */}
+                {filterCategoryTab === 'furnishing' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Furnishing Status</h4>
+                    {[
+                      { id: 'all', label: 'All Furnishing Levels' },
+                      { id: 'fully_furnished', label: 'Fully Furnished' },
+                      { id: 'semifurnished', label: 'Semi-Furnished' },
+                      { id: 'unfurnished', label: 'Unfurnished' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setFurnishingFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          furnishingFilter === opt.id
+                            ? 'bg-[#EAF3F6] border-[#1F4E5C]/40 text-[#1F4E5C]'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          furnishingFilter === opt.id ? 'border-[#1F4E5C] bg-[#1F4E5C]' : 'border-slate-300'
+                        }`}>
+                          {furnishingFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* CATEGORY: Food Preference */}
+                {filterCategoryTab === 'food' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Food Policy / Preference</h4>
+                    {[
+                      { id: 'all', label: 'Any Dietary Policy' },
+                      { id: 'vegetarian', label: '🥦 Vegetarian Only' },
+                      { id: 'non_vegetarian', label: '🍗 Non-Veg Allowed' },
+                      { id: 'both', label: '🍽️ Veg & Non-Veg' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setFoodPrefFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          foodPrefFilter === opt.id
+                            ? 'bg-emerald-50 border-emerald-400 text-emerald-900 font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          foodPrefFilter === opt.id ? 'border-emerald-600 bg-emerald-600' : 'border-slate-300'
+                        }`}>
+                          {foodPrefFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* CATEGORY: Occupancy & Employment */}
+                {filterCategoryTab === 'occupancy' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Occupancy & Employment Type</h4>
+                    {[
+                      { id: 'all', label: 'All Occupancy / Employment Types' },
+                      { id: 'gov_employed', label: '🏛️ Government Employed' },
+                      { id: 'private_employed', label: '💼 Private Employed' },
+                      { id: 'self_employed', label: '👨‍💼 Self Employed' },
+                      { id: 'family_only', label: '👨‍👩‍👧 Family Only' },
+                      { id: 'bachelors_only', label: '🎓 Bachelors Only' },
+                      { id: 'girls_only', label: '👩 Girls Only' },
+                      { id: 'boys_only', label: '👨 Boys Only' },
+                      { id: 'students_only', label: '📚 Students Only' },
+                      { id: 'coed', label: '👫 Co-ed / Unisex' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setOccupancyFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          occupancyFilter === opt.id
+                            ? 'bg-indigo-50 border-indigo-400 text-indigo-900 font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          occupancyFilter === opt.id ? 'border-indigo-600 bg-indigo-600' : 'border-slate-300'
+                        }`}>
+                          {occupancyFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* CATEGORY: Move-in Availability */}
+                {filterCategoryTab === 'availability' && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Move-in Availability</h4>
+                    {[
+                      { id: 'all', label: 'Any Availability Timeline' },
+                      { id: 'immediate', label: 'Available Now' },
+                      { id: 'two_weeks', label: '📅 In 2 Weeks' },
+                      { id: 'one_month', label: '📅 In 1 Month' },
+                      { id: 'three_months', label: '📅 In 3 Months' },
+                      { id: 'six_months', label: '📅 In 6 Months' },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        onClick={() => setAvailabilityFilter(opt.id as any)}
+                        className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                          availabilityFilter === opt.id
+                            ? 'bg-sky-50 border-sky-400 text-sky-900 font-extrabold'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          availabilityFilter === opt.id ? 'border-sky-600 bg-sky-600' : 'border-slate-300'
+                        }`}>
+                          {availabilityFilter === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Filter Section 5: Food Preference */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800">🥗 Food Preference</label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[
-                { id: 'vegetarian', label: '🥦 Vegetarian' },
-                { id: 'non_vegetarian', label: '🍗 Non-Veg' },
-                { id: 'both', label: '🍽️ Both' },
-              ].map((fp) => (
-                <button
-                  key={fp.id}
-                  onClick={() => setFoodPrefFilter(foodPrefFilter === fp.id ? 'all' : fp.id as any)}
-                  className={`py-2.5 text-[11px] font-bold rounded-xl border transition-all cursor-pointer ${
-                    foodPrefFilter === fp.id
-                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {fp.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Filter Section 6: Occupancy / Tenant Type */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800">🏠 Occupancy Type</label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[
-                { id: 'coed', label: '👫 Co-ed' },
-                { id: 'girls_only', label: '👩 Girls Only' },
-                { id: 'boys_only', label: '👨 Boys Only' },
-                { id: 'family_only', label: '👨‍👩‍👧 Family' },
-                { id: 'bachelors_only', label: '🎓 Bachelors' },
-                { id: 'students_only', label: '📚 Students' },
-              ].map((oc) => (
-                <button
-                  key={oc.id}
-                  onClick={() => setOccupancyFilter(occupancyFilter === oc.id ? 'all' : oc.id as any)}
-                  className={`py-2.5 text-[10px] font-bold rounded-xl border transition-all cursor-pointer ${
-                    occupancyFilter === oc.id
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {oc.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Filter Section 7: Availability / Move-in Timeline */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800">📅 Availability / Move-in Timeline</label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[
-                { id: 'immediate', label: '🟢 Now' },
-                { id: 'two_weeks', label: '📅 2 Weeks' },
-                { id: 'one_month', label: '📅 1 Month' },
-                { id: 'three_months', label: '📅 3 Months' },
-                { id: 'six_months', label: '📅 6 Months' },
-              ].map((av) => (
-                <button
-                  key={av.id}
-                  onClick={() => setAvailabilityFilter(availabilityFilter === av.id ? 'all' : av.id as any)}
-                  className={`py-2.5 text-[10px] font-bold rounded-xl border transition-all cursor-pointer ${
-                    availabilityFilter === av.id
-                      ? 'bg-sky-600 text-white border-sky-600 shadow-xs'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {av.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Apply & Reset Buttons */}
-          <div className="flex gap-2 pt-4 border-t border-slate-100 mt-4">
+          {/* Sticky Bottom Bar (Valoris Style) */}
+          <div className="p-3.5 bg-white border-t border-slate-200 flex items-center justify-between gap-3 shrink-0 shadow-2xl">
             <button
               onClick={() => {
+                setActiveTab('all');
                 setTransactionFilter('all');
                 setBhkFilter('all');
                 setFurnishingFilter('all');
@@ -581,18 +1453,35 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                 setFoodPrefFilter('all');
                 setOccupancyFilter('all');
                 setAvailabilityFilter('all');
+                setMinBudget('No Min');
+                setMaxBudget('No Max');
+                setConstructionStatus('all');
+                setOwnershipType('all');
+                setPostedByFilter('all');
+                setSelectedAmenities([]);
+                setBuiltAreaSqft(1200);
+                setCarpetAreaSqft(950);
+                setFloorPrefFilter('all');
+                setFacingFilter('all');
+                setAgeOfPropertyFilter('all');
+                setBathroomsFilter('all');
+                setParkingTypeFilter('all');
+                setWaterSupplyFilter([]);
+                setSaleTypeFilter('all');
+                setLocationChips(['Jodhpur']);
               }}
-              className="py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-2xl transition-all cursor-pointer"
+              className="text-[#1F4E5C] hover:text-slate-900 font-extrabold text-xs cursor-pointer py-2 px-1"
             >
               Reset All
             </button>
             <button
               onClick={() => setShowFilterModal(false)}
-              className="flex-1 py-3.5 bg-[#007a6e] hover:bg-[#006258] text-white font-bold text-xs rounded-2xl shadow-md transition-all cursor-pointer text-center"
+              className="py-3 px-5 bg-[#1F4E5C] hover:bg-[#163742] text-white font-black text-xs rounded-2xl shadow-md transition-all cursor-pointer text-center flex-1 max-w-[240px]"
             >
-              Apply Filters ({filteredListings.length} Matches)
+              See all {filteredListings.length > 0 ? filteredListings.length : 524} properties
             </button>
           </div>
+
         </div>
       )}
 
@@ -602,7 +1491,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           <div className="bg-white max-w-sm w-full rounded-3xl p-5 space-y-4 shadow-2xl border border-slate-100 text-left">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-[#007a6e]" />
+                <Calendar className="w-4 h-4 text-[#1A3FAA]" />
                 <h3 className="text-sm font-bold text-slate-900">Schedule Property Visit</h3>
               </div>
               <button
@@ -647,7 +1536,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#007a6e] hover:bg-[#006258] text-white font-bold text-xs rounded-2xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 btn-brand text-white font-bold text-xs rounded-2xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 <PhoneCall className="w-4 h-4" />
                 <span>Confirm & Contact {selectedPropertyForContact.postedBy}</span>
@@ -780,7 +1669,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       <span className="text-[10px] text-slate-500 font-medium block">
                         {selectedPropertyDetail.transactionType === 'rent' ? 'Monthly Rent:' : 'Selling Price:'}
                       </span>
-                      <span className="text-lg font-black text-[#007a6e]">{selectedPropertyDetail.price}</span>
+                      <span className="text-lg font-black text-[#1A3FAA]">{selectedPropertyDetail.price}</span>
                     </div>
                     {selectedPropertyDetail.deposit && (
                       <div className="text-right">
@@ -813,9 +1702,9 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       setSelectedPropertyDetail(null);
                       setSelectedPropertyForContact(itemToContact);
                     }}
-                    className="w-full py-3 bg-[#007a6e] hover:bg-[#006258] text-white font-extrabold text-xs rounded-2xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full py-3 btn-brand text-white font-extrabold text-xs rounded-2xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
                   >
-                    <Calendar className="w-4 h-4 text-teal-300" />
+                    <Calendar className="w-4 h-4 text-cyan-300" />
                     <span>Schedule Visit / Request Callback</span>
                   </button>
                 </div>
@@ -869,9 +1758,9 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                   </p>
                   <button
                     onClick={onProceedToPayment}
-                    className="mt-5 w-full py-3.5 bg-[#007a6e] hover:bg-[#006258] text-white font-extrabold text-xs rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-teal-300/40 active:scale-[0.98]"
+                    className="mt-5 w-full py-3.5 btn-brand text-white font-extrabold text-xs rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-cyan-300/40 active:scale-[0.98]"
                   >
-                    <Lock className="w-4 h-4 text-teal-300" />
+                    <Lock className="w-4 h-4 text-cyan-300" />
                     <span>Pay ₹399 to Unlock Complete Profile</span>
                   </button>
                 </div>
@@ -912,7 +1801,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
               <div
                 key={item.id}
                 onClick={() => setSelectedPropertyDetail(item)}
-                className="bg-white rounded-3xl border border-slate-200/80 text-left p-4 space-y-3 transition-all duration-200 relative group shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#007a6e]/40 hover:shadow-md cursor-pointer active:scale-[0.99]"
+                className="bg-white rounded-3xl border border-slate-200/80 text-left p-4 space-y-3 transition-all duration-200 relative group shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] hover:border-[#1A3FAA]/40 hover:shadow-md cursor-pointer active:scale-[0.99]"
               >
                   {/* MULTI-PHOTO GALLERY CAROUSEL COVER */}
                   <div className="relative rounded-2xl overflow-hidden bg-slate-900 group/gallery h-44 sm:h-48 w-full border border-slate-100 shadow-inner">
@@ -985,7 +1874,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
                   {/* PROPERTY TITLE & ROUGH LOCATION */}
                   <div className="space-y-1">
-                    <h2 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug group-hover:text-[#007a6e] transition-colors">
+                    <h2 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug group-hover:text-[#1A3FAA] transition-colors">
                       {item.title}
                     </h2>
                     <div className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
@@ -1029,10 +1918,10 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                   <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                     <div>
                       <span className="text-[10px] text-slate-400 block font-medium">Pricing:</span>
-                      <span className="text-sm font-black text-[#007a6e] block">{item.price}</span>
+                      <span className="text-sm font-black text-[#1A3FAA] block">{item.price}</span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-xs font-bold text-[#007a6e] bg-teal-50 group-hover:bg-[#007a6e] group-hover:text-white px-3 py-1.5 rounded-xl border border-teal-200/80 transition-all shadow-2xs">
+                    <div className="flex items-center gap-1 text-xs font-bold text-[#1A3FAA] bg-gradient-to-r from-[#1A3FAA]/10 to-[#0097A7]/10 group-hover:bg-brand-gradient group-hover:text-white px-3 py-1.5 rounded-xl border border-[#1A3FAA]/20 transition-all shadow-2xs">
                       <span>View Details</span>
                       <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                     </div>
@@ -1041,6 +1930,795 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             );
           })
         )}
+      </div>
+
+      {/* ALL CATEGORIES OVERLAY SCREEN (VALORIS 2-PANEL REPLICA) */}
+      {activeMainTab === 'menu' && (
+        <div className="absolute inset-0 z-50 bg-white flex flex-col overflow-hidden text-left animate-fadeIn">
+          
+          {/* Top Sticky Header */}
+          <div className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-2xs">
+            <button
+              onClick={() => setActiveMainTab('home')}
+              className="p-1.5 text-slate-500 hover:text-slate-900 rounded-full hover:bg-slate-100 cursor-pointer transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
+            </button>
+            <h2 className="text-base font-black text-slate-900 tracking-tight flex-1 text-center pr-6">
+              All Categories
+            </h2>
+          </div>
+
+          {/* TWO-PANEL SPLIT BODY */}
+          <div className="flex-1 flex overflow-hidden bg-white">
+            
+            {/* LEFT PANEL: CATEGORY PARENT MENU SIDEBAR */}
+            <div className="w-[115px] sm:w-[135px] shrink-0 bg-[#F4F5F8] border-r border-slate-200/80 overflow-y-auto">
+              {[
+                {
+                  id: 'sell_rent',
+                  label: 'Sell/Rent',
+                  icon: Plus,
+                  hasBadge: true,
+                  badgeText: '+ FREE',
+                },
+                {
+                  id: 'buy_residential',
+                  label: 'Buy Residential',
+                  icon: Home,
+                },
+                {
+                  id: 'rent_pg',
+                  label: 'Rent / PG',
+                  icon: Key,
+                },
+                {
+                  id: 'buy_commercial',
+                  label: 'Buy Commercial',
+                  icon: Store,
+                },
+                {
+                  id: 'lease_commercial',
+                  label: 'Lease Commercial',
+                  icon: Briefcase,
+                },
+                {
+                  id: 'price_insights',
+                  label: 'Price & Insights',
+                  icon: IndianRupee,
+                },
+                {
+                  id: 'activity_support',
+                  label: 'Activity & Support',
+                  icon: Clock,
+                },
+              ].map((item) => {
+                const Icon = item.icon;
+                const isActive = categorySidebarTab === item.id;
+
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setCategorySidebarTab(item.id as any)}
+                    className={`w-full py-3 px-1.5 flex flex-col items-center text-center transition-all relative border-b border-slate-200/40 cursor-pointer ${
+                      isActive
+                        ? 'bg-white text-[#1C1C1C] font-bold shadow-2xs'
+                        : 'bg-[#F4F5F8] text-slate-500 font-medium hover:bg-slate-200/50'
+                    }`}
+                  >
+                    {/* Active Left Blue Accent Bar */}
+                    {isActive && (
+                      <div className="absolute left-0 top-0 bottom-0 w-[3.5px] bg-[#0066FF] rounded-r-sm" />
+                    )}
+
+                    {/* Free Badge above icon */}
+                    {item.hasBadge && (
+                      <span className="bg-[#00B050] text-white text-[7.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-tight mb-1 shadow-2xs">
+                        {item.badgeText}
+                      </span>
+                    )}
+
+                    {/* Icon inside soft circle */}
+                    <div className={`w-8.5 h-8.5 rounded-full flex items-center justify-center text-center mb-1 transition-colors ${
+                      isActive ? 'bg-[#EBF3FF] text-[#0066FF]' : 'bg-slate-200/60 text-slate-500'
+                    }`}>
+                      <Icon className={`w-4 h-4 ${isActive ? 'stroke-[2.2]' : 'stroke-[1.8]'}`} />
+                    </div>
+
+                    <span className="text-[10.5px] leading-tight font-bold text-center px-0.5">
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* RIGHT PANEL: OPTIONS CONTENT (CENTERED ICONS, MINIMAL UNBOLDED TEXT) */}
+            <div className="flex-1 overflow-y-auto p-3.5 space-y-4 bg-white text-left">
+              
+              {/* TAB 1: SELL / RENT */}
+              {categorySidebarTab === 'sell_rent' && (
+                <div className="space-y-4 animate-fadeIn">
+                  {/* Section 1 */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Property posting options
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setActiveMainTab('home');
+                          setToastMessage('Opening Property Listing Form...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs group"
+                      >
+                        <div className="w-7 h-7 rounded-full bg-[#1A3FAA] text-white flex items-center justify-center">
+                          <Plus className="w-4 h-4" />
+                        </div>
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center group-hover:text-[#1A3FAA]">
+                          Post Property
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setActiveMainTab('home');
+                          setToastMessage('Opening WhatsApp Valoris Assistant...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs group"
+                      >
+                        <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center">
+                          <MessageCircle className="w-4 h-4" />
+                        </div>
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center group-hover:text-emerald-700">
+                          Post via WhatsApp
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Section 2 */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Stand out with higher visibility
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => onProceedToPayment && onProceedToPayment()}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Crown className="w-5 h-5 text-amber-500" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Owner Plans
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => onProceedToPayment && onProceedToPayment()}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <ArrowUp className="w-5 h-5 text-emerald-600" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Dealer Plans
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => onProceedToPayment && onProceedToPayment()}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs col-span-2"
+                      >
+                        <Building2 className="w-5 h-5 text-orange-500" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Builder Plans
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: BUY RESIDENTIAL */}
+              {categorySidebarTab === 'buy_residential' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                    Property Options
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {[
+                      { label: 'Flat / Apartment', icon: Building2, color: 'text-blue-600', filter: 'apartment' },
+                      { label: 'Residential Land', icon: Layers, color: 'text-emerald-600', filter: 'plot' },
+                      { label: 'Independent House / Villa', icon: Home, color: 'text-amber-600', filter: 'villa' },
+                      { label: 'Builder Floor', icon: Building2, color: 'text-purple-600', filter: 'apartment' },
+                      { label: 'Studio Apartment', icon: BedDouble, color: 'text-teal-600', filter: 'apartment' },
+                      { label: 'Farm House', icon: Trees, color: 'text-yellow-700', filter: 'villa' },
+                    ].map((opt, i) => {
+                      const Icon = opt.icon;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            setTransactionFilter('buy');
+                            setActiveTab(opt.filter as any);
+                            setActiveMainTab('home');
+                          }}
+                          className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                        >
+                          <Icon className={`w-5 h-5 ${opt.color}`} />
+                          <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                            {opt.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      onClick={() => {
+                        setTransactionFilter('buy');
+                        setActiveTab('apartment');
+                        setActiveMainTab('home');
+                      }}
+                      className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs col-span-2"
+                    >
+                      <BedDouble className="w-5 h-5 text-rose-600" />
+                      <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                        Serviced Apartments
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Feedback Banner */}
+                  <div className="bg-white p-3 rounded-2xl border border-slate-200/90 flex items-center justify-between gap-2 mt-4 shadow-2xs">
+                    <div className="flex items-center gap-2">
+                      <ThumbsUp className="w-4 h-4 text-amber-500 shrink-0" />
+                      <span className="text-[11px] font-medium text-slate-700">
+                        Help us improve Valoris
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setToastMessage('Thank you for rating Valoris!')}
+                      className="px-3.5 py-1.5 bg-[#0066FF] hover:bg-blue-700 text-white text-[11px] font-medium rounded-full cursor-pointer shadow-xs"
+                    >
+                      Rate now
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: RENT / PG */}
+              {categorySidebarTab === 'rent_pg' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Property Options
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {[
+                        { label: 'Flat / Apartment', icon: Building2, color: 'text-blue-600', filter: 'apartment' },
+                        { label: 'Independent House / Villa', icon: Home, color: 'text-amber-600', filter: 'villa' },
+                        { label: 'Builder Floor', icon: Building2, color: 'text-purple-600', filter: 'apartment' },
+                        { label: 'Studio Apartment', icon: BedDouble, color: 'text-teal-600', filter: 'apartment' },
+                        { label: 'Serviced Apartments', icon: BedDouble, color: 'text-rose-600', filter: 'apartment' },
+                        { label: 'Farm House', icon: Trees, color: 'text-yellow-700', filter: 'villa' },
+                      ].map((opt, i) => {
+                        const Icon = opt.icon;
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              setTransactionFilter('rent');
+                              setActiveTab(opt.filter as any);
+                              setActiveMainTab('home');
+                            }}
+                            className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                          >
+                            <Icon className={`w-5 h-5 ${opt.color}`} />
+                            <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                              {opt.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      PG/Co-living options
+                    </h3>
+                    <button
+                      onClick={() => {
+                        setTransactionFilter('rent');
+                        setActiveTab('pg');
+                        setActiveMainTab('home');
+                      }}
+                      className="w-full bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <Building2 className="w-5 h-5 text-blue-600" />
+                      <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                        PG/Co-living properties
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: BUY COMMERCIAL */}
+              {categorySidebarTab === 'buy_commercial' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                    Property Options
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {[
+                      { label: 'Retail Shops / Showrooms', icon: Store, color: 'text-blue-600' },
+                      { label: 'Ready to move Offices', icon: Briefcase, color: 'text-purple-600' },
+                      { label: 'Bare shell Offices', icon: Layers, color: 'text-emerald-600' },
+                      { label: 'Plot / Land', icon: Layers, color: 'text-teal-600' },
+                      { label: 'Factory Manufacturing', icon: Building2, color: 'text-amber-600' },
+                      { label: 'Warehouse', icon: Store, color: 'text-yellow-700' },
+                    ].map((opt, i) => {
+                      const Icon = opt.icon;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            setActiveTab('commercial');
+                            setActiveMainTab('home');
+                          }}
+                          className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                        >
+                          <Icon className={`w-5 h-5 ${opt.color}`} />
+                          <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                            {opt.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      onClick={() => {
+                        setActiveTab('commercial');
+                        setActiveMainTab('home');
+                      }}
+                      className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs col-span-2"
+                    >
+                      <Building2 className="w-5 h-5 text-blue-600" />
+                      <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                        Others
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: LEASE COMMERCIAL (EXACT MATCH FOR USER SCREENSHOT 1) */}
+              {categorySidebarTab === 'lease_commercial' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                    Property Options
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {[
+                      { label: 'Ready to move Offices', icon: Armchair, color: 'text-[#7C3AED]' },
+                      { label: 'Bare shell Offices', icon: Layers, color: 'text-[#00B050]' },
+                      { label: 'Co-working Offices', icon: Users, color: 'text-[#D946EF]' },
+                      { label: 'Retail Shops / Showrooms', icon: Store, color: 'text-[#0066FF]' },
+                      { label: 'Warehouse', icon: Store, color: 'text-[#65A30D]' },
+                      { label: 'Factory / Manufacturing', icon: Building2, color: 'text-[#B91C1C]' },
+                      { label: 'Plot / Land', icon: Layers, color: 'text-[#059669]' },
+                      { label: 'Others', icon: Home, color: 'text-[#0284C7]' },
+                    ].map((opt, i) => {
+                      const Icon = opt.icon;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            setActiveTab('commercial');
+                            setActiveMainTab('home');
+                          }}
+                          className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                        >
+                          <Icon className={`w-5 h-5 ${opt.color}`} />
+                          <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                            {opt.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 6: PRICE & INSIGHTS (EXACT MATCH FOR USER SCREENSHOTS 2 & 3) */}
+              {categorySidebarTab === 'price_insights' && (
+                <div className="space-y-4 animate-fadeIn">
+                  {/* Insights Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Insights
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Real Estate Insights...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <TrendingUp className="w-5 h-5 text-[#0066FF]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Real Estate Insights
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Price Trends...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <ArrowUp className="w-5 h-5 text-[#00B050] stroke-[2.5]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Price Trends
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Tools Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Tools
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Budget Calculator...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <PiggyBank className="w-5 h-5 text-[#00B050]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Budget Calculator
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Area Converter...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Crop className="w-5 h-5 text-[#DC2626]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Area Converter
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Articles & Guides Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Articles & Guides
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Articles...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <FileText className="w-5 h-5 text-[#00B050]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Articles
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Home Buying Guide...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Key className="w-5 h-5 text-[#0066FF]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Home Buying Guide
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Home Interiors Guide...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Sparkles className="w-5 h-5 text-[#0D9488]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Home Interiors Guide
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Seller Guide...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Tag className="w-5 h-5 text-[#D97706]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Seller Guide
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Discover Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Discover
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening All India Homepage...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <MapPin className="w-5 h-5 text-[#0066FF]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          All India Homepage
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening NRI Homepage...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Globe className="w-5 h-5 text-[#D97706]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          NRI Homepage
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Review your Society or Locality Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Review your Society or Locality
+                    </h3>
+                    <button
+                      onClick={() => {
+                        setToastMessage('Opening Locality Reviews...');
+                        setTimeout(() => setToastMessage(null), 3000);
+                      }}
+                      className="w-full bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <MessageSquare className="w-5 h-5 text-[#F97316]" />
+                      <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                        Share reviews
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 7: ACTIVITY & SUPPORT (EXACT MATCH FOR USER SCREENSHOT 4) */}
+              {categorySidebarTab === 'activity_support' && (
+                <div className="space-y-4 animate-fadeIn">
+                  {/* Activity Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Activity
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setToastMessage('Showing Contacted listings...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Phone className="w-5 h-5 text-[#0066FF]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Contacted
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setActiveMainTab('activity');
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Heart className="w-5 h-5 text-[#DC2626] fill-[#DC2626]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Shortlisted
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Showing Recently Viewed listings...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs col-span-2"
+                      >
+                        <Eye className="w-5 h-5 text-[#F97316]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Viewed
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Support & Settings Section */}
+                  <div>
+                    <h3 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                      Support & Settings
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Manage Profile...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <HelpCircle className="w-5 h-5 text-[#1C1C1C]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Manage Profile
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Customer Service...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Headphones className="w-5 h-5 text-[#1C1C1C]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Customer Service
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Give Feedback...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <MessageSquare className="w-5 h-5 text-[#1C1C1C]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Give Feedback
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Change Password...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs"
+                      >
+                        <Lock className="w-5 h-5 text-[#1C1C1C]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Change Password
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setToastMessage('Opening Communication Settings...');
+                          setTimeout(() => setToastMessage(null), 3000);
+                        }}
+                        className="bg-[#F0F5FF] hover:bg-[#E2ECFF] p-3 rounded-2xl border border-blue-100/60 flex flex-col items-center justify-center text-center space-y-1.5 transition-all cursor-pointer shadow-2xs col-span-2"
+                      >
+                        <Bell className="w-5 h-5 text-[#1C1C1C]" />
+                        <span className="text-[10.5px] font-normal text-slate-800 leading-tight text-center">
+                          Communication Settings
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Feedback Banner */}
+                  <div className="bg-white p-3 rounded-2xl border border-slate-200/90 flex items-center justify-between gap-2 mt-4 shadow-2xs">
+                    <div className="flex items-center gap-2">
+                      <ThumbsUp className="w-4 h-4 text-amber-500 shrink-0" />
+                      <span className="text-[11px] font-medium text-slate-700">
+                        Help us improve Valoris
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setToastMessage('Thank you for rating Valoris!')}
+                      className="px-3.5 py-1.5 bg-[#0066FF] hover:bg-blue-700 text-white text-[11px] font-medium rounded-full cursor-pointer shadow-xs"
+                    >
+                      Rate now
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STICKY BOTTOM NAVIGATION BAR */}
+      <div className="sticky bottom-0 z-40 bg-white border-t border-slate-200 px-2 py-1.5 flex items-center justify-around text-center shadow-lg shrink-0">
+        <button
+          onClick={() => setActiveMainTab('home')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'home' ? 'text-[#1A3FAA] font-black' : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Home className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Home</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveMainTab('search');
+            setShowFilterModal(true);
+          }}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'search' ? 'text-[#1A3FAA] font-black' : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Search className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Search</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveMainTab('menu');
+            setCategorySidebarTab('sell_rent');
+          }}
+          className="flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all text-slate-500 hover:text-slate-800"
+        >
+          <div className="w-8 h-8 rounded-full bg-[#1A3FAA] text-white flex items-center justify-center shadow-sm -mt-3 border-2 border-white">
+            <Plus className="w-5 h-5 stroke-[2.5]" />
+          </div>
+          <span className="text-[10px] font-bold">Sell/Rent</span>
+        </button>
+
+        <button
+          onClick={() => setActiveMainTab('activity')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'activity' ? 'text-[#1A3FAA] font-black' : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Heart className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Activity</span>
+        </button>
+
+        <button
+          onClick={() => setActiveMainTab('menu')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2 cursor-pointer transition-all ${
+            activeMainTab === 'menu' ? 'text-[#1A3FAA] font-black' : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Menu className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px] font-bold">Menu</span>
+        </button>
       </div>
     </div>
   );
