@@ -3,28 +3,36 @@ import { PhoneContainer } from './components/PhoneContainer';
 import { ScreenOne } from './components/ScreenOne';
 import { OtpVerificationScreen } from './components/OtpVerificationScreen';
 import { CreatePasswordScreen } from './components/CreatePasswordScreen';
+import { BiometricSetupScreen } from './components/BiometricSetupScreen';
+import { BiometricLoginScreen } from './components/BiometricLoginScreen';
 import { ScreenTwo, ROLES } from './components/ScreenTwo';
 import { RoleProfileScreen } from './components/RoleProfileScreens';
 import { RoleExploreScreen } from './components/RoleExploreScreens';
 import { PaymentPortalScreen, PaymentSuccessScreen } from './components/PaymentAndSuccessScreens';
 
-import { Smartphone, LayoutGrid, Sparkles, RotateCcw, Building2, Moon, Sun } from 'lucide-react';
+import { Smartphone, LayoutGrid, Sparkles, RotateCcw, Building2, Moon, Sun, ScanFace } from 'lucide-react';
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<'showcase' | 'interactive' | 'dual-interactive'>('interactive');
+  const [viewMode, setViewMode] = useState<'showcase' | 'interactive' | 'biometric-showcase'>('interactive');
   const [isDarkMode, setIsDarkMode] = useState(false);
   
   // App Flow Step:
   // 1: Screen 1 (Join Network - Account Details)
   // 2: Screen 2 (OTP Verification)
   // 3: Screen 3 (Create & Confirm Password)
-  // 4: Screen 4 (Role Select)
-  // 5: Screen 5 (Role Profile Setup)
-  // 6: Screen 6 (Role Explore Feed)
-  // 7: Screen 7 (Pay ₹399 Portal)
-  // 8: Screen 8 (Success Notification)
-  const [interactiveStep, setInteractiveStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>(1);
+  // 4: Screen 4 (Biometric Registration - Face ID & Fingerprint)
+  // 5: Screen 5 (Android App Biometric Login)
+  // 6: Screen 6 (Role Select)
+  // 7: Screen 7 (Role Profile Setup)
+  // 8: Screen 8 (Role Explore Feed)
+  // 9: Screen 9 (Pay ₹399 Portal)
+  // 10: Screen 10 (Success Notification)
+  const [interactiveStep, setInteractiveStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10>(1);
   const [isPaidMember, setIsPaidMember] = useState<boolean>(false);
+
+  // Biometric Registration State
+  const [isFaceRegistered, setIsFaceRegistered] = useState<boolean>(false);
+  const [isFingerprintRegistered, setIsFingerprintRegistered] = useState<boolean>(false);
 
   // Form & User State
   const [formData, setFormData] = useState({
@@ -48,31 +56,41 @@ export default function App() {
 
   const handlePasswordCreated = (password: string) => {
     setUserPassword(password);
-    setInteractiveStep(4); // Route to Role Selection
+    setInteractiveStep(4); // Route to Biometric Registration
+  };
+
+  const handleBiometricsSaved = () => {
+    setInteractiveStep(5); // Route to Biometric Login
+  };
+
+  const handleBiometricLoginSuccess = () => {
+    setInteractiveStep(6); // Route to Role Selection
   };
 
   const handleScreenTwoFinish = (role: string) => {
     setSelectedRole(role);
-    setInteractiveStep(5); // Route to role-specific profile setup
+    setInteractiveStep(7); // Route to role-specific profile setup
   };
 
   const handleProfileComplete = () => {
-    setInteractiveStep(6); // Route to role-specific explore feed
+    setInteractiveStep(8); // Route to role-specific explore feed
   };
 
   const handleProceedToPayment = () => {
-    setInteractiveStep(7); // Route to Pay ₹399 portal
+    setInteractiveStep(9); // Route to Pay ₹399 portal
   };
 
   const handlePaymentSuccess = () => {
     setIsPaidMember(true); // Unlock all contacts & features
-    setInteractiveStep(8); // Route to success message
+    setInteractiveStep(10); // Route to success message
   };
 
   const handleReset = () => {
     setInteractiveStep(1);
     setSelectedRole('broker');
     setUserPassword('');
+    setIsFaceRegistered(false);
+    setIsFingerprintRegistered(false);
     setIsPaidMember(false);
   };
 
@@ -98,7 +116,7 @@ export default function App() {
                   </span>
                 </div>
                 <p className="text-[11px] text-gray-500 font-medium hidden sm:block">
-                  Join ➔ Verify OTP ➔ Set Password ➔ Select Role ➔ Profile Setup ➔ Explore Feed ➔ Pay ₹399 ➔ Success
+                  Join ➔ OTP ➔ Password ➔ Biometric Setup ➔ Android Login ➔ Role ➔ Profile ➔ Feed ➔ Pay ₹399
                 </p>
               </div>
             </div>
@@ -119,6 +137,18 @@ export default function App() {
             </button>
 
             <button
+              onClick={() => setViewMode('biometric-showcase')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                viewMode === 'biometric-showcase'
+                  ? 'bg-white text-[#1A3FAA] shadow-sm border border-gray-200 font-black'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <ScanFace className="w-3.5 h-3.5 text-[#0097A7]" />
+              Biometric Showcase
+            </button>
+
+            <button
               onClick={() => setViewMode('showcase')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 viewMode === 'showcase'
@@ -129,18 +159,6 @@ export default function App() {
               <LayoutGrid className="w-3.5 h-3.5" />
               Auth Showcase
             </button>
-
-            <button
-              onClick={() => setViewMode('dual-interactive')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                viewMode === 'dual-interactive'
-                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#00a896]" />
-              Dual Live View
-            </button>
           </div>
 
           {/* Role Quick Selector, Reset & Dark Mode Toggle */}
@@ -148,7 +166,7 @@ export default function App() {
             <button
               onClick={() => {
                 setSelectedRole('broker');
-                setInteractiveStep(6);
+                setInteractiveStep(8);
               }}
               className="flex items-center gap-1.5 px-2.5 py-1.5 btn-brand text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
@@ -219,11 +237,13 @@ export default function App() {
                 { step: 1, label: '1. Join' },
                 { step: 2, label: '2. OTP' },
                 { step: 3, label: '3. Password' },
-                { step: 4, label: '4. Role' },
-                { step: 5, label: '5. Profile' },
-                { step: 6, label: '6. Feed' },
-                { step: 7, label: '7. Pay ₹399' },
-                { step: 8, label: '8. Done' },
+                { step: 4, label: '4. Biometrics' },
+                { step: 5, label: '5. App Login' },
+                { step: 6, label: '6. Role' },
+                { step: 7, label: '7. Profile' },
+                { step: 8, label: '8. Feed' },
+                { step: 9, label: '9. Pay ₹399' },
+                { step: 10, label: '10. Done' },
               ].map((s) => (
                 <button
                   key={s.step}
@@ -241,7 +261,7 @@ export default function App() {
 
             {/* Interactive Phone Frame */}
             <PhoneContainer
-              title={`Step ${interactiveStep} of 8`}
+              title={`Step ${interactiveStep} of 10`}
               badge={
                 interactiveStep === 1
                   ? 'Join Network'
@@ -250,12 +270,16 @@ export default function App() {
                   : interactiveStep === 3
                   ? 'Set Password'
                   : interactiveStep === 4
-                  ? 'Role Select'
+                  ? 'Add Biometrics'
                   : interactiveStep === 5
-                  ? `${currentRoleObj.title} Profile`
+                  ? 'Android Login'
                   : interactiveStep === 6
-                  ? `${currentRoleObj.title} Dashboard`
+                  ? 'Role Select'
                   : interactiveStep === 7
+                  ? `${currentRoleObj.title} Profile`
+                  : interactiveStep === 8
+                  ? `${currentRoleObj.title} Dashboard`
+                  : interactiveStep === 9
                   ? 'Checkout ₹399'
                   : 'Confirmed!'
               }
@@ -278,56 +302,139 @@ export default function App() {
                 />
               )}
               {interactiveStep === 4 && (
-                <ScreenTwo
-                  selectedRole={selectedRole}
+                <BiometricSetupScreen
+                  userName={formData.fullName}
+                  userEmail={formData.email}
+                  isFaceRegistered={isFaceRegistered}
+                  isFingerprintRegistered={isFingerprintRegistered}
+                  isDarkMode={isDarkMode}
+                  onUpdateBiometrics={(face, fp) => {
+                    setIsFaceRegistered(face);
+                    setIsFingerprintRegistered(fp);
+                  }}
+                  onNext={handleBiometricsSaved}
                   onBack={() => setInteractiveStep(3)}
-                  onFinish={handleScreenTwoFinish}
                 />
               )}
               {interactiveStep === 5 && (
-                <RoleProfileScreen
-                  roleId={selectedRole}
-                  onBack={() => setInteractiveStep(4)}
-                  onComplete={handleProfileComplete}
+                <BiometricLoginScreen
+                  userName={formData.fullName}
+                  userEmail={formData.email}
+                  isFaceRegistered={isFaceRegistered}
+                  isFingerprintRegistered={isFingerprintRegistered}
+                  isDarkMode={isDarkMode}
+                  onGoToSetup={() => setInteractiveStep(4)}
+                  onLoginSuccess={handleBiometricLoginSuccess}
+                  onBackToFlow={() => setInteractiveStep(4)}
                 />
               )}
               {interactiveStep === 6 && (
+                <ScreenTwo
+                  selectedRole={selectedRole}
+                  onBack={() => setInteractiveStep(5)}
+                  onFinish={handleScreenTwoFinish}
+                />
+              )}
+              {interactiveStep === 7 && (
+                <RoleProfileScreen
+                  roleId={selectedRole}
+                  onBack={() => setInteractiveStep(6)}
+                  onComplete={handleProfileComplete}
+                />
+              )}
+              {interactiveStep === 8 && (
                 <RoleExploreScreen
                   roleId={selectedRole}
                   onProceedToPayment={handleProceedToPayment}
                   isPaidMember={isPaidMember}
                 />
               )}
-              {interactiveStep === 7 && (
+              {interactiveStep === 9 && (
                 <PaymentPortalScreen
                   userEmail={formData.email}
                   userPhone={formData.phone}
                   roleTitle={currentRoleObj.title}
-                  onBack={() => setInteractiveStep(6)}
+                  onBack={() => setInteractiveStep(8)}
                   onPaymentSuccess={handlePaymentSuccess}
                 />
               )}
-              {interactiveStep === 8 && (
+              {interactiveStep === 10 && (
                 <PaymentSuccessScreen
                   userEmail={formData.email}
                   userPhone={formData.phone}
                   roleTitle={currentRoleObj.title}
-                  onExploreDashboard={() => setInteractiveStep(6)}
+                  onExploreDashboard={() => setInteractiveStep(8)}
                 />
               )}
             </PhoneContainer>
           </div>
         )}
 
-        {/* VIEW MODE 2: SIDE-BY-SIDE SHOWCASE */}
+        {/* VIEW MODE 2: BIOMETRIC MOCK SCREENS SHOWCASE */}
+        {viewMode === 'biometric-showcase' && (
+          <div className="flex flex-col items-center space-y-8 animate-fadeIn">
+            <div className="text-center space-y-1.5 max-w-xl">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1A3FAA]/10 border border-[#1A3FAA]/20 text-[#1A3FAA] rounded-full text-xs font-bold mb-1">
+                <ScanFace className="w-3.5 h-3.5 text-[#0097A7]" />
+                <span>Biometric Authentication Suite</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                Face ID & Fingerprint Android Mock Screens
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600">
+                Enroll biometrics on Screen 1, then instantly test logging in to the Android App on Screen 2.
+              </p>
+            </div>
+
+            {/* Side-by-Side Mobile Screens */}
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 pt-2">
+              
+              {/* Screen 1: Biometric Enrollment */}
+              <div className="transform hover:scale-[1.01] transition-transform duration-300">
+                <PhoneContainer title="1. Add Face & Fingerprint" badge="Biometric Enrollment">
+                  <BiometricSetupScreen
+                    userName={formData.fullName}
+                    userEmail={formData.email}
+                    isFaceRegistered={isFaceRegistered}
+                    isFingerprintRegistered={isFingerprintRegistered}
+                    onUpdateBiometrics={(face, fp) => {
+                      setIsFaceRegistered(face);
+                      setIsFingerprintRegistered(fp);
+                    }}
+                    onNext={() => setInteractiveStep(5)}
+                    onBack={() => setInteractiveStep(3)}
+                  />
+                </PhoneContainer>
+              </div>
+
+              {/* Screen 2: Biometric Android Login */}
+              <div className="transform hover:scale-[1.01] transition-transform duration-300">
+                <PhoneContainer title="2. Android Biometric App Login" badge="Android App Auth">
+                  <BiometricLoginScreen
+                    userName={formData.fullName}
+                    userEmail={formData.email}
+                    isFaceRegistered={isFaceRegistered}
+                    isFingerprintRegistered={isFingerprintRegistered}
+                    onGoToSetup={() => setViewMode('biometric-showcase')}
+                    onLoginSuccess={() => setInteractiveStep(6)}
+                    onBackToFlow={() => setInteractiveStep(4)}
+                  />
+                </PhoneContainer>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* VIEW MODE 3: SIDE-BY-SIDE SIGNUP SHOWCASE */}
         {viewMode === 'showcase' && (
           <div className="flex flex-col items-center space-y-8 animate-fadeIn">
             <div className="text-center space-y-1.5 max-w-xl">
               <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
-                Signup Auth & Profile Setup Showcase
+                Signup Auth & Password Setup Showcase
               </h2>
               <p className="text-xs sm:text-sm text-gray-600">
-                Compare the new <strong className="text-[#007a6e]">OTP & Password Setup</strong> screens alongside the complete user onboarding workflow.
+                Compare the <strong className="text-[#007a6e]">OTP & Password Setup</strong> screens alongside the complete user onboarding workflow.
               </p>
             </div>
 
@@ -359,50 +466,15 @@ export default function App() {
             </div>
           </div>
         )}
-
-        {/* VIEW MODE 3: DUAL LIVE INTERACTIVE */}
-        {viewMode === 'dual-interactive' && (
-          <div className="flex flex-col items-center space-y-8 animate-fadeIn">
-            <div className="text-center space-y-1 max-w-lg">
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900">
-                Live Dual Auth & Payment View
-              </h2>
-              <p className="text-xs text-gray-500">
-                Signup password creation and Payment ₹399 portal side-by-side.
-              </p>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16">
-              {/* Password Screen */}
-              <PhoneContainer title="Create Password Screen" badge="Security">
-                <CreatePasswordScreen
-                  onPasswordCreated={() => setInteractiveStep(4)}
-                  onBack={() => setInteractiveStep(2)}
-                />
-              </PhoneContainer>
-
-              {/* Payment Screen */}
-              <PhoneContainer title="Payment & Success Notice" badge="Pay ₹399">
-                <PaymentPortalScreen
-                  userEmail={formData.email}
-                  userPhone={formData.phone}
-                  roleTitle={currentRoleObj.title}
-                  onBack={() => setInteractiveStep(6)}
-                  onPaymentSuccess={() => setInteractiveStep(8)}
-                />
-              </PhoneContainer>
-            </div>
-          </div>
-        )}
       </main>
 
       {/* Footer Details */}
       <footer className="py-4 border-t border-gray-200/60 bg-white/60 text-center text-xs text-gray-500 font-medium">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between px-6 gap-2">
           <div className="flex items-center gap-2">
-            <span>Valoris — Complete OTP Verification & Password Setup Onboarding</span>
+            <span>Valoris — Complete Face ID & Fingerprint Biometric Android Mock Authentication</span>
           </div>
-          <div>React + Vite + Tailwind • OTP & Password Flow Included</div>
+          <div>React + Vite + Tailwind • Android BiometricPrompt Mock Included</div>
         </div>
       </footer>
 
